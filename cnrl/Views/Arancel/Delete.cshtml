@@ -1,0 +1,107 @@
+﻿@model cnrl.precio
+@using cnrl.Helpers
+
+@{
+    Layout = null;
+}
+
+@Html.Hidden("Titulo", "Arancel")
+@Html.Hidden("Subtitulo", "Eliminar Arancel")
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box box-solid box-success">
+            <div class="box-header">
+                <h6 class="box-title" style="font-size: 1.5em;">Desea eliminar este Arancel?</h6>
+            </div>
+
+
+            <div class="box-body">
+                <div align="left" style="font-size:13pt">
+                    <dl class="dl-horizontal">
+                        <div>
+                            <dd>
+                                <label>Alumno:</label>
+
+                                $@Html.DisplayFor(model => model.alumno)
+                            </dd>
+
+                            <dd>
+                                <label>No Alumno:</label>
+
+                                $@Html.DisplayFor(model => model.noalumno)
+                            </dd>
+
+                            <dd>
+                                <label>Empleado:</label>
+
+                                $@Html.DisplayFor(model => model.empleado)
+                            </dd>
+
+                            <dd>
+                                <label>Descuento Banda Negativa:</label>
+
+                                $@Html.DisplayFor(model => model.descuentoBandaNegativa)
+                            </dd>
+
+                            <dd>
+                                <label>Descripción:</label>
+
+                                @Html.DisplayFor(model => model.descripcion)
+                            </dd>
+
+                            <dd>
+                                <label>Mayor de 60:</label>
+
+                                $@Html.DisplayFor(model => model.mayorDe60)
+                            </dd>
+
+                            <dd>
+                                <label>Graduado:</label>
+
+                                $@Html.DisplayFor(model => model.graduado)
+                            </dd>
+
+                            <dd>
+                                <label>Descuento Una Cuota:</label>
+
+                                @Html.DisplayFor(model => model.descuentoUnaCuota)%
+                            </dd>
+
+                            <dd>
+                                <label>Dias Segundo Vencimiento:</label>
+
+                                @Html.DisplayFor(model => model.diasSegundoVencimiento)
+                            </dd>
+
+                            <dd>
+                                <label>Recargo Segundo Vencimiento:</label>
+
+                                @Html.DisplayFor(model => model.recargoSegundoVencimiento)%
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+        </div>
+        @using (Html.BeginForm())
+            {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <div class="pull-left">
+                    <input type="submit" value="Eliminar" class="btn btn-flat btn-success" />
+                </div>
+                <div class="pull-right">
+                    <div class="btn btn-flat btn-default">
+                        @Html.ActionLink("Cerrar", "Index")
+                    </div>
+                </div>
+            </div>
+
+
+        }
+
+    </div>
+</div>

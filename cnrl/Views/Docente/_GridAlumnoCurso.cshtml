@@ -1,0 +1,200 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+@using pruebaCursada = cnrl.Logica.Constantes
+
+@Html.Hidden("Titulo", "Alumnos")
+@Html.Hidden("Subtitulo", "Carga de Notas")
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "codigo";
+        settings.Caption = "Datos de los Alumnos del Curso";
+
+        settings.CallbackRouteValues = new { Controller = "Docente", Action = "PartialGridCursadas" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 100;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        settings.Styles.Cell.HorizontalAlign = HorizontalAlign.Center;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.NextColumn;
+        //Batch Edit
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Docente", Action = "BatchEditing_Notas" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+
+        settings.SettingsText.CommandBatchEditUpdate = "Guardar Cambios";
+        settings.SettingsText.CommandBatchEditCancel = "Cancelar Edición";
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButtonInHeader = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.ShowClearFilterButton = true;
+        //settings.CommandColumn.SelectAllCheckboxMode = ViewBag.SelectAllCheckBoxMode;
+
+        //Columnas
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.NroDocumento"; col.EditFormSettings.Visible = DefaultBoolean.False; col.Caption = "Documento"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Nombre"; col.EditFormSettings.Visible = DefaultBoolean.False; col.Caption = "Nombre"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Apellido"; col.EditFormSettings.Visible = DefaultBoolean.False; col.Caption = "Apellido"; });
+        settings.Columns.Add(col => { col.FieldName = "observacion"; col.EditFormSettings.Visible = DefaultBoolean.False; col.Caption = "Estado de las Cuotas"; });
+        settings.Columns.Add(col => { col.FieldName = "DescripcionBaja"; col.EditFormSettings.Visible = DefaultBoolean.False; col.Caption = "Inasistencias a la fecha"; });
+        settings.Columns.Add(col =>
+        {
+            col.FieldName = "resultadoCursada";
+
+            col.MinWidth = 160;
+            col.Width = Unit.Pixel(160);
+            col.Caption = "Estado de Cursada";
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var properties = col.PropertiesEdit as ComboBoxProperties;
+            if (properties != null)
+            {
+                properties.DataSource = new List<Tuple<int, string>>
+                                                    {
+                    new Tuple<int, string>(0, "Aprobado"),
+                    new Tuple<int, string>(1, "Desaprobado"),
+                    new Tuple<int, string>(3, "Ausente"),
+                    new Tuple<int, string>(4, "Sin Calificar"),
+                    new Tuple<int, string>(5, "Baja")
+                                                    };
+                properties.PopupHorizontalAlign = PopupHorizontalAlign.Center;
+                properties.TextField = "Item2";
+                properties.ValueField = "Item1";
+                properties.ValueType = typeof(int);
+                properties.Width = Unit.Pixel(150);
+            }
+        });
+
+        // Colorea los registros que no cumplen con requisitos
+        settings.HtmlRowPrepared = (sender, e) =>
+        {
+            int faltas = 0;
+            if (e.GetValue("DescripcionBaja") != null && e.GetValue("DescripcionBaja").ToString() != "")
+            {
+                faltas = int.Parse(e.GetValue("DescripcionBaja").ToString());
+            }
+
+            if (faltas > 3)
+            {
+                e.Row.BackColor = Color.FromArgb(255, 150, 150);
+            }
+        };
+
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "nota";
+            c.Width = Unit.Pixel(160);
+            c.Caption = "Nota";
+            c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            c.ColumnType = MVCxGridViewColumnType.TextBox;
+            var properties = c.PropertiesEdit as TextBoxProperties;
+
+            if (properties != null)
+            {
+                properties.DisplayFormatInEditMode = true;
+            }
+        });
+
+        settings.Columns.Add(col =>
+        {
+            col.FieldName = "ValidarNota";
+
+            if (User.IsInRole("CoordinadorDocente") || User.IsInRole("Administrador") || User.IsInRole("SuperAdministrador") || User.IsInRole("AdministradorGraduado"))
+            {
+                col.Visible = true;
+            }
+            else
+            {
+                col.Visible = false;
+            }
+            col.MinWidth = 160;
+            col.Width = Unit.Pixel(160);
+            col.Caption = "Validar";
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.ColumnType = MVCxGridViewColumnType.CheckBox;
+            var properties = col.PropertiesEdit as CheckBoxProperties;
+        });
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+        };
+
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.EnableCallbackAnimation = false;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+    }
+).Bind(Model).GetHtml()
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <span>@Strings.ErrorMensajeGenerico</span>
+    </div>
+}
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+}
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<script>
+    function habilitarAjax(codigoCursa) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/Docente/Habilitar",
+                data: { IdCursa: codigoCursa },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/Docente/Habilitar",
+                data: { IdCursa: codigoCursa },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+    }
+
+
+</script>

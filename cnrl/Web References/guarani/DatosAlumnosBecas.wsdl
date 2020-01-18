@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://webService.unlm/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" name="DatosAlumnosBecas" targetNamespace="http://webService.unlm/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="http://guarani:8080/servicioGuarani/DatosAlumnosBecas?xsd=1" namespace="http://webService.unlm/" />
+    </xsd:schema>
+  </types>
+  <message name="consultaDatosAlumnos">
+    <part name="parameters" element="tns:consultaDatosAlumnos" />
+  </message>
+  <message name="consultaDatosAlumnosResponse">
+    <part name="parameters" element="tns:consultaDatosAlumnosResponse" />
+  </message>
+  <message name="Exception">
+    <part name="fault" element="tns:Exception" />
+  </message>
+  <message name="consultaDatosAlumnosEFC">
+    <part name="parameters" element="tns:consultaDatosAlumnosEFC" />
+  </message>
+  <message name="consultaDatosAlumnosEFCResponse">
+    <part name="parameters" element="tns:consultaDatosAlumnosEFCResponse" />
+  </message>
+  <message name="consultaDatosAlumnosG3">
+    <part name="parameters" element="tns:consultaDatosAlumnosG3" />
+  </message>
+  <message name="consultaDatosAlumnosG3Response">
+    <part name="parameters" element="tns:consultaDatosAlumnosG3Response" />
+  </message>
+  <portType name="DatosAlumnosBecas">
+    <operation name="consultaDatosAlumnos">
+      <input wsam:Action="http://webService.unlm/DatosAlumnosBecas/consultaDatosAlumnosRequest" message="tns:consultaDatosAlumnos" />
+      <output wsam:Action="http://webService.unlm/DatosAlumnosBecas/consultaDatosAlumnosResponse" message="tns:consultaDatosAlumnosResponse" />
+      <fault wsam:Action="http://webService.unlm/DatosAlumnosBecas/consultaDatosAlumnos/Fault/Exception" name="Exception" message="tns:Exception" />
+    </operation>
+    <operation name="consultaDatosAlumnosEFC">
+      <input wsam:Action="http://webService.unlm/DatosAlumnosBecas/consultaDatosAlumnosEFCRequest" message="tns:consultaDatosAlumnosEFC" />
+      <output wsam:Action="http://webService.unlm/DatosAlumnosBecas/consultaDatosAlumnosEFCResponse" message="tns:consultaDatosAlumnosEFCResponse" />
+      <fault wsam:Action="http://webService.unlm/DatosAlumnosBecas/consultaDatosAlumnosEFC/Fault/Exception" name="Exception" message="tns:Exception" />
+    </operation>
+    <operation name="consultaDatosAlumnosG3">
+      <input wsam:Action="http://webService.unlm/DatosAlumnosBecas/consultaDatosAlumnosG3Request" message="tns:consultaDatosAlumnosG3" />
+      <output wsam:Action="http://webService.unlm/DatosAlumnosBecas/consultaDatosAlumnosG3Response" message="tns:consultaDatosAlumnosG3Response" />
+      <fault wsam:Action="http://webService.unlm/DatosAlumnosBecas/consultaDatosAlumnosG3/Fault/Exception" name="Exception" message="tns:Exception" />
+    </operation>
+  </portType>
+  <binding name="DatosAlumnosBecasPortBinding" type="tns:DatosAlumnosBecas">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="consultaDatosAlumnos">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+      <fault name="Exception">
+        <soap:fault use="literal" name="Exception" namespace="" />
+      </fault>
+    </operation>
+    <operation name="consultaDatosAlumnosEFC">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+      <fault name="Exception">
+        <soap:fault use="literal" name="Exception" namespace="" />
+      </fault>
+    </operation>
+    <operation name="consultaDatosAlumnosG3">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+      <fault name="Exception">
+        <soap:fault use="literal" name="Exception" namespace="" />
+      </fault>
+    </operation>
+  </binding>
+  <service name="DatosAlumnosBecas">
+    <port name="DatosAlumnosBecasPort" binding="tns:DatosAlumnosBecasPortBinding">
+      <soap:address location="http://guarani:8080/servicioGuarani/DatosAlumnosBecas" />
+    </port>
+  </service>
+</definitions>

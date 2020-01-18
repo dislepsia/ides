@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNet.Identity
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("Logout", "Cuenta", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+        <ul class="nav navbar-nav navbar-right">
+            <li style="padding: 10px 15px;padding-top: 15px;">
+                @string.Format("{0}", User.Identity.GetUserName())
+            </li>
+            <li><a href="@Url.Action("Index", "Admin")">Administraci&oacute;n</a></li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()" style="margin-right: 15px;">Salir</a></li>
+        </ul>
+    }
+}
+else if (!Request.RawUrl.ToLower().Contains("/cuenta/login"))
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="@Url.Action("Login", "Cuenta", new { returnUrl = Url.Action("Index", "Home") })">Ingresar</a></li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Volver", "Index", "Home")</li>
+    </ul>
+}
+

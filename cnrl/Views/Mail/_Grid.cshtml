@@ -1,0 +1,79 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "Id";
+        settings.Caption = "Plantillas de Correos Disponibles";
+        settings.CallbackRouteValues = new { Controller = "Mail", Action = "PartialGrid" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.NextColumn;
+        // Columnas
+        settings.Columns.Add(col => { col.FieldName = "descripcion"; col.Caption = "Descripcion"; });
+        settings.Columns.Add(col => { col.FieldName = "asunto"; col.Caption = "Asunto"; });
+        // Botones
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+
+                    //"<a class='btn btn-flat btn-xs btn-info' href='{6}' title='{7}'>{8}</a>&nbsp;" +
+                    "<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>" +
+                    "<a class='btn btn-flat btn-xs btn-info' href='{3}' title='{4}' style='margin-left:2px;'>{5}</a>",
+
+                    string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Edit", "Mail", new { id = DataBinder.Eval(c.DataItem, "codigo") })),
+                    Strings.BtnEditar,
+                    "<i class='fa fa-pencil'></i>",
+
+                    string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Delete", "Mail", new { id = DataBinder.Eval(c.DataItem, "codigo") })),
+                    Strings.BtnBorrar,
+                    "<i class='fa fa-trash'></i>"//,
+
+                    //string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Details", "Sede", new { id = DataBinder.Eval(c.DataItem, "codigo") })),
+                    //Strings.BtnVer,
+                    //"<i class='fa fa-search'></i>"
+                    ));
+            column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+                "<a class='btn btn-flat btn-xs btn-info' href='{0}'><i class='icon-plus'></i>&nbsp;{1}</a>",
+                string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Create", "Mail")),
+                Strings.BtnNuevo
+                ));
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 100;
+        });
+        // Filtros
+        //settings.Settings.ShowHeaderFilterButton = false;
+        //settings.Settings.ShowFilterRow = false;
+        //settings.Settings.ShowFilterRowMenu = false;
+        //settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        //settings.Styles.FilterRow.BackColor = Color.LightGray;
+        //settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        //settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+    }
+).Bind(Model).GetHtml()

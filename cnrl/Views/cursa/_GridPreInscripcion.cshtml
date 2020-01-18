@@ -1,0 +1,142 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "codigo";
+        settings.Caption = "Alumno";
+
+        settings.CallbackRouteValues = new { Controller = "cursa", Action = "PartialGridPreInscripcion" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        settings.Styles.Cell.HorizontalAlign = HorizontalAlign.Center;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.NextColumn;
+        //settings.ControlStyle.Font.Size = 10;
+
+        // Columnas
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.NroDocumento"; col.Caption = "N° Documento"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Apellido"; col.Caption = "Apellido"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Nombre"; col.Caption = "Nombre"; });
+        //settings.Columns.Add(col => { col.FieldName = "oferta"; col.Caption = "Codigo de Oferta"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.periodolectivo1.descripcion"; col.Caption = "Periodo"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.curso1.descripcion"; col.Caption = "Nombre de Curso"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.horario"; col.Caption = "Horario de Curso"; });
+        //settings.Columns.Add(col => { col.FieldName = "EstadoCursa.descripcion"; col.Caption = "Estado"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.fechaDesde"; col.Caption = "Inicio del Curso"; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Telefono"; col.Caption = "Telefono"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.sede1.nombre"; col.Caption = "Sede"; });
+
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+
+          //  "<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>",
+          "<button type='button' class='btn btn-flat btn-xs btn-info habilitar' onclick=\"habilitarAjax({0},'{1}');\" id='BotonHabilitar_{0}' name='BotonHabilitar' value='{0}' title='{2}'>{3}</button>&nbsp;",
+
+            DataBinder.Eval(c.DataItem, "codigo"),
+            DataBinder.Eval(c.DataItem, "AspNetUsers.Id"),
+                            Strings.BtnHabilitar,
+                            //"<i class='fa fa-plus'></i>"
+                            ((int)DataBinder.Eval(c.DataItem, "codigo") != 0) ? "<i class='fa fa-check'></i>" : "<i class='fa fa-times'></i>"
+
+
+                    //string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("ConfirmarInscripcion", "cursa", new { id = DataBinder.Eval(c.DataItem, "codigo"), usuario = DataBinder.Eval(c.DataItem, "AspNetUsers.Id") })),
+                    //Strings.BtnInscribir,
+                    //"<i class='fa fa-plus'></i>"
+
+                    ));
+            column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+               "Confirmar Inscripción"));
+
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 130;
+        });
+
+
+
+        // Filtros
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        settings.Styles.FilterRow.BackColor = Color.LightGray;
+        settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+
+    }
+).Bind(Model).GetHtml()
+
+<script>
+    function habilitarAjax(id, usuario) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/cursa/ConfirmarInscripcion",
+                data: { id: id, usuario: usuario },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                        MensajeExito('Operación finalizada con éxito');
+                        $('#dni').val("");
+                    }
+                    else {
+                        MensajeError('Operación finalizada con errores');
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/cursa/ConfirmarInscripcion",
+                data: { id: id, usuario: usuario },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                        MensajeExito('Operación finalizada con éxito');
+                        $('#dni').val("");
+                    }
+                    else {
+                        MensajeError('Operación finalizada con errores');
+                    }
+                }
+            });
+        }
+    }
+</script>

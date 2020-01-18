@@ -1,0 +1,85 @@
+﻿@using cnrl.Helpers
+@using cnrl.Logica
+
+@{
+    ViewBag.Titulo = "Periodos Lectivos";
+    ViewBag.Subtitulo = "Administración";
+    Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+    var tiposCurso = (SelectList)ViewBag.tiposCurso;
+    var periodo = (SelectList)ViewBag.periodos;
+    var anio = (SelectList)ViewBag.anios;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdTipoCurso"] = $('#IdTipoCurso').val();
+        e.customArgs["IdPeriodo"] = $('#IdPeriodo').val();
+        e.customArgs["IdAnio"] = $('#IdAnio').val();
+    }
+</script>
+
+@*@Html.AntiForgeryToken()*@
+@*/@Html.HiddenFor(model => model.codigo)*@
+@*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+
+<div class="box box-default filtros">
+    <div class="box-body filtros">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="Texto">Tipo de Curso</label>
+                    @Html.DropDownList("IdTipoCurso", tiposCurso, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="Texto">Año</label>
+                    @Html.DropDownList("IdAnio", anio, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="Texto">Periodo</label>
+                    @Html.DropDownList("IdPeriodo", periodo, new { @class = "form-control" })
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row row-horizon">
+    @Html.Action("PartialGrid")
+</div>
+@section scripts
+{
+    <script>
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+            $('#IdTipoCurso').select2("val", "-1");
+            $('#IdPeriodo').select2("val", "-1");
+            $('#IdAnio').select2("val", "-1");
+            refresh = true;
+            refrescar();
+        }
+        // Refrescar Grilla
+        function refrescar() {
+            if (refresh === true) {
+                window.Grid.PerformCallback();
+            }
+        }
+
+        $(function () {
+
+            $('#IdTipoCurso').change(function () { refrescar(); });
+            $("#IdTipoCurso").select2({ allowClear: true });
+
+            $('#IdPeriodo').change(function () { refrescar(); });
+            $("#IdPeriodo").select2({ allowClear: true });
+
+            $('#IdAnio').change(function () { refrescar(); });
+            $("#IdAnio").select2({ allowClear: true });
+        });
+
+    </script>
+}

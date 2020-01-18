@@ -1,0 +1,440 @@
+﻿@model IEnumerable<cnrl.ofertaDisponiblePorAlumno4_Result>
+@using cnrl.Logica;
+
+@{
+    ViewBag.Title = "Index";
+    var usuarioCompleto = (AspNetUsers)ViewBag.UsuarioCompleto;
+
+    IEnumerable<IGrouping<string, ofertaDisponiblePorAlumno4_Result>> ofertaAgrupadaSocio = null;
+    IEnumerable<IGrouping<string, ofertaDisponiblePorAlumno4_Result>> ofertaAgrupadaEmpresa = null;
+    IEnumerable<IGrouping<string, ofertaDisponiblePorAlumno4_Result>> ofertaAgrupadaGraduado = null;
+
+    ofertaAgrupadaSocio = Model.Where(x => x.sector == (int)Sectores.Idiomas).GroupBy(ofer => ofer.sedeNombre);
+    ofertaAgrupadaEmpresa = Model.Where(x => x.sector == (int)Sectores.Empresas).GroupBy(ofer => ofer.sedeNombre);
+    ofertaAgrupadaGraduado = Model.Where(x => x.sector == (int)Sectores.Graduados).GroupBy(ofer => ofer.sedeNombre);
+
+    string colapasado = "in";
+
+    bool hayAlgunoInscripto = false;
+    if (Model.Where(x => x.selected == "selected").Count() > 0)
+    {
+        hayAlgunoInscripto = true;
+    }
+    var colapsedFiltro = "";
+    var colapsedBody = "";
+    var iconoFiltro = "";
+    var iconoBody = "";
+    if (usuarioCompleto != null && !string.IsNullOrEmpty(usuarioCompleto.Id))
+    {
+        colapsedFiltro = "collapsed-box";
+        colapsedBody = "";
+        iconoFiltro = "fa-plus";
+        iconoBody = "fa-minus";
+    }
+    else
+    {
+        colapsedFiltro = "";
+        colapsedBody = "collapsed-box";
+        iconoFiltro = "fa-minus";
+        iconoBody = "fa-plus";
+    }
+}
+<div class="box box-success @colapsedFiltro box-solid">
+    <div class="box-header with-border">
+        <h5 class="box-title" style="font-size:medium">Seleccionar Alumno</h5>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa @iconoFiltro"></i></button>
+        </div><!-- /.box-tools -->
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        @Html.Action("_Buscador", "Usuarios", new { SelectController = "Cursa", SelectAction = "inscribirAlumno" })
+    </div>
+</div>
+<div class="col-md-12 no-padding">
+    <div class="box box-success @colapsedBody box-solid">
+        <div class="box-header with-border">
+            <h5 class="box-title" style="font-size:medium">Inscripción</h5>
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa @iconoBody"></i></button>
+            </div><!-- /.box-tools -->
+        </div>
+        <div class="box-body">
+            <h2>Inscripción de  <b>@usuarioCompleto.Apellido, @usuarioCompleto.Nombre (@usuarioCompleto.NroDocumento)</b> </h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title box-solid">Cursos disponibles</h3>
+                            <a class='btn btn-lg btn-danger pull-right'
+                               href='@Url.Action("EliminarInscripcionCompleta", "Cursa", new { id = ViewBag.Usuario })'><i class='icon-plus'></i>Eliminar Toda la Inscripción</a>
+
+                        </div><!-- /.box-header -->
+                        <!-- Capacitacion Empresarial -->
+                        @if (ViewBag.Empresa == true)
+                        {
+                            <div class="box-body">
+                                <div class="box-group" id="accordion">
+                                    <div class="panel box box-success box-solid">
+                                        <div class="box-header with-border ">
+                                            <h4 class="box-title ">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                                                    Capacitación Empresarial
+                                                    <div class="box-tools pull-right">
+                                                        <button class="btn btn-box-tool" data-widget="collapse"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                                    </div>
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse2" class="panel-collapse collapse ">
+                                            <div class="box-body">
+                                                <div class="box-group" id="accordion2">
+                                                    @if (ofertaAgrupadaEmpresa != null)
+                                                    {
+                                                        foreach (var grupo in ofertaAgrupadaEmpresa)
+                                                        {
+                                                            if (hayAlgunoInscripto) //esto es para ver si esta inscripto en alguna sede la muestra sin colapsar, si no esta inscripto a nada muestra unlam por defecto
+                                                            {
+                                                                colapasado = " ";
+                                                            }
+                                                            <div class="panel box box-success box-solid">
+                                                                <div class="box-header with-border ">
+                                                                    <h4 class="box-title ">
+                                                                        <a data-toggle="collapse" data-parent="#accordion2" href="#@grupo.Key.ToString().Replace(' ', '_')">
+                                                                            Sede: @grupo.Key
+                                                                            <div class="box-tools pull-right">
+                                                                                <button class="btn btn-box-tool" data-widget="collapse"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                                                            </div>
+                                                                        </a>
+
+                                                                    </h4>
+                                                                </div>
+                                                                <div id="@grupo.Key.ToString().Replace(' ', '_')" class="panel-collapse collapse">
+
+                                                                    @using (Html.BeginForm("Inscripcion", "Cursa", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                                                    {
+                                                                        <input type="hidden" name="usuario" value="@ViewBag.Usuario" />
+                                                                        <input type="hidden" name="callBackView" value="FormaDePago" />
+                                                                        <div class="box-body">
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-striped">
+                                                                                    <tr>
+                                                                                        <th style="width:35px">Tipo</th>
+                                                                                        <th style="width:25px">Código</th>
+                                                                                        <th>Nombre del Curso</th>
+                                                                                        <th>Día y Horario</th>
+                                                                                    </tr>
+                                                                                    @{
+                                                                                        IEnumerable<IGrouping<int, ofertaDisponiblePorAlumno4_Result>> cursoAgrupado = grupo.GroupBy(cur => cur.codCurso.Value);
+                                                                                    }
+
+                                                                                    @foreach (var cur in cursoAgrupado)
+                                                                                    {
+                                                                                        <input type="hidden" name="codCurso" value="@cur.Key" />
+                                                                                        <input type="hidden" name="codigoOferta" value="@cur.First().codigo" />
+                                                                                        <input type="hidden" name="selected" value="@cur.First().selected" />
+
+                                                                                        <tr style="font-size:large">
+                                                                                            <td>@cur.First().tipoCursoNombre</td>
+                                                                                            <td>@cur.Key</td>
+                                                                                            <td>@cur.First().descripcion</td>
+                                                                                            <td>
+                                                                                                <div class="form-group " style="margin: 0">
+                                                                                                    @{
+                                                                                                        string disabled = "";
+                                                                                                        if (cur.Where(x => x.selected.Equals("selected")).Count() > 0)
+                                                                                                        {
+                                                                                                            disabled = "disabled";
+                                                                                                        }
+                                                                                                    }
+                                                                                                    <select class="form-control" name="codigo" @disabled>
+                                                                                                        <option value="-1">(Seleccione un Horario)</option>
+                                                                                                        @foreach (var horario in cur)
+                                                                                                        {
+                                                                                                            <option value="@horario.codigo" @horario.selected>@horario.Horario</option>
+                                                                                                        }
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                                        }
+                                                                                </table>
+                                                                            </div>
+                                                                            @{ colapasado = " ";}
+                                                                            <input type="submit" value="Inscribirse" class="btn btn-success btn-lg pull-right" />
+
+                                                                        </div>
+                                                                                }
+                                                                </div>
+                                                            </div>
+
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <div class="alert-dismissible alert-link">No hay cursos disponible para inscribirse</div>
+                                                                                }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+
+
+                            </div>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if (ViewBag.Graduado == true)
+                                                                                    {
+                                                                                        <!--Graduados-->
+                                                                                        <div class="box-body">
+                                                                                            <div class="box-group" id="accordionGraduado">
+                                                                                                <div class="panel box box-success box-solid">
+                                                                                                    <div class="box-header with-border ">
+                                                                                                        <h4 class="box-title ">
+                                                                                                            <a data-toggle="collapse" data-parent="#accordionGraduado" href="#collapse4">
+                                                                                                                Graduados
+                                                                                                                <div class="box-tools pull-right">
+                                                                                                                    <button class="btn btn-box-tool" data-widget="collapse"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                                                                                                </div>
+                                                                                                            </a>
+                                                                                                        </h4>
+                                                                                                    </div>
+                                                                                                    <div id="collapse4" class="panel-collapse collapse ">
+                                                                                                        <div class="box-body">
+                                                                                                            <div class="box-group" id="accordionGraduado2">
+                                                                                                                @if (ofertaAgrupadaGraduado != null)
+                                                                                                                {
+                                                                                                                    foreach (var grupo in ofertaAgrupadaGraduado)
+                                                                                                                    {
+                                                                                                                        if (hayAlgunoInscripto) //esto es para ver si esta inscripto en alguna sede la muestra sin colapsar, si no esta inscripto a nada muestra unlam por defecto
+                                                                                                                        {
+                                                                                                                            colapasado = " ";
+                                                                                                                        }
+                                                                                                                        <div class="panel box box-success box-solid">
+                                                                                                                            <div class="box-header with-border ">
+                                                                                                                                <h4 class="box-title ">
+                                                                                                                                    <a data-toggle="collapse" data-parent="#accordionGraduado2" href="#@grupo.Key.ToString().Replace(' ', '_')_">
+                                                                                                                                        Sede: @grupo.Key
+                                                                                                                                        <div class="box-tools pull-right">
+                                                                                                                                            <button class="btn btn-box-tool" data-widget="collapse"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                                                                                                                        </div>
+                                                                                                                                    </a>
+
+                                                                                                                                </h4>
+                                                                                                                            </div>
+                                                                                                                            <div id="@grupo.Key.ToString().Replace(' ', '_')_" class="panel-collapse collapse @*@colapasado*@">
+
+                                                                                                                                @using (Html.BeginForm("Inscripcion", "Cursa", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                                                                                                                {
+                                                                                                                                    <input type="hidden" name="usuario" value="@ViewBag.Usuario" />
+                                                                                                                                    <input type="hidden" name="callBackView" value="FormaDePago" />
+                                                                                                                                    <div class="box-body">
+                                                                                                                                        <div class="table-responsive">
+                                                                                                                                            <table class="table table-striped">
+                                                                                                                                                <tr>
+                                                                                                                                                    <th style="width:35px">Tipo</th>
+                                                                                                                                                    <th style="width:25px">Código</th>
+                                                                                                                                                    <th>Nombre del Curso</th>
+                                                                                                                                                    <th>Día y Horario</th>
+                                                                                                                                                </tr>
+                                                                                                                                                @{
+                                                                                                                                                    IEnumerable<IGrouping<int, ofertaDisponiblePorAlumno4_Result>> cursoAgrupado = grupo.GroupBy(cur => cur.codCurso.Value);
+                                                                                                                                                }
+
+                                                                                                                                                @foreach (var cur in cursoAgrupado)
+                                                                                                                                                {
+                                                                                                                                                    <input type="hidden" name="codCurso" value="@cur.Key" />
+                                                                                                                                                    <input type="hidden" name="codigoOferta" value="@cur.First().codigo" />
+                                                                                                                                                    <input type="hidden" name="selected" value="@cur.First().selected" />
+
+                                                                                                                                                    <tr style="font-size:large">
+                                                                                                                                                        <td>@cur.First().tipoCursoNombre</td>
+                                                                                                                                                        <td>@cur.Key</td>
+                                                                                                                                                        <td>@cur.First().descripcion</td>
+                                                                                                                                                        <td>
+                                                                                                                                                            <div class="form-group " style="margin: 0">
+                                                                                                                                                                @{
+                                                                                                                                                                    string disabled = "";
+                                                                                                                                                                    if (cur.Where(x => x.selected.Equals("selected")).Count() > 0)
+                                                                                                                                                                    {
+                                                                                                                                                                        disabled = "disabled";
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                                <select class="form-control" name="codigo" @disabled>
+                                                                                                                                                                    <option value="-1">(Seleccione un Horario)</option>
+                                                                                                                                                                    @foreach (var horario in cur)
+                                                                                                                                                                    {
+
+
+
+                                                                                                                                                                        <option value="@horario.codigo" @horario.selected>@horario.Horario</option>
+                                                                                                                                                                    }
+                                                                                                                                                                </select>
+                                                                                                                                                            </div>
+                                                                                                                                                        </td>
+                                                                                                                                                    </tr>
+                                                                                                                                                                    }
+                                                                                                                                            </table>
+                                                                                                                                        </div>
+                                                                                                                                        @{ colapasado = " ";}
+                                                                                                                                        <input type="submit" value="Inscribirse" class="btn btn-success btn-lg pull-right" />
+
+                                                                                                                                    </div>
+                                                                                                                                            }
+                                                                                                                            </div>
+                                                                                                                        </div>
+
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                            else
+                                                                                                                                            {
+                                                                                                                                                <div class="alert-dismissible alert-link">No hay cursos disponible para inscribirse</div>
+                                                                                                                                            }
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                    </div>
+
+
+
+                                                                                                </div>
+
+
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                                                                            }
+                                                                                                                                            else
+                                                                                                                                            {
+                                                                                        <!-- SocioCulturales -->
+                                                                                                                                                <div class="box-body">
+                                                                                                                                                    <div class="box-group" id="accordionSocio">
+                                                                                                                                                        <div class="panel box box-success box-solid">
+                                                                                                                                                            <div class="box-header with-border ">
+                                                                                                                                                                <h4 class="box-title ">
+                                                                                                                                                                    <a data-toggle="collapse" data-parent="#accordionSocio" href="#collapse3">
+                                                                                                                                                                        Socioculturales
+                                                                                                                                                                        <div class="box-tools pull-right">
+                                                                                                                                                                            <button class="btn btn-box-tool" data-widget="collapse"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </a>
+                                                                                                                                                                </h4>
+                                                                                                                                                            </div>
+                                                                                                                                                            <div id="collapse3" class="panel-collapse collapse ">
+                                                                                                                                                                <div class="box-body">
+                                                                                                                                                                    <div class="box-group" id="accordionSocio2">
+                                                                                                                                                                        @if (ofertaAgrupadaSocio != null)
+                                                                                                                                                                        {
+                                                                                                                                                                            foreach (var grupo in ofertaAgrupadaSocio)
+                                                                                                                                                                            {
+                                                                                                                                                                                if (hayAlgunoInscripto) //esto es para ver si esta inscripto en alguna sede la muestra sin colapsar, si no esta inscripto a nada muestra unlam por defecto
+                                                                                                                                                                                {
+                                                                                                                                                                                    colapasado = " ";
+                                                                                                                                                                                }
+                                                                                                                                                                                <div class="panel box box-success box-solid">
+                                                                                                                                                                                    <div class="box-header with-border ">
+                                                                                                                                                                                        <h4 class="box-title ">
+                                                                                                                                                                                            <a data-toggle="collapse" data-parent="#accordionSocio2" href="#@grupo.Key.ToString().Replace(' ', '_')_">
+                                                                                                                                                                                                Sede: @grupo.Key
+                                                                                                                                                                                                <div class="box-tools pull-right">
+                                                                                                                                                                                                    <button class="btn btn-box-tool" data-widget="collapse"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                                                                                                                                                                                </div>
+                                                                                                                                                                                            </a>
+
+                                                                                                                                                                                        </h4>
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                    <div id="@grupo.Key.ToString().Replace(' ', '_')_" class="panel-collapse collapse @*@colapasado*@">
+
+                                                                                                                                                                                        @using (Html.BeginForm("Inscripcion", "Cursa", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                                                                                                                                                                        {
+                                                                                                                                                                                            <input type="hidden" name="usuario" value="@ViewBag.Usuario" />
+                                                                                                                                                                                            <input type="hidden" name="callBackView" value="FormaDePago" />
+                                                                                                                                                                                            <div class="box-body">
+                                                                                                                                                                                                <div class="table-responsive">
+                                                                                                                                                                                                    <table class="table table-striped">
+                                                                                                                                                                                                        <tr>
+                                                                                                                                                                                                            <th style="width:35px">Tipo</th>
+                                                                                                                                                                                                            <th style="width:25px">Código</th>
+                                                                                                                                                                                                            <th>Nombre del Curso</th>
+                                                                                                                                                                                                            <th>Día y Horario</th>
+                                                                                                                                                                                                        </tr>
+                                                                                                                                                                                                        @{
+                                                                                                                                                                                                            IEnumerable<IGrouping<int, ofertaDisponiblePorAlumno4_Result>> cursoAgrupado = grupo.GroupBy(cur => cur.codCurso.Value);
+                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                        @foreach (var cur in cursoAgrupado)
+                                                                                                                                                                                                        {
+                                                                                                                                                                                                            <input type="hidden" name="codCurso" value="@cur.Key" />
+                                                                                                                                                                                                            <input type="hidden" name="codigoOferta" value="@cur.First().codigo" />
+                                                                                                                                                                                                            <input type="hidden" name="selected" value="@cur.First().selected" />
+
+                                                                                                                                                                                                            <tr style="font-size:large">
+                                                                                                                                                                                                                <td>@cur.First().tipoCursoNombre</td>
+                                                                                                                                                                                                                <td>@cur.Key</td>
+                                                                                                                                                                                                                <td>@cur.First().descripcion</td>
+                                                                                                                                                                                                                <td>
+                                                                                                                                                                                                                    <div class="form-group " style="margin: 0">
+                                                                                                                                                                                                                        @{
+                                                                                                                                                                                                                            string disabled = "";
+                                                                                                                                                                                                                            if (cur.Where(x => x.selected.Equals("selected")).Count() > 0)
+                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                disabled = "disabled";
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                        <select class="form-control" name="codigo" @disabled>
+                                                                                                                                                                                                                            <option value="-1">(Seleccione un Horario)</option>
+                                                                                                                                                                                                                            @foreach (var horario in cur)
+                                                                                                                                                                                                                            {
+
+
+
+                                                                                                                                                                                                                                <option value="@horario.codigo" @horario.selected>@horario.Horario</option>
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                        </select>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                </td>
+                                                                                                                                                                                                            </tr>
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                    </table>
+                                                                                                                                                                                                </div>
+                                                                                                                                                                                                @{ colapasado = " ";}
+                                                                                                                                                                                                <input type="submit" value="Inscribirse" class="btn btn-success btn-lg pull-right" />
+
+                                                                                                                                                                                            </div>
+                                                                                                                                                                                                    }
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                </div>
+
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                    else
+                                                                                                                                                                                                    {
+                                                                                                                                                                                                        <div class="alert-dismissible alert-link">No hay cursos disponible para inscribirse</div>
+                                                                                                                                                                                                    }
+                                                                                                                                                                    </div>
+                                                                                                                                                                </div>
+
+                                                                                                                                                            </div>
+
+
+
+                                                                                                                                                        </div>
+
+
+
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    }
+
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div><!-- /.col -->
+        </div>
+    </div>
+</div>

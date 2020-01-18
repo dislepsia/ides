@@ -1,0 +1,141 @@
+﻿@using System.Globalization
+@using cnrl.Models
+@using cnrl.ViewModels
+@model cnrl.oferta
+@using cnrl.Logica
+
+@{
+    Layout = null;// "~/Views/Shared/_LayoutImprimir.cshtml";
+    var anio = Model.periodolectivo1.anio;
+    var periodo = Model.periodolectivo1.periodo;
+    var docente = Model.docente.IsEmpty();
+}
+
+<div id="header"></div>
+
+<style>
+    #page {
+        margin: 0px auto;
+        width: 800px;
+    }
+
+    #header {
+        background-image: url("../../Content/images/banner.png");
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 800px;
+        height: 100px;
+        color: #FFFFFF;
+        padding: 10px;
+        background-repeat: no-repeat;
+    }
+
+    * html body {
+        overflow: hidden;
+    }
+</style>
+
+<body>
+    <br /><br /><br /><br />
+    <h3 style="align-self:center">Planilla de Asistencia @periodo º Cuatrimestre de  @anio</h3>
+
+    <div>
+        <label>Curso:</label>
+        @Model.curso1.descripcion
+    </div>
+    <div>
+        <label>Horario:</label>
+        @Model.horario
+    </div>
+    @if (!Model.docente.IsEmpty())
+    {
+        <div>
+            <label>Docente:</label>
+            @*@Model.docente;*@
+            @Model.AspNetUsers.Apellido @Model.AspNetUsers.Nombre
+
+        </div>
+    }
+
+    <div style="float:left;">
+        <table style="border-collapse:collapse">
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+
+            <tr>
+                <th>Tipo &nbsp;</th>
+                <th>Nro &nbsp;</th>
+                <th>Apellido y Nombre &nbsp;&nbsp;</th>
+                <th>Estado &nbsp;&nbsp;</th>
+                <th>Condición &nbsp;&nbsp;</th>
+                <th>Nota</th>
+            </tr>
+
+            @{
+                var alumnos = Model.cursa;
+                var noVan = alumnos.Where(m => m.DateModified < m.oferta1.fechaDesde && m.estado == (int)EstadosCursada.BajaAceptada);
+                var resul = alumnos.Except(noVan).ToList();
+
+                alumnos = resul;
+            }
+
+
+
+
+
+
+            @foreach (cursa estadoRed in @*Model.cursa*@ alumnos.Where(x => x.estado == (int)EstadosCursada.FormaPago || x.estado == (int)EstadosCursada.Confirmado || x.estado == (int)EstadosCursada.PlanGenerado || x.estado == (int)EstadosCursada.Inscripto || x.estado == (int)EstadosCursada.SolicitudBaja || x.estado == (int)EstadosCursada.BajaAceptada).OrderBy(f => f.AspNetUsers.Apellido))
+            {
+                <tr style="font-size:small">
+
+
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@estadoRed.AspNetUsers.tipodocumento1.descripcion &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@estadoRed.AspNetUsers.NroDocumento &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@estadoRed.AspNetUsers.Apellido.ToUpper() @estadoRed.AspNetUsers.Nombre.ToUpper() &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    @if (estadoRed.EstadoCursa.descripcion == "SolicitudBaja")
+                    {
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baja&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    }
+                    else
+                    {
+                        if (estadoRed.EstadoCursa.descripcion == "BajaAceptada")
+                        {
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baja Aceptada&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        }
+                        else
+                        {
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        }
+                    }
+
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@estadoRed.ResultadoCursa.descripcion &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    @if (estadoRed.nota != null)
+                    {
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@estadoRed.nota.ToString()</td>
+                    }
+                    else
+                    {
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    }
+
+                </tr>
+            }
+        </table>
+    </div>
+    <footer style="position:absolute;  background-color: none;   bottom: 0;  width: 100%;  height: 40px; color: black;">
+        <div>
+            <p><pre>Firma Docente                  Firma Coordinador Pedagógico                    Firma Director de Área</pre></p>
+        </div>
+
+    </footer>
+
+</body>
+
+@*<a class="btn btn-flat btn-success" href="@Url.Action("Ficha", "Asistencia", new { id = Model.codigo , imprimir = true })" target="_blank">Imprimir<i class="fa fa-print"></i></a>*@
+
+<script>
+    $(document).ready(function () {
+    })
+</script>

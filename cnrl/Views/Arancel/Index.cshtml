@@ -1,0 +1,108 @@
+﻿@model IEnumerable<cnrl.precio>
+@using cnrl.Logica
+
+@{
+    ViewBag.Titulo = "Aranceles";
+    var descripciones = (SelectList)ViewBag.Descripcion;
+    var conceptos = (SelectList)ViewBag.Conceptos;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdDescripcion"] = $('#IdDescripcion').val();
+        e.customArgs["Concepto"] = $('#Concepto').val();
+    }
+</script>
+<form action="@Url.Action("Exportar")" method="POST" name="frmExportar" id="frmExportar">
+    <div class="box box-default filtros">
+        <div class="box-body">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <!--<label for="Texto">Buscar por Descripción</label>
+                    <div id="IdDescripcion" name="IdDescripcion" style="width: 100%"></div>-->
+                    <label for="IdDescripcion">Descripcion</label>
+                    @Html.DropDownList("IdDescripcion", descripciones, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <!--<label for="Texto">Buscar por Descripción</label>
+            <div id="IdDescripcion" name="IdDescripcion" style="width: 100%"></div>-->
+                    <label for="Concepto">Concepto</label>
+                    @Html.DropDownList("Concepto", conceptos, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <br>
+            <div class="col-sm-1">
+                <div class="pull-right">
+                    <button type="button" class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row row-horizon">
+        @Html.Action("PartialGrid")
+    </div>
+</form>
+
+@section scripts
+{
+    <script>
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+            $('#IdDescripcion').select2("val", "");
+            $('#Concepto').select2("val", "");
+            refresh = true;
+            refrescar();
+        }
+        // Refrescar Grilla
+        function refrescar() {
+            if (refresh === true) {
+                window.Grid.PerformCallback();
+            }
+        }
+
+        $(function () {
+            $('#IdDescripcion').change(function () { refrescar(); });
+            $("#IdDescripcion").select2({ allowclear: true });
+            $('#Concepto').change(function () { refrescar(); });
+            $("#Concepto").select2({ allowclear: true });
+            @*     $("#IdDescripcion").select2({
+                placeholder: "Ingresa algunas letras de la descripción...",
+                language: "es",
+                allowClear: true,
+                minimumInputLength: 4,
+                ajax: {
+                    cache: true,
+                    dataType: "json",
+                    type: "GET",
+                    quietMillis: 500,
+                    delay: 250,
+                    url: "@Url.Action("BuscarDescripcion", "Arancel")",
+                    data: function (searchTerm) {
+                        return { q: searchTerm };
+                    },
+                    processResults: function (data /*, page*/) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });*@
+        });
+
+
+        $(document).ready(function () {
+            $("#frmExportar").keypress(function (e) {//Para deshabilitar el uso de la tecla "Enter"
+                if (e.which == 13) {
+                    return false;
+                }
+            });
+        });
+
+    </script>
+}

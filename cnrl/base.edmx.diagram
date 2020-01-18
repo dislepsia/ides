@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ca74c65065d74baa9405c2784cb07bd1" Name="Diagram1" ZoomLevel="82">
+        <EntityTypeShape EntityType="socioculturalesModel.asistencia" Width="1.5" PointX="15.75" PointY="9.875" />
+        <EntityTypeShape EntityType="socioculturalesModel.EstadoCursa" Width="1.5" PointX="11.25" PointY="17.625" />
+        <EntityTypeShape EntityType="socioculturalesModel.localidad" Width="1.5" PointX="3.75" PointY="17" />
+        <EntityTypeShape EntityType="socioculturalesModel.menu" Width="1.5" PointX="5.75" PointY="1" />
+        <EntityTypeShape EntityType="socioculturalesModel.motivoBaja" Width="1.5" PointX="11.25" PointY="3.25" />
+        <EntityTypeShape EntityType="socioculturalesModel.nivelacion" Width="1.5" PointX="8.25" PointY="9.875" />
+        <EntityTypeShape EntityType="socioculturalesModel.periodolectivo" Width="1.5" PointX="3" PointY="8.875" />
+        <EntityTypeShape EntityType="socioculturalesModel.permiso" Width="1.5" PointX="8" PointY="1.125" />
+        <EntityTypeShape EntityType="socioculturalesModel.plantillaEmail" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="socioculturalesModel.provincia" Width="1.5" PointX="1.5" PointY="17.25" />
+        <EntityTypeShape EntityType="socioculturalesModel.sede" Width="1.5" PointX="9" PointY="5.625" />
+        <EntityTypeShape EntityType="socioculturalesModel.tipocurso" Width="1.5" PointX="0.75" PointY="9.875" />
+        <EntityTypeShape EntityType="socioculturalesModel.tipodocumento" Width="1.5" PointX="3.75" PointY="19.75" />
+        <AssociationConnector Association="socioculturalesModel.FK_localidad_provincia" />
+        <AssociationConnector Association="socioculturalesModel.FK_menu_menu" />
+        <AssociationConnector Association="socioculturalesModel.FK_permiso_menu" />
+        <AssociationConnector Association="socioculturalesModel.FK_periodolectivo_tipocurso" />
+        <EntityTypeShape EntityType="socioculturalesModel.AspNetRoles" Width="1.5" PointX="0.75" PointY="6.125" />
+        <AssociationConnector Association="socioculturalesModel.FK_permiso_AspNetRoles" />
+        <AssociationConnector Association="socioculturalesModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="socioculturalesModel.XX_usuarios" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="socioculturalesModel.frecuenciaCuota" Width="1.5" PointX="14.5" PointY="7.375" />
+        <EntityTypeShape EntityType="socioculturalesModel.curso" Width="1.5" PointX="6" PointY="5.75" />
+        <AssociationConnector Association="socioculturalesModel.FK_curso_tipocurso" />
+        <AssociationConnector Association="socioculturalesModel.FK_nivelacion_curso" />
+        <AssociationConnector Association="socioculturalesModel.correlativa" />
+        <EntityTypeShape EntityType="socioculturalesModel.ResultadoCursa" Width="1.5" PointX="11.375" PointY="6.875" />
+        <EntityTypeShape EntityType="socioculturalesModel.cursa" Width="1.5" PointX="21" PointY="9.875" />
+        <AssociationConnector Association="socioculturalesModel.FK_asistencia_cursa" />
+        <AssociationConnector Association="socioculturalesModel.FK_cursa_EstadoCursa" />
+        <AssociationConnector Association="socioculturalesModel.FK_cursa_motivoBaja" />
+        <AssociationConnector Association="socioculturalesModel.FK_cursa_ResultadoCursa" />
+        <EntityTypeShape EntityType="socioculturalesModel.oferta" Width="1.5" PointX="18.625" PointY="6.25" />
+        <EntityTypeShape EntityType="socioculturalesModel.precio" Width="1.5" PointX="3.75" PointY="22.75" />
+        <AssociationConnector Association="socioculturalesModel.FK_cursa_oferta" />
+        <AssociationConnector Association="socioculturalesModel.FK_curso_precio" />
+        <AssociationConnector Association="socioculturalesModel.FK_oferta_curso" />
+        <AssociationConnector Association="socioculturalesModel.FK_oferta_curso2" />
+        <AssociationConnector Association="socioculturalesModel.FK__oferta__frecuenc__25518C17" />
+        <AssociationConnector Association="socioculturalesModel.FK_oferta_periodolectivo" />
+        <AssociationConnector Association="socioculturalesModel.FK_oferta_periodolectivo2" />
+        <AssociationConnector Association="socioculturalesModel.FK_oferta_sede" />
+        <AssociationConnector Association="socioculturalesModel.FK_oferta_sede2" />
+        <EntityTypeShape EntityType="socioculturalesModel.Sector" Width="1.5" PointX="6.75" PointY="13.875" />
+        <AssociationConnector Association="socioculturalesModel.FK_sede_Sector" />
+        <AssociationConnector Association="socioculturalesModel.FK_plantillaEmail_Sector" />
+        <AssociationConnector Association="socioculturalesModel.FK_precio_Sector" />
+        <EntityTypeShape EntityType="socioculturalesModel.Encuesta" Width="1.5" PointX="11.25" PointY="14.25" />
+        <EntityTypeShape EntityType="socioculturalesModel.RespuestasEncuesta" Width="1.5" PointX="9" PointY="24.5" />
+        <AssociationConnector Association="socioculturalesModel.FK_Encuesta_RespuestasEncuesta" />
+        <AssociationConnector Association="socioculturalesModel.FK_Encuesta_cursa" />
+        <EntityTypeShape EntityType="socioculturalesModel.AspNetUsers" Width="1.5" PointX="14.25" PointY="14" />
+        <AssociationConnector Association="socioculturalesModel.FK_AspNetUsers_localidad" />
+        <AssociationConnector Association="socioculturalesModel.FK_AspNetUsers_sede" />
+        <AssociationConnector Association="socioculturalesModel.FK_AspNetUsers_tipodocumento" />
+        <AssociationConnector Association="socioculturalesModel.FK_cursa_AspNetUsers" />
+        <AssociationConnector Association="socioculturalesModel.FK_Encuesta_AspNetUsers" />
+        <AssociationConnector Association="socioculturalesModel.FK_nivelacion_AspNetUsers" />
+        <AssociationConnector Association="socioculturalesModel.FK_oferta_AspNetUsers" />
+        <AssociationConnector Association="socioculturalesModel.FK_oferta_AspNetUsers2" />
+        <AssociationConnector Association="socioculturalesModel.FK_tipocurso_Sector" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

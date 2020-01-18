@@ -1,0 +1,9 @@
+﻿@model IEnumerable<cnrl.sede>
+
+    @{
+        ViewBag.Titulo = "Sedes";
+        ViewBag.Subtitulo = "Administración";
+        Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+    }
+
+    @Html.Action("PartialGrid")

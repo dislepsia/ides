@@ -1,0 +1,122 @@
+﻿@model IEnumerable<cnrl.cursa>
+
+@{
+    ViewBag.Titulo = "Solicitudes de Baja";
+    ViewBag.Subtitulo = "Administración";
+    var sedes = (SelectList)ViewBag.sedes;
+    Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdSede"] = $('#IdSede').val();
+        e.customArgs["IdUsuario"] = $('#IdUsuario').val();
+        //console.log("IdUsuario: " + $('#IdUsuario').val());
+    }
+</script>
+
+<form action="@Url.Action("Exportar")" method="POST" name="frmExportar" id="frmExportar">
+    <div class="box box-default filtros">
+        <div class="box-body filtros">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdUsuario">@Strings.ColAlumno</label>
+                    <div id="IdUsuario" name="IdUsuario" style="width: 100%"></div>
+                    <input type="hidden" id="hiddenUsuario" name="hiddenUsuario" value="" />
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="IdSede">@Strings.ColSede</label>
+                    @Html.DropDownList("IdSede", sedes, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="col-sm-1">
+                <div class="pull-right">
+                    <button type="button" class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="row row-horizon">
+        @Html.Action("PartialGrid", new { IdUsuario = ViewBag.IdUsuario })
+    </div>
+</form>
+@section scripts
+{
+    <script>
+        
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+            $('#IdSede').select2("val", "-1");
+
+            $('#IdUsuario').select2("val", "");
+
+
+            refresh = true;
+            refrescar();
+        }
+
+        function refrescar() {
+            if (refresh === true) {
+                window.Grid.PerformCallback();
+            }
+        }
+        $(function () {
+            $('#IdSede').change(function () { refrescar(); });
+            $('#IdUsuario').change(function () { refrescar(); });
+            
+            
+            $("#IdSede").select2({
+                allowClear: true
+            });
+
+            $("#IdUsuario").select2({
+                placeholder: "Ingresa Nombre o documento...",
+                language: "es",
+                allowClear: true,
+                minimumInputLength: 4,
+                ajax: {
+                    cache: true,
+                    dataType: "json",
+                    type: "GET",
+                    quietMillis: 500,
+                    delay: 100,
+                    url: "@Url.Action("Buscar", "Usuarios")",
+                    data: function (searchTerm) {
+                        return { q: searchTerm };
+                    },
+                    processResults: function (data /*, page*/) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+
+            @{string idUsuario = ViewBag.IdUsuario;
+            if (!string.IsNullOrEmpty(idUsuario))
+            {
+                <text>
+            $("#IdUsuario").select2('data', { id: '@idUsuario', text: '@ViewBag.NombreUsuario' });
+
+            </text>
+            }
+        }
+        });
+        $(document).ready(function () {
+            $("#frmExportar").keypress(function (e) {//Para deshabilitar el uso de la tecla "Enter"
+                if (e.which == 13) {
+                    return false;
+                }
+            });
+        });
+    </script>
+}

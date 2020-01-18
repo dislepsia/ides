@@ -1,0 +1,198 @@
+﻿@model cnrl.cursa
+@using cnrl.Logica
+@using cnrl.Models
+
+@{
+    ViewBag.Titulo = "Imprimir Actas";
+    ViewBag.Subtitulo = "Administración de los Alumnos del Curso";
+    Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+
+    var tiposCurso = (SelectList)ViewBag.tiposCurso;
+    var sedes = (SelectList)ViewBag.sedes;
+    var cursos = (SelectList)ViewBag.cursos;
+    var periodosLectivos = (SelectList)ViewBag.periodosLectivos;
+    var vistaCompleta = (bool?)ViewBag.VistaCompleta;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdTipoCurso"] = $('#IdTipoCurso').val();
+        e.customArgs["IdSede"] = $('#IdSede').val();
+        e.customArgs["IdCurso"] = $('#IdCurso').val();
+
+        e.customArgs["IdPeriodo"] = $('#IdPeriodo').val();
+
+        //  e.customArgs["VistaCompleta"] = $('#VistaCompleta').val();
+
+
+
+    }
+</script>
+
+<div class="box box-default filtros">
+    <div class="box-body filtros">
+        @Html.Hidden("VistaCompleta", false)
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="IdSede">@Strings.ColSede</label>
+                @Html.DropDownList("IdSede", sedes, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="IdPeriodo">@Strings.ColPeriodo</label>
+                @Html.DropDownList("IdPeriodo", periodosLectivos, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="IdTipoCurso">@Strings.ColTipoCurso</label>
+                @Html.DropDownList("IdTipoCurso", tiposCurso, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="IdCurso">@Strings.ColCurso</label>
+                @Html.DropDownList("IdCurso", cursos, new { @class = "form-control" })
+            </div>
+        </div>
+
+
+    </div>
+</div>
+@Html.Action("PartialGridImprimir")
+
+@section scripts
+{
+    <script>
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+            $('#IdTipoCurso').select2("val", "-1");
+            $('#IdSede').select2("val", "-1");
+            $('#IdCurso').select2("val", "-1");
+
+            $('#IdPeriodo').select2("val", "-1");
+
+            refresh = true;
+            refrescar();
+        }
+
+        // Refrescar Grilla
+        function refrescar() {
+            if (refresh === true) {
+                window.Grid.PerformCallback();
+            }
+        }
+        $(function () {
+            $('#IdTipoCurso').change(function () { refrescar(); });
+            $('#IdSede').change(function () { refrescar(); });
+            $('#IdCurso').change(function () { refrescar(); });
+            
+            $('#IdPeriodo').change(function () { refrescar(); });
+            
+
+            $("#IdTipoCurso").select2({
+                allowClear: true
+            });
+            $("#IdSede").select2({
+                allowClear: true
+            });
+            $("#IdCurso").select2({
+                allowClear: true
+            });
+            
+            $("#IdPeriodo").select2({
+                allowClear: true
+            });
+            
+        });
+
+        //function habilitarTodo(habilitar) {
+
+        //    $.ajax({
+        //        type: "post",
+        //        url: "/oferta/consultarCantidadOfertas",
+        //        data: {
+        //            IdTipoCurso: $('#IdTipoCurso').val(),
+        //            IdSede: $('#IdSede').val(),
+        //            IdCurso: $('#IdCurso').val(),
+        //            IdDia: $('#IdDia').val(),
+        //            IdPeriodo: $('#IdPeriodo').val(),
+        //            IdDocente: $('#IdDocente').val(),
+        //            VistaCompleta: $('#VistaCompleta').val(),
+        //            montoDesde: $('#montoDesde').val(),
+        //            montoHasta: $('#montoHasta').val(),
+        //            inscriptosDesde: $('#inscriptosDesde').val(),
+        //            inscriptosHasta: $('#inscriptosHasta').val(),
+        //            inscriptosMayorMinimo: $('#inscriptosMayorMinimo').prop('checked'),
+        //            montoMayorMinimo: $('#montoMayorMinimo').prop('checked'), habilitar: habilitar
+        //        },
+        //        datatype: "json",
+        //        traditional: true,
+        //        success: function (data) {
+        //            if (data.cantidad > 0) {
+        //                var palabra = "";
+        //                if (habilitar)
+        //                    palabra = "Habilitar";
+        //                else
+        //                    palabra = "Inhabilitar";
+
+        //                bootbox.confirm({
+        //                    title: palabra + " Ofertas",
+        //                    message: "¿Esta seguro que desea " + palabra + " " + data.cantidad + " ofertas?",
+        //                    buttons: {
+        //                        cancel: {
+        //                            label: '<i class="fa fa-times"></i> Cancelar'
+        //                        },
+        //                        confirm: {
+        //                            label: '<i class="fa fa-check"></i> Confirmar'
+        //                        }
+        //                    },
+        //                    callback: function (result) {
+        //                        if (result == true) {
+        //                            $.ajax({
+        //                                type: "post",
+        //                                url: "/oferta/HabilitarTodo",
+        //                                data: {
+        //                                    IdTipoCurso: $('#IdTipoCurso').val(),
+        //                                    IdSede: $('#IdSede').val(),
+        //                                    IdCurso: $('#IdCurso').val(),
+        //                                    IdDia: $('#IdDia').val(),
+        //                                    IdPeriodo: $('#IdPeriodo').val(),
+        //                                    IdDocente: $('#IdDocente').val(),
+        //                                    VistaCompleta: $('#VistaCompleta').val(),
+        //                                    montoDesde: $('#montoDesde').val(),
+        //                                    montoHasta: $('#montoHasta').val(),
+        //                                    inscriptosDesde: $('#inscriptosDesde').val(),
+        //                                    inscriptosHasta: $('#inscriptosHasta').val(),
+        //                                    inscriptosMayorMinimo: $('#inscriptosMayorMinimo').prop('checked'),
+        //                                    montoMayorMinimo: $('#montoMayorMinimo').prop('checked'), habilitar: habilitar
+        //                                },
+        //                                datatype: "json",
+        //                                traditional: true,
+        //                                success: function (data) {
+        //                                    if (data.ok === true) {
+        //                                        window.Grid.PerformCallback();
+        //                                    }
+        //                                }
+        //                            });
+        //                        }
+        //                    }
+        //                });
+        //            }
+        //        }
+        //    });
+
+        //}
+
+        //$(document).ready(function () {
+        //    $("#frmExportar").keypress(function (e) {//Para deshabilitar el uso de la tecla "Enter"
+        //        if (e.which == 13) {
+        //            return false;
+        //        }
+        //    });
+        //});
+    </script>
+}

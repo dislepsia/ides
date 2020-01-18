@@ -1,0 +1,590 @@
+﻿@model IEnumerable<cnrl.ofertaDisponiblePorAlumno4_Result>
+@using cnrl.Logica;
+
+@{
+    ViewBag.Title = "Index";
+    var usuarioCompleto = (AspNetUsers)ViewBag.UsuarioCompleto;
+
+    IEnumerable<IGrouping<string, ofertaDisponiblePorAlumno4_Result>> ofertaAgrupadaSocio = null;
+    IEnumerable<IGrouping<string, ofertaDisponiblePorAlumno4_Result>> ofertaAgrupadaEmpresa = null;
+    IEnumerable<IGrouping<string, ofertaDisponiblePorAlumno4_Result>> ofertaAgrupadaGraduado = null;
+
+    if (Model != null && Model.Count() > 0)
+    {
+        ofertaAgrupadaSocio = Model.Where(x => x.sector == (int)Sectores.Idiomas).GroupBy(ofer => ofer.sedeNombre);
+        ofertaAgrupadaGraduado = Model.Where(x => x.sector == (int)Sectores.Graduados).GroupBy(ofer => ofer.sedeNombre);
+        ofertaAgrupadaEmpresa = Model.Where(x => x.sector == (int)Sectores.Empresas).GroupBy(ofer => ofer.sedeNombre);
+        
+    }
+
+    string colapasado = "in";
+    bool hayAlgunoInscripto = false;
+    if (Model != null && Model.Where(x => x.selected == "selected").Count() > 0)
+    {
+        hayAlgunoInscripto = true;
+    }
+}
+<style>
+    .class-with-width {
+        width: 80%;
+    }
+
+    .class-paddint-top-100 {
+        margin-top: 100px;
+    }
+</style>
+<h2>Inscripción de  <b>@usuarioCompleto.Apellido, @usuarioCompleto.Nombre (@usuarioCompleto.NroDocumento)</b> </h2>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h2 class="box-title box-solid">Cursos disponibles</h2>
+
+                <button class="btn btn-lg btn-danger pull-right" onclick="EliminarTodo();">Eliminar Toda la Inscripción</button>
+
+                <script>
+                    function EliminarTodo() {
+                        bootbox.confirm("Se eliminarán solo las inscripciones en las que no haya seleccionado una forma de Pago, si ya seleccionó una forma de pago debe hacer una solicitud de baja de cursadas", function (result) { window.location.href = '@Url.Action("EliminarInscripcionCompleta", "Cursa", new { id = ViewBag.Usuario })'; });
+                    }
+
+                </script>
+
+            </div>
+            <!-- Capacitacion Empresarial -->
+            <div class="box-body">
+                <div class="box-group" id="accordion">
+                    <div class="panel box box-success box-solid">
+                        <div class="box-header with-border ">
+                            <h4 class="box-title ">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                                    Capacitación Empresarial
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-box-tool" data-widget="collapse"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse2" class="panel-collapse collapse ">
+                            <div class="box-body">
+                                <div class="box-group" id="accordion2">
+                                    @if (ofertaAgrupadaEmpresa != null)
+                                    {
+                                        foreach (var grupo in ofertaAgrupadaEmpresa)
+                                        {
+                                            if (hayAlgunoInscripto) //esto es para ver si esta inscripto en alguna sede la muestra sin colapsar, si no esta inscripto a nada muestra unlam por defecto
+                                            {
+                                                colapasado = " ";
+                                            }
+                                            <div class="panel box box-success box-solid">
+                                                <div class="box-header with-border ">
+                                                    <h4 class="box-title ">
+                                                        <a data-toggle="collapse" data-parent="#accordion2" href="#@grupo.Key.ToString().Replace(' ', '_')">
+                                                            Sede: @grupo.Key
+                                                            <div class="box-tools pull-right">
+                                                                <button class="btn btn-box-tool" data-widget="collapse"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                                            </div>
+                                                        </a>
+
+                                                    </h4>
+                                                </div>
+                                                <div id="@grupo.Key.ToString().Replace(' ', '_')" class="panel-collapse collapse">
+
+                                                    @using (Html.BeginForm("Inscripcion", "Cursa", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                                    {
+                                                        <input type="hidden" name="usuario" value="@ViewBag.Usuario" />
+                                                        <input type="hidden" name="callBackView" value="FormaDePago" />
+                                                        <div class="box-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped">
+                                                                    <tr>
+                                                                        <th style="width:35px">Tipo</th>
+                                                                        <th style="width:25px">Código</th>
+                                                                        <th>Nombre del Curso</th>
+                                                                        <th>Día y Horario</th>
+                                                                    </tr>
+                                                                    @{
+                                                                        IEnumerable<IGrouping<int, ofertaDisponiblePorAlumno4_Result>> cursoAgrupado = grupo.GroupBy(cur => cur.codCurso.Value);
+                                                                    }
+
+                                                                    @foreach (var cur in cursoAgrupado)
+                                                                    {
+                                                                        <input type="hidden" name="codCurso" value="@cur.Key" />
+                                                                        <input type="hidden" name="codigoOferta" value="@cur.First().codigo" />
+                                                                        <input type="hidden" name="selected" value="@cur.First().selected" />
+
+                                                                        <tr style="font-size:large">
+                                                                            <td>@cur.First().tipoCursoNombre</td>
+                                                                            <td>@cur.Key</td>
+                                                                            <td>@cur.First().descripcion</td>
+                                                                            <td>
+                                                                                <div class="form-group " style="margin: 0">
+                                                                                    @{
+                                                                                        string disabled = "";
+                                                                                        if (cur.Where(x => x.selected.Equals("selected")).Count() > 0)
+                                                                                        {
+                                                                                            disabled = "disabled";
+                                                                                        }
+                                                                                    }
+                                                                                    <select class="form-control" name="codigo" @disabled>
+                                                                                        <option value="-1">(Seleccione un Horario)</option>
+                                                                                        @foreach (var horario in cur)
+                                                                                        {
+                                                                                            <option value="@horario.codigo" @horario.selected>@horario.Horario</option>
+                                                                                        }
+                                                                                    </select>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                                        }
+                                                                </table>
+                                                            </div>
+                                                            @{ colapasado = " ";}
+                                                            <input type="submit" value="Inscribirse" class="btn btn-success btn-lg pull-right" />
+
+                                                        </div>
+                                                                }
+                                                </div>
+                                            </div>
+
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="alert-dismissible alert-link">No hay cursos disponible para inscribirse</div>
+                                                                }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
+            </div>
+
+            <!-- SocioCulturales -->
+            <div class="box-body">
+                <div class="box-group" id="accordionSocio">
+                    <div class="panel box box-success box-solid">
+                        <div class="box-header with-border ">
+                            <h4 class="box-title ">
+                                <a data-toggle="collapse" data-parent="#accordionSocio" href="#collapse3" onclick="Termino();">
+                                    Socioculturales
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-box-tool" data-widget="collapse" onclick="Termino();"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse3" class="panel-collapse collapse ">
+                            <div class="box-body">
+                                <div class="box-group" id="accordionSocio2">
+                                    @if (ofertaAgrupadaSocio != null)
+                                    {
+                                        foreach (var grupo in ofertaAgrupadaSocio)
+                                        {
+                                            if (hayAlgunoInscripto) //esto es para ver si esta inscripto en alguna sede la muestra sin colapsar, si no esta inscripto a nada muestra unlam por defecto
+                                            {
+                                                colapasado = " ";
+                                            }
+                                            <div class="panel box box-success box-solid">
+                                                <div class="box-header with-border ">
+                                                    <h4 class="box-title ">
+                                                        <a data-toggle="collapse" data-parent="#accordionSocio2" href="#@grupo.Key.ToString().Replace(' ', '_')_">
+                                                            Sede: @grupo.Key
+                                                            <div class="box-tools pull-right">
+                                                                <button class="btn btn-box-tool" data-widget="collapse"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                                            </div>
+                                                        </a>
+
+                                                    </h4>
+                                                </div>
+                                                <div id="@grupo.Key.ToString().Replace(' ', '_')_" class="panel-collapse collapse ">
+
+                                                    @using (Html.BeginForm("Inscripcion", "Cursa", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                                    {
+                                                        <input type="hidden" name="usuario" value="@ViewBag.Usuario" />
+                                                        <input type="hidden" name="callBackView" value="FormaDePago" />
+                                                        <div class="box-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped">
+                                                                    <tr>
+                                                                        <th style="width:35px">Tipo</th>
+                                                                        <th style="width:25px">Código</th>
+                                                                        <th>Nombre del Curso</th>
+                                                                        <th>Día y Horario</th>
+                                                                    </tr>
+                                                                    @{
+                                                                        IEnumerable<IGrouping<int, ofertaDisponiblePorAlumno4_Result>> cursoAgrupado = grupo.GroupBy(cur => cur.codCurso.Value);
+                                                                    }
+
+                                                                    @foreach (var cur in cursoAgrupado)
+                                                                    {
+                                                                        <input type="hidden" name="codCurso" value="@cur.Key" />
+                                                                        <input type="hidden" name="codigoOferta" value="@cur.First().codigo" />
+                                                                        <input type="hidden" name="selected" value="@cur.First().selected" />
+
+                                                                        <tr style="font-size:large">
+                                                                            <td>@cur.First().tipoCursoNombre</td>
+                                                                            <td>@cur.Key</td>
+                                                                            <td>@cur.First().descripcion</td>
+                                                                            <td>
+                                                                                <div class="form-group " style="margin: 0">
+                                                                                    @{
+                                                                                        string disabled = "";
+                                                                                        if (cur.Where(x => x.selected.Equals("selected")).Count() > 0)
+                                                                                        {
+                                                                                            disabled = "disabled";
+                                                                                        }
+                                                                                    }
+                                                                                    <select class="form-control" name="codigo" @disabled>
+                                                                                        <option value="-1">(Seleccione un Horario)</option>
+                                                                                        @foreach (var horario in cur)
+                                                                                        {
+
+
+
+                                                                                            <option value="@horario.codigo" @horario.selected>@horario.Horario</option>
+                                                                                        }
+                                                                                    </select>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                                        }
+                                                                </table>
+                                                            </div>
+                                                            @{ colapasado = " ";}
+                                                            <input type="submit" value="Inscribirse" class="btn btn-success btn-lg pull-right" />
+
+                                                        </div>
+                                                                }
+                                                </div>
+                                            </div>
+
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="alert-dismissible alert-link">No hay cursos disponible para inscribirse</div>
+                                                                }
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+            <!--Graduado-->
+            <div class="box-body">
+                <div class="box-group" id="accordionGraduado">
+                    <div class="panel box box-success box-solid">
+                        <div class="box-header with-border ">
+                            <h4 class="box-title ">
+                                <a data-toggle="collapse" data-parent="#accordionGraduado" href="#collapse4" onclick="TerminoGraduado();">
+                                    Graduados
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-box-tool" data-widget="collapse" ><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse4" class="panel-collapse collapse ">
+                            <div class="box-body">
+                                <div class="box-group" id="accordionGraduado2">
+                                    @if (ofertaAgrupadaGraduado != null)
+                                    {
+                                        foreach (var grupo in ofertaAgrupadaGraduado)
+                                        {
+                                            if (hayAlgunoInscripto) //esto es para ver si esta inscripto en alguna sede la muestra sin colapsar, si no esta inscripto a nada muestra unlam por defecto
+                                            {
+                                                colapasado = " ";
+                                            }
+                                            
+                                            <div class="panel box box-success box-solid">
+                                                <div class="box-header with-border ">
+                                                    <h4 class="box-title ">
+                                                        <a data-toggle="collapse" data-parent="#accordionGraduado2" href="#@grupo.Key.ToString().Replace(' ', '_')-">
+                                                            Sede: @grupo.Key
+                                                            <div class="box-tools pull-right">
+                                                                <button class="btn btn-box-tool" data-widget="collapse" onclick="TerminoGraduado();"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                                                            </div>
+                                                        </a>
+
+                                                    </h4>
+                                                </div>
+                                                <div id="@grupo.Key.ToString().Replace(' ', '_')-" class="panel-collapse collapse">
+
+                                                    @using (Html.BeginForm("Inscripcion", "Cursa", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                                    {
+                                                        <input type="hidden" name="usuario" value="@ViewBag.Usuario" />
+                                                        <input type="hidden" name="callBackView" value="FormaDePago" />
+                                                        <div class="box-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped">
+                                                                    <tr>
+                                                                        <th style="width:35px">Tipo</th>
+                                                                        <th style="width:25px">Código</th>
+                                                                        <th>Nombre del Curso</th>
+                                                                        <th>Día y Horario</th>
+                                                                    </tr>
+                                                                    @{
+                                                                        IEnumerable<IGrouping<int, ofertaDisponiblePorAlumno4_Result>> cursoAgrupado = grupo.GroupBy(cur => cur.codCurso.Value);
+                                                                    }
+
+                                                                    @foreach (var cur in cursoAgrupado)
+                                                                    {
+                                                                        <input type="hidden" name="codCurso" value="@cur.Key" />
+                                                                        <input type="hidden" name="codigoOferta" value="@cur.First().codigo" />
+                                                                        <input type="hidden" name="selected" value="@cur.First().selected" />
+
+                                                                        <tr style="font-size:large">
+                                                                            <td>@cur.First().tipoCursoNombre</td>
+                                                                            <td>@cur.Key</td>
+                                                                            <td>@cur.First().descripcion</td>
+                                                                            <td>
+                                                                                <div class="form-group " style="margin: 0">
+                                                                                    @{
+                                                                                        string disabled = "";
+                                                                                        if (cur.Where(x => x.selected.Equals("selected")).Count() > 0)
+                                                                                        {
+                                                                                            disabled = "disabled";
+                                                                                        }
+                                                                                    }
+                                                                                    <select class="form-control" name="codigo" @disabled>
+                                                                                        <option value="-1">(Seleccione un Horario)</option>
+                                                                                        @foreach (var horario in cur)
+                                                                                        {
+
+
+
+                                                                                            <option value="@horario.codigo" @horario.selected>@horario.Horario</option>
+                                                                                        }
+                                                                                    </select>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                                        }
+                                                                </table>
+                                                            </div>
+                                                            @{ colapasado = " ";}
+                                                            <input type="submit" value="Inscribirse" class="btn btn-success btn-lg pull-right" />
+
+                                                        </div>
+                                                                }
+                                                </div>
+                                            </div>
+
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="alert-dismissible alert-link">No hay cursos disponible para inscribirse</div>
+                                                                }
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+</div><!-- /.col -->
+<script>
+    var bandera = 0;
+    var terminos = "<h1>1</h1>"
+             + "<p>La apertura de los cursos, deberá cumplir con un mínimo de alumnos específico, se producirán con un número mínimo de 12 (doce) alumnos. De no llegar al número establecido, se informará telefónicamente a los inscriptos, teniendo la posibilidad de incorporarse a otros cursos abiertos o se les reintegrará el dinero abonado en la inscripción en efectivo, en un plazo mínimo de 15 (quince) días. Este dinero solo puede ser retirado de la Tesorería por la persona que lo solicite con el recibo original y su D.N.I.</p>"
+             + "<h1>2</h1>"
+             + "<p>Las cuotas vencen del 1 al 10 de cada mes. En el caso de no poder cumplir en ese periodo se establece una segunda fecha de vencimiento siendo la misma del 11 al último día hábil del mismo mes debiendo abonarse la cuota correspondiente más un 10% de recargo. Mes a mes luego de abonada la cuota deberá presentarse con el comprobante original a la oficina de atención al público para que el personal selle la cuponera correspondiente. Con la primer cuota deberá presentar original y fotocopia del comprobante de pago en la Oficina de Atención al Público para que se haga entrega de la cuponera.</p>"
+             + "<h1>3</h1>"
+             + "<p>En el caso de los cursos que corresponda rendir examen final será obligación presentar ante el docente el cupón de pago, que previamente será sellado en la Oficina de Atención al Público.</p>"
+             + "<h1>4</h1>"
+             + "<p>Para obtener la certificación de la capacitación es necesario tener el 75 % de asistencia a clases, el pago de las cuotas al día y aprobar (con 7 o 70 puntos  más) los exámenes finales o el recuperatorio de los mismos en los cursos que así lo requieran.</p>"
+             + "<h1>5</h1>"
+             + "<p>Recuperatorio de clases: En caso de ausencia de los docentes y los días feriados, de paro o movilizaciones que impidan el normal dictado de la clase, se recuperará la misma previo arreglo con el docente a cargo del curso.</p>"
+             + "<h1>6</h1>"
+             + "<p><b>IMPORTANTE</b> Baja de curso: De no cumplimentar la asistencia, abandonando el curso (ya sea por temas personales, laborales, etc) al cual se inscribió deberá gestionarla por el sistema de inscripción (en la solapa correspondiente). La misma deberá gestionarse antes de la fecha de vencimiento de la cuota. En caso contrario se registrará la deuda, importe que deberá abonar al momento de reinscribirse a otro curso.</p>"
+             + "<h1>7</h1>"
+             + "<p>Inscripciones fuera de término: Se les informa que aquella persona que por diversos motivos no abonen la inscripción y por consiguiente se de baja la misma o hayan abonado fuera de término y se les haya vencido el cupón, deberán presentar una nota informando los motivos quedando a evaluación del personal y de cada caso particular la inscripción de la misma. En caso de aprobarse tal solicitud el pago será en una única cuota sin excepción.</p>"
+             + "<h1>8</h1>"
+             + "<p>En el caso de aquellos estudiantes que asistan a los talleres que sean para menores de 15 años, deberán asistir acompañados de sus padres, quedando estos presentes durante todo el horario en que se desarrolle la actividad.</p>"
+             + "<hr />"
+             + "<p>Ante cualquier duda, sugerencia, queja o problema respecto de los cursos y talleres, no dude en recurrir a la oficina de atención al público (frente al aula 205) o comunicarse telefónicamente de lunes a viernes al (011) 4480-8900 int. 8823/8723 de 12 a 18 hs. O enviando un e-mail a sociocultural@unlam.edu.ar.</p>"
+
+    var banderaGraduado = 0;
+    var terminosGraduado = "<h1>Ciclo de Capacitación para la Iniciación en la Docencia para Graduados.</h1>"
+             + "<h1>1</h1>"
+             + "<p>Para este curso se realizará una preinscripción on line y luego se informará por correo electrónico EXCLUSIVAMENTE a los que hayan obtenido su vacante.</p>"
+             + "<h1>2</h1>"
+             + "<p>Para finalizar la inscripción es requisito presentar TODA la documentación indicada en la “Información” del mismo en el plazo indicado, caso contrario la inscripción será dada de baja de forma automática.</p>"
+             + "<h1>3</h1>"
+             + "<p>Se solicita revisar todas las condiciones de este curso en particular en su solapa de “Información”, debido a que presenta un régimen diferenciado a las otras capacitaciones en especial las condiciones de aprobación.</p>"
+             + "<h1>Capacitaciones Profesionales (excepto Ciclo de Capacitación para la Iniciación en la Docencia para Graduados).</h1>"
+             + "<h1>1</h1>"
+             + "<p>La apertura de los cursos, deberá cumplir con un mínimo de alumnos. De no llegar al número establecido, se informará vía correo electrónico a los inscriptos, teniendo la posibilidad de incorporarse a otros cursos abiertos o se les reintegrará el dinero abonado en la inscripción en efectivo, en un plazo mínimo de 15 (quince) días. Este dinero sólo puede ser retirado de la Tesorería por el titular del pago con su DNI.</p>"
+             + "<h1>2</h1>"
+             + "<p>Una vez realizado el pago del arancel correspondiente, deberá presentarse en la oficina de la Dirección de Graduados con el comprobante correspondiente y una fotocopia del DNI, dentro del plazo indicado, para garantizar la reserva de su vacante.</p>"
+             + "<h1>3</h1>"
+             + "<p>Para obtener la certificación de la capacitación es necesario tener el 80% de asistencia a clases y la aprobación de los trabajos, sólo en el caso que el curso así lo requiera.</p>"
+             + "<h1>4</h1>"
+             + "<p>Recuperación de clases: En caso de ausencia de los docentes, los días feriados, de paro o movilizaciones que impidan el normal dictado de la clase, se recuperará la misma previa coordinación con el docente a cargo del curso y la correspondiente notificación a los estudiantes.</p>"
+             + "<h1>5</h1>"
+             + "<p><b>IMPORTANTE:</b> Cuando complete el formulario de inscripción se generará automáticamente un cupón de pago. Por lo tanto, le solicitamos que lo complete sólo si su intención es realizar la capacitación, caso contrario se registrará la deuda, importe que deberá abonar al momento de reinscribirse a otro curso.</p>"
+             + "<h1>6</h1>"
+             + "<p>Inscripciones fuera de término: Se les informa que aquella persona que por diversos motivos no abonen la inscripción y por consiguiente la misma se da de baja o hayan abonado fuera de término y se les haya vencido el cupón, deberán presentar una nota informando los motivos quedando a evaluación del personal y de cada caso particular la realización de la misma.</p>"
+             + "<hr />"
+             + "<p>Ante cualquier duda, sugerencia, queja o problema respecto de las Capacitaciones Profesionales, no dude en recurrir a la oficina de la Dirección de Graduados, comunicarse telefónicamente de lunes a viernes al (011) 4480-8972/73 de 10.30 a 19.30 hs. o enviar un e-mail a graduados@unlam.edu.ar.</p>"
+
+    function Termino() {
+        if (bandera === 0) {
+            bandera = 1;
+            var dialog = bootbox.dialog({
+                title: 'Terminos y condiciones',
+                size: 'large',
+                class: "class-with-width",
+                closeButton: false,
+                message: terminos,
+                buttons: {
+                    ok: {
+                        label: "Acepto los terminos y condiciones",
+                        className: 'btn-success',
+                    }
+                }
+            });
+        }
+    }
+
+    function TerminoGraduado() {
+        if (banderaGraduado === 0) {
+            banderaGraduado = 1;
+            var dialog = bootbox.dialog({
+                title: 'Terminos y condiciones',
+                size: 'large',
+                class: "class-with-width",
+                closeButton: false,
+                message: terminosGraduado,
+                buttons: {
+                    ok: {
+                        label: "Acepto los terminos y condiciones",
+                        className: 'btn-success',
+                    }
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+
+
+        var avisoDeuda = "<h1>Advertencia</h1>"
+             + "<p>Estimado:</p>"
+             + "<p>El sistema le ha inhabilitado la inscripción visto que registra deuda.</p>"
+             + "<p>Se solicita por favor ingrese a la opción “Cuotas” de modo que pueda descargar los volantes correspondientes. Una vez abonados los mismos, para mayor celeridad acérquese a la oficina de atención al público o envíe la imagen por correo electrónico al sector correspondiente de su curso (sociocultural@unlam.edu.ar, graduados@unlam.edu.ar o empresas@unlam.edu.ar) pago para poder vincularlos.</p>"
+             + "<p>En caso de haber abonado todas las cuotas correspondientes y que de igual forma le figure deuda, por favor acérquese a la oficina de atención al público o envíe la imagen para poder vincular los recibos pertinentes.</p>"
+             + "<p>Desde ya disculpa por las molestias y muchas gracias.</p>";
+
+        var avisoMenor = "<h1>Advertencia</h1>"
+        + "<p>En el caso de aquellos estudiantes que asistan a los talleres que sean para menores de 15 años, deberán asistir acompañados de sus padres, quedando estos presentes durante todo el horario en que se desarrolle la actividad.</p>"
+        + "<hr />"
+
+        var avisoPreinscripcion = "<h1>¡Atención!</h1>"
+        + "<p>Estimados, se le informa acaba de Preinscribir a un curso, dentro de los 5 días hábiles debe acercarse a la Oficina de Atención al Público para presentar la documentación correspondiente a cada curso. Una vez que haya alcanzado la misma y que el personal la haya corroborado se procederá a confirmar su inscripción para que posteriormente pueda acceder al comprobante de pago a traves del menú Alumno, opción Forma de Pago. \nRecuerde que de no traer los papeles dentro del plazo establecido se dará de baja la inscripción quedando la vacante libre y de querer inscribirse deberá hacer nuevamente todo el procedimiento.</p>"
+
+
+        @if (ViewBag.TieneDeuda == true)
+        {
+           <text>
+        var dialog = bootbox.dialog({
+            title: 'Advertencia',
+            size: 'large',
+            class: "class-paddint-top-100",
+            closeButton: false,
+            message: avisoDeuda,
+            buttons: {
+                ok: {
+                    label: "Ver mis cuotas",
+                    className: 'btn-warning',
+                    callback: function () {
+                        $(location).attr('href', '@Url.Action("cuotasalumno", "Deuda")');
+                    }
+
+                }
+            }
+        });
+        </text>
+        }
+        else if (ViewBag.TieneDeuda == false)
+        {
+             <text>
+        //var dialog = bootbox.dialog({
+        //    title: 'Terminos y condiciones',
+        //    size: 'large',
+        //    class: "class-with-width",
+        //    closeButton: false,
+        //    message: terminos,
+        //    buttons: {
+        //        ok: {
+        //            label: "Acepto los terminos y condiciones",
+        //            className: 'btn-success',
+        //        }
+        //    }
+        //});
+        </text>
+        }
+        else if (ViewBag.MenorDeQuince == true)
+            {
+                <text>
+        var dialog = bootbox.dialog({
+            title: 'Advertencia',
+            size: 'large',
+            class: "class-with-width",
+            closeButton: false,
+            message: avisoMenor,
+            buttons: {
+                ok: {
+                    label: "Acepto",
+                    className: 'btn-success',
+                }
+            }
+        });
+        </text>
+            }
+    else if (ViewBag.PreInscripcion == true)
+        {
+            <text>
+        var dialog = bootbox.dialog({
+            title: 'Advertencia',
+            size: 'large',
+            class: "class-with-width",
+            closeButton: false,
+            message: avisoPreinscripcion,
+            buttons: {
+                ok: {
+                    label: "Acepto",
+                    className: 'btn-success',
+                }
+            }
+        });
+        </text>
+        }
+    });
+
+</script>

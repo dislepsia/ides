@@ -1,0 +1,134 @@
+﻿@using System.Globalization
+@using cnrl.Models
+@using cnrl.ViewModels
+@model cnrl.oferta
+@using cnrl.Logica
+
+@{
+    Layout = null;// "~/Views/Shared/_LayoutImprimir.cshtml";
+    var anio = Model.periodolectivo1.anio;
+    var periodo = Model.periodolectivo1.periodo;
+    var docente = Model.docente.IsEmpty();
+    var nombreDocente = ViewBag.NombreDocente;
+}
+
+<div id="header"></div>
+
+<style>
+    #page {
+        margin: 0px auto;
+        width: 800px;
+    }
+
+    #header {
+        background-image: url("../../Content/images/banner.png");
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 800px;
+        height: 100px;
+        color: #FFFFFF;
+        padding: 10px;
+        background-repeat: no-repeat;
+    }
+
+    * html body {
+        overflow: hidden;
+    }
+</style>
+
+<body>
+    <br /><br /><br /><br />
+    <h3 style="align-self:center">Planilla de Asistencia @periodo º Cuatrimestre de  @anio</h3>
+
+    <div>
+        <label>Curso:</label>
+        @Model.curso1.descripcion
+    </div>
+    <div>
+        <label>Horario:</label>
+        @Model.horario
+    </div>
+    @if (!Model.docente.IsEmpty())
+    {
+        <div>
+            <label>Docente:</label>
+            @*@Model.docente;*@
+            @nombreDocente
+        </div>
+    }
+
+    <div style="float:left;">
+        <table style="border-collapse:collapse">
+            <tr>
+                <th>Tipo &nbsp;</th>
+                <th>Nro</th>
+                <th>Apellido y Nombre</th>
+            </tr>
+
+            <h5 style="font-weight:bold">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Asistencia
+            </h5>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+
+            @for (int i = 1; i <= 20; i++)
+            {
+                if (i == 17)
+                {
+                    <th>&nbsp;&nbsp;&nbsp;c1</th>
+                }
+                if (i == 18)
+                {
+                    <th>&nbsp;&nbsp;&nbsp;c2</th>
+                }
+                if (i == 19)
+                {
+                    <th>&nbsp;&nbsp;&nbsp;c3</th>
+                }
+                if (i == 20)
+                {
+                    <th>&nbsp;&nbsp;&nbsp;c4</th>
+                }
+                if (i < 17)
+                {
+                    <th style="font-size:small">&nbsp;&nbsp;@i</th>
+                }
+            }
+
+            @foreach (cursa estadoRed in Model.cursa.Where(x => x.estado == (int)EstadosCursada.FormaPago || x.estado == (int)EstadosCursada.Confirmado || x.estado == (int)EstadosCursada.PlanGenerado || x.estado == (int)EstadosCursada.Inscripto).OrderBy(f => f.AspNetUsers.Apellido))
+            {
+                <tr style="font-size:small">
+
+                    <td>@estadoRed.AspNetUsers.tipodocumento1.descripcion &nbsp;</td>
+                    <td>@estadoRed.AspNetUsers.NroDocumento &nbsp;</td>
+                    <td>@estadoRed.AspNetUsers.Apellido.ToUpper() @estadoRed.AspNetUsers.Nombre.ToUpper() &nbsp;</td>
+                    @for (int i = 0; i < 20; i++)
+                {
+                        <td style="color:white;font-size:medium;border-style:solid;border-color:black;border-width:1px">XX</td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+
+@*<a class="btn btn-flat btn-success" href="@Url.Action("Ficha", "Asistencia", new { id = Model.codigo , imprimir = true })" target="_blank">Imprimir<i class="fa fa-print"></i></a>*@
+
+<script>
+    $(document).ready(function () {
+    })
+</script>

@@ -1,0 +1,684 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BtnBorrar" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="BtnCancelar" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="BtnCerrar" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="BtnEditar" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="BtnGuardar" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="BtnNueva" xml:space="preserve">
+    <value>Nueva</value>
+  </data>
+  <data name="BtnNuevo" xml:space="preserve">
+    <value>Nuevo</value>
+  </data>
+  <data name="BtnVer" xml:space="preserve">
+    <value>Ver</value>
+  </data>
+  <data name="ColActivo" xml:space="preserve">
+    <value>Activo</value>
+  </data>
+  <data name="ColActivoCorto" xml:space="preserve">
+    <value>Act</value>
+  </data>
+  <data name="ColCp" xml:space="preserve">
+    <value>C.P.</value>
+  </data>
+  <data name="ColCpLargo" xml:space="preserve">
+    <value>Código Postal</value>
+  </data>
+  <data name="ColDescripcion" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="ColDescripcionCorta" xml:space="preserve">
+    <value>Descripción abreviada</value>
+  </data>
+  <data name="ColDomicilio" xml:space="preserve">
+    <value>Dirección</value>
+  </data>
+  <data name="ColEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="ColEstado" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="ColId" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="ColInstituto" xml:space="preserve">
+    <value>Instituto</value>
+  </data>
+  <data name="ColInstitutos" xml:space="preserve">
+    <value>Institutos</value>
+  </data>
+  <data name="ColJurisdiccion" xml:space="preserve">
+    <value>Jurisdicción</value>
+  </data>
+  <data name="ColNodos" xml:space="preserve">
+    <value>Nodos</value>
+  </data>
+  <data name="ColServiciosCorto" xml:space="preserve">
+    <value>Serv.</value>
+  </data>
+  <data name="ColLocalidad" xml:space="preserve">
+    <value>Localidad</value>
+  </data>
+  <data name="ColNivel" xml:space="preserve">
+    <value>Nivel</value>
+  </data>
+  <data name="ColNivelLargo" xml:space="preserve">
+    <value>Nivel</value>
+  </data>
+  <data name="ColNombre" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="ColNotas" xml:space="preserve">
+    <value>Notas</value>
+  </data>
+  <data name="ColRed" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="ColRedes" xml:space="preserve">
+    <value>Redes</value>
+  </data>
+  <data name="ColRegion" xml:space="preserve">
+    <value>Región Sanitaria</value>
+  </data>
+  <data name="ColResponsable" xml:space="preserve">
+    <value>Responsable</value>
+  </data>
+  <data name="ColResponsables" xml:space="preserve">
+    <value>Responsables</value>
+  </data>
+  <data name="ColResponsablesCorto" xml:space="preserve">
+    <value>Resp.</value>
+  </data>
+  <data name="ColTelefono" xml:space="preserve">
+    <value>Teléfono</value>
+  </data>
+  <data name="ColTipo" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="ErrorCampoObligatorio" xml:space="preserve">
+    <value>* Este campo es obligatorio</value>
+  </data>
+  <data name="ErrorEliminarRegistroPorIntegridad" xml:space="preserve">
+    <value>Imposible eliminar el registro por conflicto de Reglas de Integridad de Datos</value>
+  </data>
+  <data name="ErrorIntentarEditarRegistro" xml:space="preserve">
+    <value>Error al intentar editar el registro: {0}</value>
+  </data>
+  <data name="ErrorIntentarInsertarRegistro" xml:space="preserve">
+    <value>Error al intentar insertar el registro: {0}</value>
+  </data>
+  <data name="ErrorMensajeGenerico" xml:space="preserve">
+    <value>Han ocurrido algunos errores, por favor, revisa el formulario</value>
+  </data>
+  <data name="MsgBorrar" xml:space="preserve">
+    <value>Borrar registro</value>
+  </data>
+  <data name="MsgColumnas" xml:space="preserve">
+    <value>Columnas</value>
+  </data>
+  <data name="MsgDeseaBorrar" xml:space="preserve">
+    <value>¿Desea borrar este registro?</value>
+  </data>
+  <data name="MsgEditar" xml:space="preserve">
+    <value>Editar registro</value>
+  </data>
+  <data name="MsgJurisdiccion" xml:space="preserve">
+    <value>Jurisdicción</value>
+  </data>
+  <data name="MsgNuevo" xml:space="preserve">
+    <value>Nuevo registro</value>
+  </data>
+  <data name="MsgRed" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="Nivel0" xml:space="preserve">
+    <value>N/D</value>
+  </data>
+  <data name="Nivel1" xml:space="preserve">
+    <value>I</value>
+  </data>
+  <data name="Nivel2" xml:space="preserve">
+    <value>II</value>
+  </data>
+  <data name="Nivel3" xml:space="preserve">
+    <value>III</value>
+  </data>
+  <data name="Nivel4" xml:space="preserve">
+    <value>IV</value>
+  </data>
+  <data name="SeleccionarEstado" xml:space="preserve">
+    <value>(Seleccione el Estado actual)</value>
+  </data>
+  <data name="SeleccionarJurisdiccion" xml:space="preserve">
+    <value>(Seleccione la Jurisdicción)</value>
+  </data>
+  <data name="SeleccionarNivel" xml:space="preserve">
+    <value>(Seleccione el Nivel de Complejidad)</value>
+  </data>
+  <data name="SeleccionarRed" xml:space="preserve">
+    <value>(Seleccione la Red)</value>
+  </data>
+  <data name="SeleccionarRegion" xml:space="preserve">
+    <value>(Seleccione la Región)</value>
+  </data>
+  <data name="SeleccionarRegionInicio" xml:space="preserve">
+    <value>(Seleccione primero la Jurisdicción)</value>
+  </data>
+  <data name="SeleccionarTipoInstituto" xml:space="preserve">
+    <value>(Seleccione el Tipo de Instituto)</value>
+  </data>
+  <data name="TheStatementHasBeenTerminated" xml:space="preserve">
+    <value>The statement has been terminated.</value>
+  </data>
+  <data name="ColReferente" xml:space="preserve">
+    <value>Es Referente?</value>
+  </data>
+  <data name="ColOrden" xml:space="preserve">
+    <value>Orden</value>
+  </data>
+  <data name="ErrorCampoNombre" xml:space="preserve">
+    <value>Debes ingresar el Nombre</value>
+  </data>
+  <data name="ErrorCampoOrden" xml:space="preserve">
+    <value>Debe estar entre 0 y 100</value>
+  </data>
+  <data name="BtnBuscar" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="MsgTodasJurisdicciones" xml:space="preserve">
+    <value>(Todas las Jurisdicciones)</value>
+  </data>
+  <data name="MsgTodasRedes" xml:space="preserve">
+    <value>(Todas las Redes)</value>
+  </data>
+  <data name="MsgOpciones" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="ColInactivos" xml:space="preserve">
+    <value>Ver registros inactivos</value>
+  </data>
+  <data name="MsgTodosTipos" xml:space="preserve">
+    <value>(Todos los Tipos)</value>
+  </data>
+  <data name="ColResponsableIns" xml:space="preserve">
+    <value>Responsable de Instituto</value>
+  </data>
+  <data name="ColResponsableJur" xml:space="preserve">
+    <value>Coordinador de Jurisdicción</value>
+  </data>
+  <data name="ColResponsableNodo" xml:space="preserve">
+    <value>Responsable del Nodo</value>
+  </data>
+  <data name="ColResponsableRedJur" xml:space="preserve">
+    <value>Coordinador de Red</value>
+  </data>
+  <data name="ColResponsableRedNac" xml:space="preserve">
+    <value>Coordinador de Red</value>
+  </data>
+  <data name="ColResponsableSer" xml:space="preserve">
+    <value>Responsable de Servicio</value>
+  </data>
+  <data name="MsgTodasRegiones" xml:space="preserve">
+    <value>(Todas las Regiones)</value>
+  </data>
+  <data name="TituloJurisdicciones" xml:space="preserve">
+    <value>Redes Jurisdiccionales</value>
+  </data>
+  <data name="TituloRegiones" xml:space="preserve">
+    <value>Regiones Sanitarias</value>
+  </data>
+  <data name="ColRegiones" xml:space="preserve">
+    <value>Regiones</value>
+  </data>
+  <data name="ColCampo" xml:space="preserve">
+    <value>Campo</value>
+  </data>
+  <data name="MsgTodosCampos" xml:space="preserve">
+    <value>(Todos los Campos)</value>
+  </data>
+  <data name="TituloCampos" xml:space="preserve">
+    <value>Campos de Acción</value>
+  </data>
+  <data name="ColCampos" xml:space="preserve">
+    <value>Campos</value>
+  </data>
+  <data name="TituloAdmin" xml:space="preserve">
+    <value>Administración</value>
+  </data>
+  <data name="ColNodo" xml:space="preserve">
+    <value>Nodo</value>
+  </data>
+  <data name="TituloRedesJur" xml:space="preserve">
+    <value>Redes Locales</value>
+  </data>
+  <data name="TituloRedesNac" xml:space="preserve">
+    <value>Redes Nacionales</value>
+  </data>
+  <data name="TituloRedesNacJur" xml:space="preserve">
+    <value>Redes Nacionales y Locales</value>
+  </data>
+  <data name="MenuRedesEstado" xml:space="preserve">
+    <value>Estado de Redes</value>
+  </data>
+  <data name="MsgOtrosFiltros" xml:space="preserve">
+    <value>Otros Criterios de Búsqueda</value>
+  </data>
+  <data name="MsgVerMas" xml:space="preserve">
+    <value>Ver más </value>
+  </data>
+  <data name="TituloHome" xml:space="preserve">
+    <value>CNRL Centro Nacional de Redes de Laboratorios</value>
+  </data>
+  <data name="TituloInicio" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="TituloMenuPpal" xml:space="preserve">
+    <value>menú Principal</value>
+  </data>
+  <data name="TituloPendientes" xml:space="preserve">
+    <value>Pendientes</value>
+  </data>
+  <data name="TituloRedesEstado" xml:space="preserve">
+    <value>Estado de Redes</value>
+  </data>
+  <data name="TituloTipos" xml:space="preserve">
+    <value>Tipos de Instituto</value>
+  </data>
+  <data name="TituloNodos" xml:space="preserve">
+    <value>Nodos en Red</value>
+  </data>
+  <data name="ColServicio" xml:space="preserve">
+    <value>Servicio</value>
+  </data>
+  <data name="ColServicios" xml:space="preserve">
+    <value>Servicios</value>
+  </data>
+  <data name="TituloRegion" xml:space="preserve">
+    <value>Región Sanitaria</value>
+  </data>
+  <data name="TituloZonas" xml:space="preserve">
+    <value>Zonas Geográficas</value>
+  </data>
+  <data name="ColZona" xml:space="preserve">
+    <value>Zona Geográfica</value>
+  </data>
+  <data name="MsgTodasZonas" xml:space="preserve">
+    <value>(Todas las Zonas)</value>
+  </data>
+  <data name="MsgTodosEstados" xml:space="preserve">
+    <value>(Todos los Estados)</value>
+  </data>
+  <data name="ColJurisdiccional" xml:space="preserve">
+    <value>JURISDICCIONAL</value>
+  </data>
+  <data name="ColNacional" xml:space="preserve">
+    <value>NACIONAL</value>
+  </data>
+  <data name="BtnVerFicha" xml:space="preserve">
+    <value>Ver Ficha</value>
+  </data>
+  <data name="TituloUsuarios" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
+  <data name="TituloPersonas" xml:space="preserve">
+    <value>Personas</value>
+  </data>
+  <data name="TituloRedesJurLargo" xml:space="preserve">
+    <value>Redes Jurisdiccionales Locales</value>
+  </data>
+  <data name="ColPersona" xml:space="preserve">
+    <value>Persona</value>
+  </data>
+  <data name="ColTitulo" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="ColReferenteJurisdiccional" xml:space="preserve">
+    <value>Coordinador Jurisdiccional</value>
+  </data>
+  <data name="ColEspecialidad" xml:space="preserve">
+    <value>Especialidad</value>
+  </data>
+  <data name="MsgTodosInstitutos" xml:space="preserve">
+    <value>(Todos los Institutos)</value>
+  </data>
+  <data name="BtnMail" xml:space="preserve">
+    <value>Enviar Email</value>
+  </data>
+  <data name="emailBienvenida" xml:space="preserve">
+    <value>bienvenido a la pagina</value>
+  </data>
+  <data name="TituloDocumentos" xml:space="preserve">
+    <value>Documentos</value>
+  </data>
+  <data name="ColDocumento" xml:space="preserve">
+    <value>Documento</value>
+  </data>
+  <data name="MsgTodasComplejidades" xml:space="preserve">
+    <value>(Todos los Niveles de Complejidad)</value>
+  </data>
+  <data name="ColComplejidad" xml:space="preserve">
+    <value>Nivel de Complejidad</value>
+  </data>
+  <data name="BtnAgregar" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
+  <data name="ColComplejidadDescripcion" xml:space="preserve">
+    <value>Descripcion del Nivel de Complejidad</value>
+  </data>
+  <data name="ColLocal" xml:space="preserve">
+    <value>LOCAL</value>
+  </data>
+  <data name="BtnDocumentos" xml:space="preserve">
+    <value>Documentos</value>
+  </data>
+  <data name="MsgTodosDiagnosticos" xml:space="preserve">
+    <value>(Todos los Diagnósticos)</value>
+  </data>
+  <data name="MsgTodosLosConceptos" xml:space="preserve">
+    <value>(Todos los Conceptos)</value>
+  </data>
+  <data name="MsgTodosTiposCurso" xml:space="preserve">
+    <value>(Todos los Tipos de Curso)</value>
+  </data>
+  <data name="TituloCursos" xml:space="preserve">
+    <value>Cursos</value>
+  </data>
+  <data name="ColConcepto" xml:space="preserve">
+    <value>Concepto</value>
+  </data>
+  <data name="ColCurso" xml:space="preserve">
+    <value>Curso</value>
+  </data>
+  <data name="ColTipoCurso" xml:space="preserve">
+    <value>Tipo Curso</value>
+  </data>
+  <data name="AppTitulo" xml:space="preserve">
+    <value>Cursos de Extensión Universitaria</value>
+  </data>
+  <data name="MsgTodosRoles" xml:space="preserve">
+    <value>(Todos los Roles)</value>
+  </data>
+  <data name="ColRol" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="SeleccionarLocalidad" xml:space="preserve">
+    <value>(Seleccione un Localidad)</value>
+  </data>
+  <data name="SeleccionarProvincia" xml:space="preserve">
+    <value>(Seleccione un Provincia)</value>
+  </data>
+  <data name="BtnInscribir" xml:space="preserve">
+    <value>Inscribir</value>
+  </data>
+  <data name="BtnSeleccionar" xml:space="preserve">
+    <value>Seleccionar</value>
+  </data>
+  <data name="ColCorrelativa" xml:space="preserve">
+    <value>Correlativa</value>
+  </data>
+  <data name="SeleccionarCorrelativa" xml:space="preserve">
+    <value>(Seleccione el Curso Correlativo)</value>
+  </data>
+  <data name="SeleccionarCurso" xml:space="preserve">
+    <value>(Seleccione el Curso)</value>
+  </data>
+  <data name="TituloCorrelativas" xml:space="preserve">
+    <value>Correlativas</value>
+  </data>
+  <data name="ColDia" xml:space="preserve">
+    <value>Día</value>
+  </data>
+  <data name="ColSede" xml:space="preserve">
+    <value>Sede</value>
+  </data>
+  <data name="MsgTodasSedes" xml:space="preserve">
+    <value>(Todas las Sedes)</value>
+  </data>
+  <data name="SeleccionarDia" xml:space="preserve">
+    <value>(Seleccione un Día)</value>
+  </data>
+  <data name="SeleccionarSede" xml:space="preserve">
+    <value>(Seleccione una Sede)</value>
+  </data>
+  <data name="TituloDias" xml:space="preserve">
+    <value>Días</value>
+  </data>
+  <data name="TituloSedes" xml:space="preserve">
+    <value>Sedes</value>
+  </data>
+  <data name="MsgTodosLosCursos" xml:space="preserve">
+    <value>(Todos los Cursos)</value>
+  </data>
+  <data name="ColOferta" xml:space="preserve">
+    <value>Oferta</value>
+  </data>
+  <data name="MsgTodosLasOfertas" xml:space="preserve">
+    <value>(Todos las Ofertas)</value>
+  </data>
+  <data name="TituloOfertas" xml:space="preserve">
+    <value>Ofertas</value>
+  </data>
+  <data name="ColPeriodo" xml:space="preserve">
+    <value>Periodo Lectivo</value>
+  </data>
+  <data name="MsgTodosLosPeriodos" xml:space="preserve">
+    <value>(Todos los Periodos)</value>
+  </data>
+  <data name="MsgTodosLosDias" xml:space="preserve">
+    <value>(Todas los Días)</value>
+  </data>
+  <data name="SeleccionarTipoCurso" xml:space="preserve">
+    <value>(Seleccione el Tipo de Curso)</value>
+  </data>
+  <data name="ColDocente" xml:space="preserve">
+    <value>Docente</value>
+  </data>
+  <data name="MsgTodosDocentes" xml:space="preserve">
+    <value>(Todos los Docentes)</value>
+  </data>
+  <data name="SeleccionarDocente" xml:space="preserve">
+    <value>(Seleccione el Docente)</value>
+  </data>
+  <data name="SeleccionarPeriodoLectivo" xml:space="preserve">
+    <value>(Seleccione el Periodo Lectivo)</value>
+  </data>
+  <data name="BtnHabilitar" xml:space="preserve">
+    <value>Habilitar/Deshabilitar</value>
+  </data>
+  <data name="BtnPrecargarNota" xml:space="preserve">
+    <value>Pre Cargar Nota</value>
+  </data>
+  <data name="ColFechaBaja" xml:space="preserve">
+    <value>Fecha de Baja</value>
+  </data>
+  <data name="ColFechaPago" xml:space="preserve">
+    <value>Fecha de Pago</value>
+  </data>
+  <data name="ColFechaVto" xml:space="preserve">
+    <value>Primer Vencimiento</value>
+  </data>
+  <data name="ColFechaVto2" xml:space="preserve">
+    <value>Segundo Vencimiento</value>
+  </data>
+  <data name="ColImporte" xml:space="preserve">
+    <value>Importe 1er Vencimiento</value>
+  </data>
+  <data name="ColImporte2" xml:space="preserve">
+    <value>Importe 2do Vencimiento</value>
+  </data>
+  <data name="ColNroCuota" xml:space="preserve">
+    <value>Nº Cuota</value>
+  </data>
+  <data name="ColTotalCuota" xml:space="preserve">
+    <value>Cantidad Cuotas</value>
+  </data>
+  <data name="TituloCuotas" xml:space="preserve">
+    <value>Cuotas</value>
+  </data>
+  <data name="ColAlumno" xml:space="preserve">
+    <value>Alumno</value>
+  </data>
+  <data name="MsgTodosAlumnos" xml:space="preserve">
+    <value>(Todos los Alumnos)</value>
+  </data>
+  <data name="ColCuota" xml:space="preserve">
+    <value>Cuota</value>
+  </data>
+  <data name="SeleccionarOferta" xml:space="preserve">
+    <value>(Seleccione la Oferta)</value>
+  </data>
+  <data name="SeleccionarTipoAlumno" xml:space="preserve">
+    <value>(Seleccione el Tipo de Alumno)</value>
+  </data>
+  <data name="TituloComunicaciones" xml:space="preserve">
+    <value>Comunicaciones</value>
+  </data>
+  <data name="MsgTodasLasPlantillas" xml:space="preserve">
+    <value>(Todas las Plantillas de Email)</value>
+  </data>
+  <data name="SeleccionarPlantilla" xml:space="preserve">
+    <value>(Seleccione la Plantilla de Email)</value>
+  </data>
+  <data name="DuplicateEmail" xml:space="preserve">
+    <value>El Email '{0}' ya esta en uso</value>
+  </data>
+  <data name="DuplicateName" xml:space="preserve">
+    <value>El Tipo y Nro de Documento ingresados ya estan en uso</value>
+  </data>
+  <data name="MensajeMayor60" xml:space="preserve">
+    <value>Felicidades, usted puede gozar de beneficios por ser mayor de 60 años, para esto debe presentarse en la oficina de socioculturales</value>
+  </data>
+  <data name="SeleccionarMotivoBaja" xml:space="preserve">
+    <value>(Seleccione el motivo)</value>
+  </data>
+</root>

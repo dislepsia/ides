@@ -1,0 +1,507 @@
+﻿@using cnrl.Logica
+@using cnrl.Models
+@{
+    ViewBag.Titulo = Strings.TituloOfertas;
+    ViewBag.Subtitulo = Strings.TituloAdmin;
+
+    var tiposCurso = (SelectList)ViewBag.tiposCurso;
+    var sedes = (SelectList)ViewBag.sedes;
+    var cursos = (SelectList)ViewBag.cursos;
+    var periodosLectivos = (SelectList)ViewBag.periodosLectivos;
+    var dias = (SelectList)ViewBag.dias;
+    var docentes = (SelectList)ViewBag.docentes;
+    var estadosOferta = (SelectList)ViewBag.EstadosOferta;
+    var vistaCompleta = (bool?)ViewBag.VistaCompleta;
+    var horario = (SelectList)ViewBag.Horario;
+    // var cantidadOfertas = (int)ViewBag.CantidadOfertas;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdTipoCurso"] = $('#IdTipoCurso').val();
+        e.customArgs["IdSede"] = $('#IdSede').val();
+        e.customArgs["IdCurso"] = $('#IdCurso').val();
+        e.customArgs["IdDia"] = $('#IdDia').val();
+        e.customArgs["EstadoOferta"] = $('#EstadoOferta').val();
+        e.customArgs["IdPeriodo"] = $('#IdPeriodo').val();
+        e.customArgs["IdDocente"] = $('#IdDocente').val();
+        e.customArgs["IdHorario"] = $('#IdHorario').val();
+        e.customArgs["VistaCompleta"] = $('#VistaCompleta').val();
+        e.customArgs["montoDesde"] = $('#montoDesde').val();
+        e.customArgs["montoHasta"] = $('#montoHasta').val();
+        e.customArgs["inscriptosDesde"] = $('#inscriptosDesde').val();
+        e.customArgs["inscriptosHasta"] = $('#inscriptosHasta').val();
+        e.customArgs["inscriptosMayorMinimo"] = $('#inscriptosMayorMinimo').prop('checked');
+        e.customArgs["montoMayorMinimo"] = $('#montoMayorMinimo').prop('checked');
+    }
+</script>
+<form action="@Url.Action("Exportar")" method="POST" name="frmExportar" id="frmExportar">
+
+    <div class="box box-default filtros">
+        <div class="box-body filtros">
+            @Html.Hidden("VistaCompleta", false)
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdSede">@Strings.ColSede</label>
+                    @Html.DropDownList("IdSede", sedes, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdPeriodo">@Strings.ColPeriodo</label>
+                    @Html.DropDownList("IdPeriodo", periodosLectivos, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="IdDia">@Strings.TituloDias</label>
+                    @Html.DropDownList("IdDia", dias, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="IdDia">@Strings.ColEstado</label>
+                    @Html.DropDownList("EstadoOferta", estadosOferta, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdTipoCurso">@Strings.ColTipoCurso</label>
+                    @Html.DropDownList("IdTipoCurso", tiposCurso, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdCurso">@Strings.ColCurso</label>
+                    @Html.DropDownList("IdCurso", cursos, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="IdDocente">@Strings.ColDocente</label>
+                    @Html.DropDownList("IdDocente", docentes, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="IdHorario">Horarios</label>
+                    @Html.DropDownList("IdHorario", horario, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="col-sm-1">
+                <div class="pull-left">
+                    <button type="button" class="btn" onclick="javascript:ColumasCompletas();"><i class="fa fa-bars"></i></button>
+                </div>
+                <div class="pull-right">
+                    <button type="button" class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>
+            <div id="filtroCompleto" style="display:none">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                            @Html.Editor("montoDesde", new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01", @placeholder = "Monto recaudado desde" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                            @Html.Editor("montoHasta", new
+                       {
+                           htmlAttributes = new
+                           {
+                               @class = "form-control",
+                               @type = "number",
+                               @min = "0",
+                               @step = "0.01",
+                               @placeholder = "Monto recaudado hasta"
+                           }
+                       })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                            @Html.Editor("inscriptosDesde", new
+                       {
+                           htmlAttributes = new
+                           {
+                               @class = "form-control",
+                               @type = "number",
+                               @min = "0",
+                               @step = "1",
+                               @placeholder = "Cantidad inscriptos desde"
+                           }
+                       })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                            @Html.Editor("inscriptosHasta", new
+                       {
+                           htmlAttributes = new
+                           {
+                               @class = "form-control",
+                               @type = "number",
+                               @min = "0",
+                               @step = "1",
+                               @placeholder = "Cantidad inscriptos hasta"
+                           }
+                       })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <div>
+                            @Html.CheckBox("inscriptosMayorMinimo")
+                            <label>Cantidad de inscriptos mayor a mínimo</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <div>
+                            @Html.CheckBox("montoMayorMinimo")
+                            <label>Monto recaudado mayor a mínimo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" onclick="javascript:refrescar();">Filtrar</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@Html.Action("PartialGrid") @*, new { IdTipoCurso = ViewBag.IdTipoCurso, IdConcepto = ViewBag.IdConcepto })*@
+<button type="button" class="btn btn-success" title="Exportar a Excel" onclick="document.getElementById('frmExportar').submit();">Exportar Excel</button>
+<button type="button" class="btn btn-primary" title="Habilitar Todas las Comisiones" onclick="habilitarTodo(true);">Habilitar Todas las Comisiones</button>
+<button type="button" class="btn btn-danger" title="Deshabilitar Todas las Comisiones" onclick="habilitarTodo(false);">Deshabilitar Todas las Comisiones</button>
+
+<a class='btn btn-warning ' href='javascript:dlgModal.Ver("@Url.Action("Oferta", "Comunicaciones")")'><i class='icon-plus'></i>Enviar E-Mail a Todos los Alumnos de las Ofertas visibles</a>
+
+
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script>
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+            $('#IdTipoCurso').select2("val", "-1");
+            $('#IdSede').select2("val", "-1");
+            $('#IdCurso').select2("val", "-1");
+            $('#IdDia').select2("val", "-1");
+            $('#EstadosOferta').select2("val", "-1");
+            $('#IdPeriodo').select2("val", "-1");
+            $('#IdDocente').select2("val", "-1");
+            $('#IdHorario').select2("val", "-1");
+            $('#montoDesde').val(null);
+            $('#montoHasta').val(null);
+            $('#inscriptosDesde').val(null);
+            $('#inscriptosHasta').val(null);
+            $('#inscriptosMayorMinimo').iCheck('uncheck');//.removeProp('checked');
+            $('#montoMayorMinimo').iCheck('uncheck');//.removeProp('checked');
+            refresh = true;
+            refrescar();
+        }
+
+        function ColumasCompletas() {
+            refresh = false;
+            if ($('#VistaCompleta').val() == "true") {
+                $('#VistaCompleta').val("false");
+                $('#filtroCompleto').hide();
+            } else {
+                $('#VistaCompleta').val("true");
+                $('#filtroCompleto').show();
+            }
+            refresh = true;
+            refrescar();
+        }
+        // Refrescar Grilla
+        function refrescar() {
+            if (refresh === true) {
+                window.Grid.PerformCallback();
+            }
+        }
+        $(function () {
+            $('#IdTipoCurso').change(function () { refrescar(); });
+            $('#IdSede').change(function () { refrescar(); });
+            $('#IdCurso').change(function () { refrescar(); });
+            $('#IdDia').change(function () { refrescar(); });
+            $('#EstadoOferta').change(function () { refrescar(); });
+            $('#IdPeriodo').change(function () { refrescar(); });
+            $('#IdDocente').change(function () { refrescar(); });
+            $('#IdHorario').change(function () { refrescar(); });
+
+            $("#IdTipoCurso").select2({
+                allowClear: true
+            });
+            $("#IdSede").select2({
+                allowClear: true
+            });
+            $("#IdCurso").select2({
+                allowClear: true
+            });
+            $("#IdDia").select2({
+                allowClear: true
+            });
+            $("#EstadoOferta").select2({
+                allowClear: true
+            });
+            $("#IdPeriodo").select2({
+                allowClear: true
+            });
+            $("#IdDocente").select2({
+                allowClear: true
+            });
+            $("#IdHorario").select2({
+                allowClear: true
+            });
+
+            $('#filtroCompleto').hide();
+        });
+
+        function habilitarTodo(habilitar) {
+            var URLactual = window.location.pathname;
+            if (URLactual.search('nuevositio') != -1) {
+                $.ajax({
+                    type: "post",
+                    url: "/nuevositio/oferta/consultarCantidadOfertas",
+                    data: {
+                        IdTipoCurso: $('#IdTipoCurso').val(),
+                        IdSede: $('#IdSede').val(),
+                        IdCurso: $('#IdCurso').val(),
+                        IdDia: $('#IdDia').val(),
+                        IdPeriodo: $('#IdPeriodo').val(),
+                        IdDocente: $('#IdDocente').val(),
+                        VistaCompleta: $('#VistaCompleta').val(),
+                        montoDesde: $('#montoDesde').val(),
+                        montoHasta: $('#montoHasta').val(),
+                        inscriptosDesde: $('#inscriptosDesde').val(),
+                        inscriptosHasta: $('#inscriptosHasta').val(),
+                        inscriptosMayorMinimo: $('#inscriptosMayorMinimo').prop('checked'),
+                        montoMayorMinimo: $('#montoMayorMinimo').prop('checked'), habilitar: habilitar
+                    },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        if (data.cantidad > 0) {
+                            var palabra = "";
+                            if (habilitar)
+                                palabra = "Habilitar";
+                            else
+                                palabra = "Inhabilitar";
+
+                            bootbox.confirm({
+                                title: palabra + " Ofertas",
+                                message: "¿Esta seguro que desea " + palabra + " " + data.cantidad + " ofertas?",
+                                buttons: {
+                                    cancel: {
+                                        label: '<i class="fa fa-times"></i> Cancelar'
+                                    },
+                                    confirm: {
+                                        label: '<i class="fa fa-check"></i> Confirmar'
+                                    }
+                                },
+                                callback: function (result) {
+                                    if (result == true) {
+                                        $.ajax({
+                                            type: "post",
+                                            url: "/oferta/HabilitarTodo",
+                                            data: {
+                                                IdTipoCurso: $('#IdTipoCurso').val(),
+                                                IdSede: $('#IdSede').val(),
+                                                IdCurso: $('#IdCurso').val(),
+                                                IdDia: $('#IdDia').val(),
+                                                IdPeriodo: $('#IdPeriodo').val(),
+                                                IdDocente: $('#IdDocente').val(),
+                                                VistaCompleta: $('#VistaCompleta').val(),
+                                                montoDesde: $('#montoDesde').val(),
+                                                montoHasta: $('#montoHasta').val(),
+                                                inscriptosDesde: $('#inscriptosDesde').val(),
+                                                inscriptosHasta: $('#inscriptosHasta').val(),
+                                                inscriptosMayorMinimo: $('#inscriptosMayorMinimo').prop('checked'),
+                                                montoMayorMinimo: $('#montoMayorMinimo').prop('checked'), habilitar: habilitar
+                                            },
+                                            datatype: "json",
+                                            traditional: true,
+                                            success: function (data) {
+                                                if (data.ok === true) {
+                                                    window.Grid.PerformCallback();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            else
+            {
+                $.ajax({
+                    type: "post",
+                    url: "/oferta/consultarCantidadOfertas",
+                    data: {
+                        IdTipoCurso: $('#IdTipoCurso').val(),
+                        IdSede: $('#IdSede').val(),
+                        IdCurso: $('#IdCurso').val(),
+                        IdDia: $('#IdDia').val(),
+                        IdPeriodo: $('#IdPeriodo').val(),
+                        IdDocente: $('#IdDocente').val(),
+                        VistaCompleta: $('#VistaCompleta').val(),
+                        montoDesde: $('#montoDesde').val(),
+                        montoHasta: $('#montoHasta').val(),
+                        inscriptosDesde: $('#inscriptosDesde').val(),
+                        inscriptosHasta: $('#inscriptosHasta').val(),
+                        inscriptosMayorMinimo: $('#inscriptosMayorMinimo').prop('checked'),
+                        montoMayorMinimo: $('#montoMayorMinimo').prop('checked'), habilitar: habilitar
+                    },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        if (data.cantidad > 0) {
+                            var palabra = "";
+                            if (habilitar)
+                                palabra = "Habilitar";
+                            else
+                                palabra = "Inhabilitar";
+
+                            bootbox.confirm({
+                                title: palabra + " Ofertas",
+                                message: "¿Esta seguro que desea " + palabra + " " + data.cantidad + " ofertas?",
+                                buttons: {
+                                    cancel: {
+                                        label: '<i class="fa fa-times"></i> Cancelar'
+                                    },
+                                    confirm: {
+                                        label: '<i class="fa fa-check"></i> Confirmar'
+                                    }
+                                },
+                                callback: function (result) {
+                                    if (result == true) {
+                                        $.ajax({
+                                            type: "post",
+                                            url: "/oferta/HabilitarTodo",
+                                            data: {
+                                                IdTipoCurso: $('#IdTipoCurso').val(),
+                                                IdSede: $('#IdSede').val(),
+                                                IdCurso: $('#IdCurso').val(),
+                                                IdDia: $('#IdDia').val(),
+                                                IdPeriodo: $('#IdPeriodo').val(),
+                                                IdDocente: $('#IdDocente').val(),
+                                                VistaCompleta: $('#VistaCompleta').val(),
+                                                montoDesde: $('#montoDesde').val(),
+                                                montoHasta: $('#montoHasta').val(),
+                                                inscriptosDesde: $('#inscriptosDesde').val(),
+                                                inscriptosHasta: $('#inscriptosHasta').val(),
+                                                inscriptosMayorMinimo: $('#inscriptosMayorMinimo').prop('checked'),
+                                                montoMayorMinimo: $('#montoMayorMinimo').prop('checked'), habilitar: habilitar
+                                            },
+                                            datatype: "json",
+                                            traditional: true,
+                                            success: function (data) {
+                                                if (data.ok === true) {
+                                                    window.Grid.PerformCallback();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+        }
+
+        $(document).ready(function () {
+            $("#frmExportar").keypress(function (e) {//Para deshabilitar el uso de la tecla "Enter"
+                if (e.which == 13) {
+                    return false;
+                }
+            });
+
+            $("[name='IdCurso']").change(function () {
+                var selectedItem = $(this).val();
+                var sede = $('#IdSede').val();
+                var periodo = $('#IdPeriodo').val();
+                var ddlStates = $("#IdHorario");
+                var statesProgress = $("#states-loading-progress");
+                statesProgress.show();
+                var URLactual = window.location.pathname;
+                if (URLactual.search('nuevositio') != -1) {
+                    $.ajax({
+                        type: "post",
+                        url: "/nuevositio/oferta/GetHorarios",
+                        data: { IdCurso: selectedItem, IdSede: sede, IdPeriodo: periodo },
+                        datatype: "json",
+                        traditional: true,
+                        success: function (data) {
+                            ddlStates.html('');
+                            $.each(data, function (id, option) {
+                                ddlStates.append($('<option></option>').val(option.Value).html(option.Text));
+                            });
+                            statesProgress.hide();
+                            $("#IdHorario").val("-1").change();
+                        }
+                    });
+                }
+                else
+                {
+                    $.ajax({
+                        type: "post",
+                        url: "/oferta/GetHorarios",
+                        data: { IdCurso: selectedItem, IdSede: sede, IdPeriodo: periodo },
+                        datatype: "json",
+                        traditional: true,
+                        success: function (data) {
+                            ddlStates.html('');
+                            $.each(data, function (id, option) {
+                                ddlStates.append($('<option></option>').val(option.Value).html(option.Text));
+                            });
+                            statesProgress.hide();
+                            $("#IdHorario").val("-1").change();
+                        }
+                    });
+                }
+            });
+
+
+        });
+    </script>
+}

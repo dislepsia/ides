@@ -1,0 +1,76 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "GridCorrelativas";
+        settings.KeyFieldName = "Id";
+        settings.Caption = Strings.TituloCorrelativas;
+        settings.CallbackRouteValues = new { Controller = "Cursos", Action = "PartialGridCorrelativas" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        // Columnas
+        settings.Columns.Add(col => { col.FieldName = "codigo"; col.Caption = Strings.ColId; col.Visible = false; });
+        settings.Columns.Add(col => { col.FieldName = "codCurso"; col.Caption = Strings.ColId; col.Width = Unit.Pixel(50); });
+        settings.Columns.Add(col => { col.FieldName = "descripcion"; col.Caption = Strings.ColDescripcion; });
+        settings.Columns.Add(col => { col.FieldName = "horasSemanales"; col.Caption = "Horas Semanales"; });
+        settings.Columns.Add(col => { col.FieldName = "nivel"; col.Caption = "Nivel"; });
+        settings.Columns.Add(col => { col.FieldName = "precio.descripcion"; col.Caption = "Precio"; });
+        settings.Columns.Add(col => { col.FieldName = "tipocurso1.descripcion"; col.Caption = "Tipo Curso"; });
+        // Botones
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+                    "<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>",
+                        string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("DeleteCorrelativa", "Cursos", new { id = DataBinder.Eval(c.DataItem, "codigo"), IdCurso = ViewBag.IdCurso })),
+                        Strings.BtnBorrar,
+                        "<i class='fa fa-trash'></i>"
+                        ));
+            column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+                "<a class='btn btn-flat btn-xs btn-info' href='{0}'><i class='icon-plus'></i>&nbsp;{1}</a>",
+                string.Format("javascript:dlgModal2.Ver(\"{0}\")", @Url.Action("CreateCorrelativa", "Cursos", new { id = ViewBag.IdCurso })),
+                Strings.BtnNuevo
+                ));
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 100;
+        });
+        // Filtros
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        settings.Styles.FilterRow.BackColor = Color.LightGray;
+        settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        //settings.ClientSideEvents.FocusedRowChanged = "onGridFocusedRowChanged";
+
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+    }
+).Bind(Model).GetHtml()

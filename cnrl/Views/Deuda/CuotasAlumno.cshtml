@@ -1,0 +1,34 @@
+﻿@using cnrl.Logica
+
+@{
+    ViewBag.Titulo = Strings.TituloCuotas;
+    ViewBag.Subtitulo = ViewBag.NombreUsuario;
+
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+      }
+</script>
+
+@Html.Action("PartialGridAlumno", new { IdUsuario = ViewBag.IdUsuario })
+
+
+
+
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script>
+                
+
+    </script>
+}

@@ -1,0 +1,209 @@
+﻿.main-sidebar {
+    width: 300px;
+    padding: 5px 10px;
+    background-color: white;
+}
+
+
+
+.angular-leaflet-map {
+    width: 100%;
+    height: 320px;
+}
+
+.left {
+    float: left;
+    width: 58%;
+    padding-right: 1em;
+}
+
+.right {
+    float: right;
+    width: 40%;
+}
+
+/* all map containers must be full height */
+    html, body, .wrapper, .content-wrapper, .container-fluid, .row, .content, .map {
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+@media (max-width: 767px) {
+    html{
+        /*overflow-y: scroll;*/
+    }
+
+
+}
+
+@media (min-width: 768px) {
+    .navbar-collapse .navbar-nav.navbar-right:last-child {
+        margin-right: 0;
+    }
+
+
+}
+
+#map-canvas, .angular-leaflet-map {
+    width: 100%;
+    height: 100%;
+    height: calc(100% - 0);
+}
+
+.container-fluid {
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.content {
+    padding: 0;
+    margin: 0;
+}
+
+.fondo-blanco {
+    background-color: white;
+}
+
+.color-blanco {
+    color: white;
+}
+
+.panel-heading .accordion-toggle:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: right;
+    position: relative;
+    font-size: 12pt;
+    color: white;
+}
+.panel-heading .collapsed .accordion-toggle:after {
+    content:"\e080";
+}
+
+.panel-heading:hover {
+    cursor: pointer;
+}
+
+.panel-heading:hover h6 {
+    text-decoration: none;
+}
+
+.panel-default>.panel-heading {
+    color: white;
+    background-color: #555299;
+    -ms-border-radius: 0;
+    border-radius: 0;
+}
+
+.panel-group .panel {
+    -ms-border-radius: 0;
+    border-radius: 0;}
+
+.panel-group {
+    margin-bottom: 10px;
+}
+
+div#footer {
+    width: 100%;
+    position:absolute;
+    bottom:0;
+    right: 0;
+    padding-left:10px;
+    margin-bottom: 50px;
+}
+
+/* http://bootsnipp.com/snippets/M2QRX */
+/* FANCY COLLAPSE PANEL STYLES */
+/*.fancy-collapse-panel,
+.panel-group {
+    margin-left: 10px;
+    margin-right: 10px;
+}*/
+
+.fancy-collapse-panel .panel-default > .panel-heading {
+    padding: 0;
+}
+
+.panel-heading h6 {
+    font-size: 1em;
+}
+
+.fancy-collapse-panel .panel-heading a, .fancy-collapse-panel .panel-heading span {
+    padding: 12px 35px 12px 15px;
+    display: inline-block;
+    width: 100%;
+    background-color: #555299;
+    color: #ffffff;
+    position: relative;
+    text-decoration: none;
+}
+
+.fancy-collapse-panel .panel-heading a:after {
+    font-family: "FontAwesome";
+    content: "\f147";
+    position: absolute;
+    right: 20px;
+    font-weight: 400;
+    top: 50%;
+    line-height: 1;
+    margin-top: -10px;
+}
+
+.fancy-collapse-panel .panel-heading a.collapsed:after {
+    content: "\f196";
+}
+
+.sort-icon {
+    font-size: 9px;
+    margin-left: 5px;
+}
+
+th {
+    cursor:pointer;
+}
+
+td {
+    line-height:26px;
+}
+
+td.wide {
+    overflow:hidden;
+    height:26px;
+    display:block;
+}
+
+.pagination {
+    margin: 0 0;
+    -ms-border-radius: 0;
+    border-radius: 0;
+}
+
+.checkbox label, .radio label {
+    padding-left: 0;
+}
+
+.btn-mini {
+    font-size: 11px;
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    -ms-border-radius: 0;
+    border-radius: 0;
+}
+
+.google-maps { position: relative; padding-bottom: 75%; height: 0; overflow: hidden; }
+.google-maps iframe { position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important; }
+
+#searchclear {
+    position: absolute;
+    right: 5px;
+    top: 0;
+    bottom: 0;
+    height: 14px;
+    margin: auto;
+    font-size: 20px;
+    cursor: pointer;
+    color: #ccc;
+
+}

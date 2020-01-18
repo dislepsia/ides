@@ -1,0 +1,9 @@
+﻿@model IEnumerable<cnrl.plantillaEmail>
+
+@{
+    ViewBag.Titulo = "Plantillas de Correo";
+    ViewBag.Subtitulo = "Administración";
+    Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+}
+
+@Html.Action("PartialGrid")

@@ -1,0 +1,370 @@
+﻿/* DevExpress GridView */
+ .class-margin .bootbox-body {
+     margin-top: 55% !important;
+ }
+.dxgvTable_MetropolisBlue caption {
+    font-size: 1.5em;
+}
+.dxgvEditFormDisplayRow_MetropolisBlue td.dxgv, .dxgvDataRow_MetropolisBlue td.dxgv, .dxgvDataRowAlt_MetropolisBlue td.dxgv, .dxgvSelectedRow_MetropolisBlue td.dxgv, .dxgvFocusedRow_MetropolisBlue td.dxgv {
+    padding: 2px 8px;
+}
+.btn-grid {
+    padding: 1px 6px;
+}
+.dxgvHeader_MetropolisBlue a.btn-grid {
+    color: white;
+}
+.dxgvTable_MetropolisBlue caption
+{
+    color: white;
+    background-color: #008d4c;
+}
+.dxpLite_MetropolisBlue .dxp-current {
+    background-color: #008d4c;
+}
+.dxgvHSDC {
+    background-color: lightgrey;
+}
+
+.dxgvHeader_MetropolisBlue a {
+    color: white;
+}
+
+.dxgvDetailRow_MetropolisBlue {
+    background-color: #9cf1c9;
+}
+
+.dxgvControl_MetropolisBlue a.btn,
+.dxgvControl_MetropolisBlue a.btn:hover,
+.dxgvControl_MetropolisBlue a.btn:active,
+.dxgvControl_MetropolisBlue a.btn:focus
+{
+  color: white;
+}
+
+/*http://cssdeck.com/labs/beautiful-flat-buttons*/
+.wisteria-flat-button {
+    position: relative;
+    vertical-align: top;
+    width: 120px;
+    height: 30px;
+    padding: 0;
+    font-size: 1em;
+    color: white;
+    text-align: center;
+    -ms-text-shadow: 0 1px 2px #000000;
+    text-shadow: 0 1px 2px #000000;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    background: #8e44ad;
+    border: 0;
+    border-bottom: 2px solid #80399d;
+    cursor: pointer;
+    -webkit-box-shadow: inset 0 -2px #80399d;
+    -ms-box-shadow: inset 0 -2px #80399d;
+    box-shadow: inset 0 -2px #80399d;
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+}
+
+.wisteria-flat-button:active {
+    top: 1px;
+    outline: none;
+    -webkit-box-shadow: none;
+    -ms-box-shadow: none;
+    box-shadow: none;
+}
+
+/*http://cssdeck.com/labs/beautiful-flat-buttons*/
+.btn-cnrl {
+    border: 0;
+    font-size: 1em;
+    color: white;
+    text-align: center;
+    -ms-text-shadow: 0 1px 2px #000000;
+    text-shadow: 0 1px 2px #000000;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    background: #8e44ad;
+    border-bottom: 2px solid #80399d;
+    -webkit-box-shadow: inset 0 -2px #80399d;
+    -ms-box-shadow: inset 0 -2px #80399d;
+    box-shadow: inset 0 -2px #80399d;
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+}
+
+.btn-cnrl:active {
+    top: 1px;
+    outline: none;
+    -webkit-box-shadow: none;
+    -ms-box-shadow: none;
+    box-shadow: none;
+}
+
+.btn-cnrl2 {
+    background-color: #03a9f4;
+    color: white;
+}
+
+.btn-cnrl2:active, .btn-cnrl2:hover {
+    background-color: #3f51b5;
+    color: white;
+}
+
+.main-header .logo {
+    text-align: left;
+    text-decoration: none;
+}
+
+.main-header .navbar .sidebar-toggle, .sidebar-menu > li {
+    text-decoration: none;
+}
+
+.box-header>.fa, .box-header>.glyphicon, .box-header>.ion, .box-header .box-title {
+    font-size: 2.5em;
+}
+
+.google-maps { position: relative; padding-bottom: 75%; height: 0; overflow: hidden; }
+.google-maps iframe { position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important; }
+
+.bg-red, .callout.callout-danger, .alert-danger, .alert-error, .label-danger, .modal-danger .modal-body {
+  background-color: #f44336 !important; /* #dd4b39 */
+}
+
+.form-group.has-error label {
+  color: #f44336;
+}
+
+.field-validation-error {
+    color: #f44336;
+}
+
+.rojo {
+    color: #f44336;
+}
+
+.alerta {
+    font-size: 1.8em;
+}
+
+.modal {
+    width: 90%!important;
+}
+
+.modal.minimo {
+    width:50%!important;
+    /*top: 25%!important;*/
+    bottom: auto;
+}
+
+.label-dashboard {
+    color:white;
+    font-size: 0.4em   
+}
+
+.small-box h3 {
+    font-weight: normal;
+}
+
+img.ri {
+    position: absolute;
+	max-width: 80%;
+	top: 10%;
+	left: 10%;
+    z-index: 2000;
+    display: none;
+}
+
+img.ri:empty
+{
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.badge {
+    -ms-border-radius: 0;
+    border-radius: 0;
+}
+
+.bg-purple {
+    border-color: #605ca8;
+}
+
+.btn-similar {
+    display: inline-block;
+    padding: 1px 5px;
+    margin-bottom: 0;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid transparent;
+    -ms-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    -ms-box-shadow: none;
+    box-shadow: none;
+}
+
+.main-sidebar, .left-side {
+    width: 190px;
+}
+
+.main-header .logo {
+    width: 190px;
+}
+
+.main-header > .navbar {
+     margin-left: 190px;
+}
+
+.content-wrapper, .right-side, .main-footer {
+    margin-left: 190px;
+}
+
+@media(max-width:767px){
+        .main-header > .navbar {
+         margin-left: 0px;
+    }
+
+    .content-wrapper, .right-side, .main-footer {
+        margin-left: 0px;
+    }
+
+    .main-header .logo {
+        display: none;
+    }
+}
+
+.content-wrapper {
+    /*margin-bottom: -20px;*/
+    margin-bottom: 0;
+}
+
+body {
+    overflow-y: scroll!important;
+}
+
+.bg-cnrl-blue {
+    background-color: #4FC3F7;
+    color: #fff !important;
+}
+
+.bg-cnrl-indigo {
+    background-color: #4DD0E1;
+    color: #fff !important;
+}
+
+.bg-cnrl-orange {
+    background-color: #FFA726;
+    color: #fff !important;
+}
+
+.bg-cnrl-yellow {
+    background-color: #FFCA28;
+    color: #fff !important;
+}
+
+.bg-cnrl-purple {
+    background-color: #B39DDB;
+    color: #fff !important;
+}
+
+.bg-cnrl-green {
+    background-color: #5dce6d;
+    color: #fff !important;
+}
+
+.bg-cnrl-purple2 {
+    background-color: #CE93D8;
+    color: #fff !important;
+}
+
+.bg-cnrl-green2 {
+    background-color: #3fcf1c;
+    color: #fff !important;
+}
+
+.box.filtros {
+    margin-bottom: 10px;
+}
+
+.box-body.filtros {
+    padding: 5px;
+}
+
+.grid-table th {
+    background: LightGrey;
+}
+
+.btn-mini {
+    font-size: 10px;
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+}
+
+table.grid-table {
+    font-size: 12px;
+    font-family: 'Segoe UI', Helvetica, 'Droid Sans', Tahoma, Geneva, sans-serif;
+}
+
+html {
+    background-color: #ecf0f5;
+}
+
+.skin-purple .wrapper {
+    background-color: #ecf0f5;
+    /*padding-bottom: 10px;*/
+}
+
+.skin-purple .main-sidebar, .skin-purple .left-side {
+    background-color: #222222;
+    /*padding-bottom: 10px;*/
+}
+
+.fondo-blanco {
+    background-color: white;
+}
+
+.skin-purple .sidebar-menu>li.header {
+    color: white;
+    background: #555;
+}
+
+.skin-purple .sidebar-menu>li.active>a {
+    color: #fff;
+    background: mediumpurple;
+    border-left-color: #8e44ad;
+}
+
+.skin-green .sidebar-menu>li.active>a {
+    color: #fff;
+    background: #3fcf1c;
+    border-left-color: #8e44ad;
+}
+
+.checkbox  {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.checkbox label {
+    padding-left: 10px;
+}
+
+.checkbox > label {
+    padding-left: 0;
+}
+
+.radio, .checkbox {
+    padding-left: 0;
+}
+
+.alertify, .alertify * {
+    /* Para que esté por encima de los Modal Dialogs, que están en 1050 */
+    z-index: 2000;
+}

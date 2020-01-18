@@ -1,0 +1,73 @@
+﻿@using cnrl.Logica
+
+@{
+    ViewBag.Titulo = Strings.TituloUsuarios;
+    ViewBag.Subtitulo = Strings.TituloAdmin;
+
+    var Roles = (SelectList)ViewBag.Roles;
+    var SelectController = (string)ViewBag.SelectController;
+    var SelectAction = (string)ViewBag.SelectAction;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["texto"] = $('#texto').val();
+        e.customArgs["SelectController"] = '@SelectController';
+        e.customArgs["SelectAction"] = '@SelectAction';
+
+    }
+</script>
+<div class="box box-default filtros">
+    <div class="box-body filtros">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="Texto">Buscar</label>
+                @Html.TextBox("texto", "", new { @class = "form-control", id = "texto", placeholder = string.Format("{0}...", "Buscar") })
+            </div>
+        </div>
+        <div class="col-sm-1">
+            <div class="pull-right">
+                <button class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Action("PartialGrid") @*, new { IdTipoCurso = ViewBag.IdTipoCurso, IdConcepto = ViewBag.IdConcepto })*@
+
+
+
+
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+  <script>
+                var refresh = true;
+                function resetFiltros() {
+                    refresh = false;
+                    $('#IdRol').select2("val", "-1");
+                    $('#texto').val("");
+                    refresh = true;
+                    refrescar();
+                }
+                // Refrescar Grilla
+                function refrescar() {
+                    if (refresh === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+                $(function () {
+                    $('#IdRol').change(function () { refrescar(); });
+                    $('#texto').pressEnter(function () { refrescar(); });
+                    $("#IdRol").select2({
+                        allowClear: true
+                    });
+                });
+
+    </script>
+

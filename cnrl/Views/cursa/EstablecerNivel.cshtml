@@ -1,0 +1,170 @@
+﻿@using cnrl.Logica
+@model IEnumerable<cnrl.cursa>
+
+@{
+    ViewBag.Titulo = "Establecer Nivel";
+    Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["texto"] = $('#texto').val();
+        e.customArgs["IdCurso"] = $('#IdCurso').val();
+    }
+</script>
+
+<div class="box box-success ">
+    <div class="box-body ">
+        <div class="row">
+            <div class="col-md-12">
+                
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="Texto">Buscar alumno por Dni</label>
+                            @Html.TextBox("texto", "", new { @class = "form-control", id = "texto", placeholder = string.Format("{0}...", "Buscar") })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="col-sm-2">
+                        <button type='button' class='btn btn-facebook btn-md btn-info' onclick='Buscar();'>Ver Nivelaciones</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="Texto">Buscar Curso</label>
+                            <div id="IdCurso" name="IdCurso" style="width: 100%"></div>
+                            @* @Html.DropDownList("IdCurso", cursos, new { @class = "form-control" })*@
+                        </div>
+                    </div>
+                    <br />
+                    <div class="col-sm-3">
+                        <button type='button' class='btn btn-facebook btn-md btn-info' onclick='EstablecerNivel();'>Establecer Nivel</button>
+                    </div>
+
+                    <div class="col-sm-1">
+                        <button class="btn btn-file" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+
+                    @Html.Action("PartialGrid")
+
+                </div>
+        </div>
+    </div>
+</div>
+
+        @section styles
+{
+            <style>
+                .btn-toolbar {
+                    margin-bottom: 15px;
+                }
+            </style>
+        }
+
+@section scripts
+{
+<script>
+var refresh = true;
+function resetFiltros()
+{
+    refresh = false;
+    $('#texto').val("");
+    $('#IdCurso').select2("val", "");
+    refresh = true;
+    refrescar();
+}
+
+function refrescar() {
+    if (refresh === true) {
+        window.Grid.PerformCallback();
+    }
+}
+
+$(function () {
+    $('#texto').pressEnter(function () { refrescar(); });
+});
+
+function Buscar() {
+    refrescar();
+}
+
+$(function () {
+    $('#texto').pressEnter(function () { refrescar(); });
+    $('#IdCurso').change(function () { refrescar(); });
+    $("#IdCurso").select2({
+        placeholder: "Ingresa algunas letras del Curso...",
+        language: "es",
+        allowClear: true,
+        minimumInputLength: 4,
+        ajax: {
+            cache: true,
+            dataType: "json",
+            type: "GET",
+            quietMillis: 500,
+            delay: 250,
+            url: "@Url.Action("Buscar", "cursa")",
+        data: function (searchTerm) {
+            return { q: searchTerm };
+        },
+        processResults: function (data /*, page*/) {
+            return {
+                results: data
+            };
+        }
+        }
+        });
+    });
+
+function EstablecerNivel() {
+    var dni = $('#texto').val();
+    var curso = $('#IdCurso').val();
+    var URLactual = window.location.pathname;
+    if (URLactual.search('nuevositio') != -1) {
+        $.ajax({
+            type: "post",
+            url: "/nuevositio/cursa/EstablecerNivelGrid",
+            data: { texto: dni, IdCurso: curso },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                if (data.ok === true) {
+                    //alert("todo bien");
+                    MensajeExito('Operación finalizada con éxito');
+                    window.Grid.PerformCallback();
+                }
+                else {
+                    //alert("error");
+                    MensajeError('Operación finalizada con errores');
+                }
+            }
+        });
+    }
+    else
+    {
+        $.ajax({
+            type: "post",
+            url: "/cursa/EstablecerNivelGrid",
+            data: { texto: dni, IdCurso: curso },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                if (data.ok === true) {
+                    //alert("todo bien");
+                    MensajeExito('Operación finalizada con éxito');
+                    window.Grid.PerformCallback();
+                }
+                else {
+                    //alert("error");
+                    MensajeError('Operación finalizada con errores');
+                }
+            }
+        });
+    }
+}
+
+</script>
+}

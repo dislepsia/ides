@@ -1,0 +1,98 @@
+﻿@using cnrl.Logica
+
+@{
+    ViewBag.Titulo = Strings.TituloCursos;
+    ViewBag.Subtitulo = Strings.TituloAdmin;
+
+    var Conceptos = (SelectList)ViewBag.Conceptos;
+    var TiposCurso = (SelectList)ViewBag.TiposCurso;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["texto"] = $('#texto').val();
+        e.customArgs["IdTipoCurso"] = $('#IdTipoCurso').val();
+        e.customArgs["IdConcepto"] = $('#IdConcepto').val();
+    }
+</script>
+<div class="box box-default filtros">
+    <div class="box-body filtros">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="IdTipoCurso">@Strings.ColTipoCurso</label>
+                @Html.DropDownList("IdTipoCurso", TiposCurso, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="IdConcepto">@Strings.ColConcepto</label>
+                @Html.DropDownList("IdConcepto", Conceptos, new { @class = "form-control" })
+            </div>
+        </div>
+        @*Buscador de cursos por los campos Descripción y Código del grid*@
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="Texto">Buscar por curso o código</label>
+                @Html.TextBox("texto", "", new { @class = "form-control", id = "texto", placeholder = string.Format("{0}...", "Buscar") })
+            </div>
+        </div>
+
+        <br />
+        <div class="col-sm-1">
+            <div class="pull-right">
+                <button class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+            </div>
+        </div>
+
+    </div>
+</div>
+@Html.Action("PartialGrid") @*, new { IdTipoCurso = ViewBag.IdTipoCurso, IdConcepto = ViewBag.IdConcepto })*@
+
+
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script>
+                var refresh = true;
+                function resetFiltros() {
+                    refresh = false;
+                    $('#IdTipoCurso').select2("val", "-1");
+                    $('#IdConcepto').select2("val", "-1");
+                    $('#texto').val("");
+                    refresh = true;
+                    refrescar();
+                }
+                // Refrescar Grilla
+                function refrescar() {
+                    if (refresh === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+                $(function () {
+                    $('#IdTipoCurso').change(function () { refrescar(); });
+                    $('#IdConcepto').change(function () { refrescar(); });
+                    $('#texto').pressEnter(function () { refrescar(); });
+                    $("#IdTipoCurso").select2({
+                        allowClear: true
+                    });
+                    $("#IdConcepto").select2({
+                        allowClear: true
+                    });
+
+                });
+
+                $(".Fecha").daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    format: "DD/MM/YYYY"
+                });
+    </script>
+}

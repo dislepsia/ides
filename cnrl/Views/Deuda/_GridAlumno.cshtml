@@ -1,0 +1,89 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "Id";
+        settings.Caption = Strings.TituloCuotas;
+        settings.CallbackRouteValues = new { Controller = "Deuda", Action = "PartialGridAlumno" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+
+        //// Search Panel
+        //settings.SettingsSearchPanel.Visible = true;
+        //settings.SettingsSearchPanel.ShowApplyButton = true;
+        //settings.SettingsSearchPanel.ShowClearButton = true;
+        //settings.SettingsText.SearchPanelEditorNullText = @"Ingresa algunas letras a buscar...";
+
+        // Columnas
+        settings.Columns.Add(col => { col.FieldName = "Id"; col.Caption = Strings.ColId; col.Visible = false; });
+
+        settings.Columns.Add(column =>
+        {
+
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+                    ((string)DataBinder.Eval(c.DataItem, "EstadoDescripcion") == "Impaga") ? "<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>" : " ",
+                    @Url.Action("EmitirCuponCuota", "Deuda", new { id = DataBinder.Eval(c.DataItem, "Id") }),
+                    Strings.BtnEditar,
+                    "<i class='fa fa-credit-card'></i>"
+                    ));
+
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 50;
+        });
+
+        settings.Columns.Add(col => { col.FieldName = "Periodo"; col.Caption = "Período Lectivo"; col.Visible = false; });
+        settings.Columns.Add(col => { col.FieldName = "Dni"; col.Caption = Strings.ColDocumento; });
+        settings.Columns.Add(col => { col.FieldName = "Concepto"; col.Caption = Strings.ColConcepto; });
+        settings.Columns.Add(col => { col.FieldName = "Curso"; col.Caption = Strings.ColCurso; });
+        settings.Columns.Add(col => { col.FieldName = "NroCuota"; col.Caption = Strings.ColNroCuota; });
+        settings.Columns.Add(col => { col.FieldName = "TotalCuota"; col.Caption = Strings.ColTotalCuota; });
+        settings.Columns.Add(col => { col.FieldName = "Importe"; col.Caption = Strings.ColImporte; col.PropertiesEdit.DisplayFormatString = "c"; });
+        settings.Columns.Add(col => { col.FieldName = "fechavto"; col.Caption = Strings.ColFechaVto; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "Importe2"; col.Caption = Strings.ColImporte2; col.PropertiesEdit.DisplayFormatString = "c"; });
+        settings.Columns.Add(col => { col.FieldName = "fechavto2"; col.Caption = Strings.ColFechaVto2; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "EstadoDescripcion"; col.Caption = Strings.ColEstado; });
+
+        // Botones
+        
+        // Filtros
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        settings.Styles.FilterRow.BackColor = Color.LightGray;
+        settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+    }
+).Bind(Model).GetHtml()
+
+

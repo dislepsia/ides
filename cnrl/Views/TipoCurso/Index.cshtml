@@ -1,0 +1,9 @@
+﻿@model IEnumerable<cnrl.tipocurso>
+
+    @{
+        ViewBag.Titulo = "Tipos de Cursos";
+        ViewBag.Subtitulo = "Administración";
+        Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+    }
+
+    @Html.Action("PartialGrid")

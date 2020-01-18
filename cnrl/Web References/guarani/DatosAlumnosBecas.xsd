@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://webService.unlm/" targetNamespace="http://webService.unlm/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Exception" type="tns:Exception" />
+  <xs:element name="consultaDatosAlumnos" type="tns:consultaDatosAlumnos" />
+  <xs:element name="consultaDatosAlumnosEFC" type="tns:consultaDatosAlumnosEFC" />
+  <xs:element name="consultaDatosAlumnosEFCResponse" type="tns:consultaDatosAlumnosEFCResponse" />
+  <xs:element name="consultaDatosAlumnosG3" type="tns:consultaDatosAlumnosG3" />
+  <xs:element name="consultaDatosAlumnosG3Response" type="tns:consultaDatosAlumnosG3Response" />
+  <xs:element name="consultaDatosAlumnosResponse" type="tns:consultaDatosAlumnosResponse" />
+  <xs:complexType name="consultaDatosAlumnosG3">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="nro_documento" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="consultaDatosAlumnosG3Response">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Exception">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="consultaDatosAlumnos">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="nro_documento" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="consultaDatosAlumnosResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="consultaDatosAlumnosEFC">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="nro_documento" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="consultaDatosAlumnosEFCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

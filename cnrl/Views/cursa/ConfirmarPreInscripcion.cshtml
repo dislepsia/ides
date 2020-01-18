@@ -1,0 +1,140 @@
+﻿@model cnrl.cursa
+@using cnrl.Logica
+@*  *@
+@{
+
+    var periodosLectivosPreinscripcion = (SelectList)ViewBag.periodosLectivos;
+    ViewBag.Titulo = "Confirmar Pre Inscripcion";
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["dni"] = $('#dni').val();
+        e.customArgs["IdPeriodo"] = $('#IdPeriodo').val();
+    }
+</script>
+
+<div class="box box-default filtros">
+    <div class="box-body filtros">
+        <div class="col-md-6">
+            <div class="form-group col-sm-6">
+                <label for="Texto">Buscar alumno por Dni</label>
+                @Html.TextBox("dni", "", new { @class = "form-control", id = "dni", placeholder = string.Format("{0}...", "Buscar") })
+            </div>
+
+
+            <div class="col-sm-1">
+                <button type='submit' class='btn btn-facebook btn-md btn-info' onclick='Buscar();'><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="IdPeriodo">@Strings.ColPeriodo</label>
+                @Html.DropDownList("IdPeriodo", periodosLectivosPreinscripcion, new { @class = "form-control" })
+            </div>
+
+            <div class="col-sm-1">
+                <button class="btn btn-file" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+            </div>
+        </div>
+
+        <br />
+
+        @Html.Action("PartialGridPreInscripcion")
+    </div>
+
+</div>
+
+
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script>
+
+
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+
+            $('#dni').val("");
+            console.log("Entro a Reset Filtros");
+            $('#IdPeriodo').select2("val", "-1");
+
+            refresh = true;
+            refrescar();
+        }
+        // Refrescar Grilla
+        function refrescar() {
+            if (refresh === true) {
+                window.Grid.PerformCallback();
+                console.log("Entro a Refrescar");
+            }
+        }
+        $(function () {
+
+            $('#dni').pressEnter(function () { refrescar(); });
+            $('#IdPeriodo').change(function () { refrescar(); });
+        });
+
+        function Buscar() {
+            var dni = $('#dni').val();
+            var IdPeriodo = $('#IdPeriodo').val();
+            var URLactual = window.location.pathname;
+            if (URLactual.search('nuevositio') != -1) {
+                $.ajax({
+                    type: "get",
+                    url: "/nuevositio/cursa/PartialGridPreInscripcion",
+                    data: { dni: dni, IdPeriodo: IdPeriodo },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        if (data.ok === true) {
+                            //alert("todo bien");
+                            //MensajeExito('Operación finalizada con éxito');
+                            window.Grid.PerformCallback();
+                        }
+                        else {
+                            //alert("error");
+                            //MensajeError('Operación finalizada con errores');
+                            window.Grid.PerformCallback();
+                        }
+                    }
+                });
+            }
+            else
+            {
+                $.ajax({
+                    type: "get",
+                    url: "/cursa/PartialGridPreInscripcion",
+                    data: { dni: dni, IdPeriodo: IdPeriodo },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        if (data.ok === true) {
+                            //alert("todo bien");
+                            //MensajeExito('Operación finalizada con éxito');
+                            window.Grid.PerformCallback();
+                        }
+                        else {
+                            //alert("error");
+                            //MensajeError('Operación finalizada con errores');
+                            window.Grid.PerformCallback();
+                        }
+                    }
+                });
+
+            }
+        }
+
+    </script>
+
+
+}

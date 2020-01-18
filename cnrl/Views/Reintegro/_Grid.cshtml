@@ -1,0 +1,75 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "Id";
+        settings.Caption = "Datos de la persona";
+
+        settings.CallbackRouteValues = new { Controller = "Reintegro", Action = "PartialGrid" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        // Columnas
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.NroDocumento"; col.Caption = "N° Doc"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Nombre"; col.Caption = "Nombre"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Apellido"; col.Caption = "Apellido"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.FechaNacimiento"; col.Caption = "Fecha de Nacimiento"; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Email"; col.Caption = "Correo"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.curso1.descripcion"; col.Caption = "Curso"; });
+
+        // Botones
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(
+                    c => ViewContext.Writer.Write(
+                                                  "<a class='btn btn-flat btn-xs btn-info' href='{0}'><i class='icon-plus'></i>&nbsp;{1}</a>",
+                                                  @Url.Action("Download", "Reintegro", new { documento = DataBinder.Eval(c.DataItem, "AspNetUsers.NroDocumento"),
+                                                      curso = DataBinder.Eval(c.DataItem, "oferta1.curso1.descripcion")})
+                                                  ,"Generar"
+                                                  )
+                                             );
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 100;
+        });
+        // Filtros
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        settings.Styles.FilterRow.BackColor = Color.LightGray;
+        settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+
+    }
+).Bind(Model).GetHtml()

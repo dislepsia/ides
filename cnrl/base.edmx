@@ -1,0 +1,2729 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="socioculturalesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="asistencia">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="cursa" Type="int" Nullable="false" />
+          <Property Name="asistencia" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="asistio" Type="bit" Nullable="false" />
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Activo" Type="bit" />
+          <Property Name="passwordInicial" Type="varchar" MaxLength="50" />
+          <Property Name="NroDocumento" Type="int" />
+          <Property Name="Apellido" Type="nvarchar" MaxLength="250" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="250" />
+          <Property Name="Calle" Type="nvarchar" MaxLength="250" />
+          <Property Name="NroCalle" Type="int" />
+          <Property Name="FechaNacimiento" Type="datetime" />
+          <Property Name="Telefono" Type="nvarchar" MaxLength="50" />
+          <Property Name="Telefono2" Type="nvarchar" MaxLength="50" />
+          <Property Name="piso" Type="nvarchar" MaxLength="4" />
+          <Property Name="dpto" Type="nvarchar" MaxLength="4" />
+          <Property Name="localidad" Type="int" />
+          <Property Name="provincia" Type="int" />
+          <Property Name="TipoDocumento" Type="int" />
+          <Property Name="TipoAlumno" Type="tinyint" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="sede" Type="int" />
+          <Property Name="Carrera" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="correlativa">
+          <Key>
+            <PropertyRef Name="codigo_curso" />
+            <PropertyRef Name="codigo_correlativa" />
+          </Key>
+          <Property Name="codigo_curso" Type="int" Nullable="false" />
+          <Property Name="codigo_correlativa" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cursa">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="oferta" Type="int" Nullable="false" />
+          <Property Name="fechaAlta" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="aprobo" Type="bit" Nullable="false" />
+          <Property Name="nota" Type="varchar" MaxLength="50" />
+          <Property Name="observacion" Type="nvarchar" MaxLength="350" Nullable="false" />
+          <Property Name="alumno" Type="nvarchar" MaxLength="128" />
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="estado" Type="int" />
+          <Property Name="cantidadCuotas" Type="int" />
+          <Property Name="RequierePreInscripcion" Type="bit" Nullable="false" />
+          <Property Name="baja" Type="int" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="porcentajeBeca" Type="float" />
+          <Property Name="DescripcionBaja" Type="varchar" MaxLength="250" />
+          <Property Name="EstadoAntBaja" Type="int" />
+          <Property Name="resultadoCursada" Type="int" />
+          <Property Name="ValidarNota" Type="bit" />
+        </EntityType>
+        <EntityType Name="curso">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="horasSemanales" Type="int" Nullable="false" />
+          <Property Name="concepto" Type="int" Nullable="false" />
+          <Property Name="tipoCurso" Type="int" Nullable="false" />
+          <Property Name="nivel" Type="int" Nullable="false" />
+          <Property Name="extraInfo" Type="nvarchar" MaxLength="12" />
+          <Property Name="codCurso" Type="int" />
+          <Property Name="RequierePreInscripcion" Type="bit" Nullable="false" />
+          <Property Name="documentacion" Type="varchar" MaxLength="512" />
+          <Property Name="fechaDocumentacion" Type="date" />
+          <Property Name="horaDocumentacion" Type="time" Precision="7" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="AdminCurso" Type="nvarchar" MaxLength="128" />
+          <Property Name="AdminCurso2" Type="nvarchar" MaxLength="128" />
+          <Property Name="AdminCurso3" Type="nvarchar" MaxLength="128" />
+          <Property Name="gratuito" Type="bit" Nullable="false" />
+          <Property Name="AdminCurso4" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="Encuesta">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="fecha" Type="date" />
+          <Property Name="idRespuesta" Type="int" />
+          <Property Name="idCursa" Type="int" />
+        </EntityType>
+        <EntityType Name="EstadoCursa">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="frecuenciaCuota">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="localidad">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" Nullable="false" />
+          <Property Name="idProvincia" Type="int" Nullable="false" />
+          <Property Name="localidad" Type="nvarchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="menu">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="codPadre" Type="int" />
+          <Property Name="descripcion" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="vista" Type="nvarchar" MaxLength="100" />
+          <Property Name="accion" Type="nvarchar" MaxLength="100" />
+          <Property Name="orden" Type="int" Nullable="false" />
+          <Property Name="ancho" Type="int" />
+          <Property Name="icono" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="motivoBaja">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="nivelacion">
+          <Key>
+            <PropertyRef Name="codigo_usuario" />
+            <PropertyRef Name="codigo_curso" />
+          </Key>
+          <Property Name="codigo_usuario" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="codigo_curso" Type="int" Nullable="false" />
+          <Property Name="fecha" Type="datetime" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="oferta">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="curso" Type="int" Nullable="false" />
+          <Property Name="periodoLectivo" Type="int" Nullable="false" />
+          <Property Name="fechaDesde" Type="datetime" Nullable="false" />
+          <Property Name="fechaHasta" Type="datetime" Nullable="false" />
+          <Property Name="habilitada" Type="bit" Nullable="false" />
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="lunes" Type="bit" Nullable="false" />
+          <Property Name="martes" Type="bit" Nullable="false" />
+          <Property Name="miercoles" Type="bit" Nullable="false" />
+          <Property Name="jueves" Type="bit" Nullable="false" />
+          <Property Name="viernes" Type="bit" Nullable="false" />
+          <Property Name="sabado" Type="bit" Nullable="false" />
+          <Property Name="horaDesde" Type="time" Precision="7" />
+          <Property Name="horaHasta" Type="time" Precision="7" />
+          <Property Name="sede" Type="int" />
+          <Property Name="inscripcionDesde" Type="date" />
+          <Property Name="inscripcionHasta" Type="date" />
+          <Property Name="fechaPrimerCuota" Type="datetime" />
+          <Property Name="esBandaNegativa" Type="bit" Nullable="false" />
+          <Property Name="horaInscripcionDesde" Type="time" Precision="7" />
+          <Property Name="horaInscripcionHasta" Type="time" Precision="7" />
+          <Property Name="docente" Type="nvarchar" MaxLength="128" />
+          <Property Name="precioAlumno" Type="float" Nullable="false" />
+          <Property Name="precioNoAlumno" Type="float" Nullable="false" />
+          <Property Name="precioEmpleado" Type="float" Nullable="false" />
+          <Property Name="descuentoBandaNegativa" Type="float" />
+          <Property Name="precioMayorDe60" Type="float" Nullable="false" />
+          <Property Name="descuentoUnaCuota" Type="float" />
+          <Property Name="cantidadCuotas" Type="int" />
+          <Property Name="cupo" Type="int" />
+          <Property Name="diasSegundoVencimiento" Type="int" />
+          <Property Name="recargoSegundoVencimiento" Type="float" />
+          <Property Name="recaudacionMinima" Type="float" />
+          <Property Name="cupoMinimo" Type="int" />
+          <Property Name="RequierePreInscripcion" Type="bit" Nullable="false" />
+          <Property Name="documentacion" Type="varchar" MaxLength="512" />
+          <Property Name="fechaDocumentacion" Type="datetime2" Precision="7" />
+          <Property Name="horaDocumentacion" Type="time" Precision="7" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="gratuito" Type="bit" Nullable="false" />
+          <Property Name="frecuenciaCuota" Type="int" />
+          <Property Name="coordinadorDocente" Type="nvarchar" MaxLength="128" />
+          <Property Name="descuentoBandaNegativaNoAlumno" Type="float" />
+          <Property Name="precioGraduado" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="periodolectivo">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="anio" Type="int" Nullable="false" />
+          <Property Name="periodo" Type="int" Nullable="false" />
+          <Property Name="desdeFecha" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="hastaFecha" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipoCurso" Type="int" Nullable="false" />
+          <Property Name="fechaInscripcionDesde" Type="datetime2" Precision="7" />
+          <Property Name="fechaInscripcionHasta" Type="datetime2" Precision="7" />
+          <Property Name="fechaPrimeraCuota" Type="datetime2" Precision="7" />
+          <Property Name="periodoHoraDesde" Type="time" Precision="7" />
+          <Property Name="periodoHoraHasta" Type="time" Precision="7" />
+          <Property Name="inscripcionHoraDesde" Type="time" Precision="7" />
+          <Property Name="inscripcionHoraHasta" Type="time" Precision="7" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="permiso">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pagina" Type="int" />
+          <Property Name="tipoUsuario" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="plantillaEmail">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="150" />
+          <Property Name="cuerpo" Type="text" />
+          <Property Name="asunto" Type="text" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="sector" Type="int" />
+        </EntityType>
+        <EntityType Name="precio">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="alumno" Type="float" Nullable="false" />
+          <Property Name="noalumno" Type="float" Nullable="false" />
+          <Property Name="empleado" Type="float" Nullable="false" />
+          <Property Name="descuentoBandaNegativa" Type="float" />
+          <Property Name="descripcion" Type="varchar" MaxLength="250" />
+          <Property Name="mayorDe60" Type="float" Nullable="false" />
+          <Property Name="descuentoUnaCuota" Type="float" />
+          <Property Name="diasSegundoVencimiento" Type="int" />
+          <Property Name="recargoSegundoVencimiento" Type="float" />
+          <Property Name="concepto" Type="int" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="gratuito" Type="bit" Nullable="false" />
+          <Property Name="graduado" Type="float" />
+          <Property Name="sector" Type="int" />
+          <Property Name="descuentoBandaNegativaNoAlumno" Type="float" />
+        </EntityType>
+        <EntityType Name="provincia">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" Nullable="false" />
+          <Property Name="provincia" Type="nvarchar" MaxLength="60" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RespuestasEncuesta">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="respuesta" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResultadoCursa">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Sector">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SectorDescripcion" Type="varchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="sede">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="domicilio" Type="varchar" MaxLength="50" />
+          <Property Name="telefono" Type="varchar" MaxLength="50" />
+          <Property Name="mail" Type="varchar" MaxLength="50" />
+          <Property Name="contacto" Type="varchar" MaxLength="50" />
+          <Property Name="borradoLogico" Type="bit" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="sector" Type="int" />
+        </EntityType>
+        <EntityType Name="tipocurso">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="abreviado" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="UserCreated" Type="varchar" MaxLength="128" />
+          <Property Name="UserModified" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="sector" Type="int" />
+        </EntityType>
+        <EntityType Name="tipodocumento">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="descLarga" Type="nvarchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="XX_usuarios">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="nroDoc" Type="varchar" MaxLength="9" />
+          <Property Name="clave" Type="varchar" MaxLength="50" />
+          <Property Name="apellido" Type="varchar" MaxLength="50" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" />
+          <Property Name="calle" Type="varchar" MaxLength="40" />
+          <Property Name="nroCalle" Type="int" />
+          <Property Name="fechaNac" Type="datetime" />
+          <Property Name="telefono" Type="varchar" MaxLength="50" />
+          <Property Name="tipoUsuario" Type="int" />
+          <Property Name="tipoDoc" Type="int" />
+          <Property Name="email" Type="varchar" MaxLength="250" />
+          <Property Name="keyToken" Type="varchar" MaxLength="50" />
+          <Property Name="telefono2" Type="varchar" MaxLength="50" />
+          <Property Name="piso" Type="varchar" MaxLength="4" />
+          <Property Name="depto" Type="varchar" MaxLength="4" />
+          <Property Name="localidad" Type="varchar" MaxLength="250" />
+          <Property Name="provincia" Type="varchar" MaxLength="250" />
+          <Property Name="codigo" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="documento" Type="bigint" />
+          <Property Name="codLocaldiad" Type="int" />
+          <Property Name="codProvincia" Type="int" />
+          <Property Name="ape" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <Association Name="FK__oferta__frecuenc__25518C17">
+          <End Role="frecuenciaCuota" Type="Self.frecuenciaCuota" Multiplicity="0..1" />
+          <End Role="oferta" Type="Self.oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="frecuenciaCuota">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="frecuenciaCuota" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_asistencia_cursa">
+          <End Role="cursa" Type="Self.cursa" Multiplicity="1" />
+          <End Role="asistencia" Type="Self.asistencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cursa">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="asistencia">
+              <PropertyRef Name="cursa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AspNetUsers_localidad">
+          <End Role="localidad" Type="Self.localidad" Multiplicity="0..1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="localidad">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="localidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AspNetUsers_sede">
+          <End Role="sede" Type="Self.sede" Multiplicity="0..1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sede">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="sede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AspNetUsers_tipodocumento">
+          <End Role="tipodocumento" Type="Self.tipodocumento" Multiplicity="0..1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipodocumento">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="TipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_correlativa_curso">
+          <End Role="curso" Type="Self.curso" Multiplicity="1" />
+          <End Role="correlativa" Type="Self.correlativa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="curso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="correlativa">
+              <PropertyRef Name="codigo_curso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_correlativa_curso_correlativa">
+          <End Role="curso" Type="Self.curso" Multiplicity="1" />
+          <End Role="correlativa" Type="Self.correlativa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="curso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="correlativa">
+              <PropertyRef Name="codigo_correlativa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cursa_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="cursa" Type="Self.cursa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="cursa">
+              <PropertyRef Name="alumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cursa_EstadoCursa">
+          <End Role="EstadoCursa" Type="Self.EstadoCursa" Multiplicity="0..1" />
+          <End Role="cursa" Type="Self.cursa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstadoCursa">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="cursa">
+              <PropertyRef Name="estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cursa_motivoBaja">
+          <End Role="motivoBaja" Type="Self.motivoBaja" Multiplicity="0..1" />
+          <End Role="cursa" Type="Self.cursa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="motivoBaja">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="cursa">
+              <PropertyRef Name="baja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cursa_oferta">
+          <End Role="oferta" Type="Self.oferta" Multiplicity="1" />
+          <End Role="cursa" Type="Self.cursa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="oferta">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="cursa">
+              <PropertyRef Name="oferta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cursa_ResultadoCursa">
+          <End Role="ResultadoCursa" Type="Self.ResultadoCursa" Multiplicity="0..1" />
+          <End Role="cursa" Type="Self.cursa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResultadoCursa">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="cursa">
+              <PropertyRef Name="resultadoCursada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_curso_precio">
+          <End Role="precio" Type="Self.precio" Multiplicity="1" />
+          <End Role="curso" Type="Self.curso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="precio">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="curso">
+              <PropertyRef Name="concepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_curso_tipocurso">
+          <End Role="tipocurso" Type="Self.tipocurso" Multiplicity="1" />
+          <End Role="curso" Type="Self.curso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipocurso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="curso">
+              <PropertyRef Name="tipoCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Encuesta_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Encuesta" Type="Self.Encuesta" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Encuesta">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Encuesta_cursa">
+          <End Role="cursa" Type="Self.cursa" Multiplicity="0..1" />
+          <End Role="Encuesta" Type="Self.Encuesta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cursa">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="Encuesta">
+              <PropertyRef Name="idCursa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Encuesta_RespuestasEncuesta">
+          <End Role="RespuestasEncuesta" Type="Self.RespuestasEncuesta" Multiplicity="0..1" />
+          <End Role="Encuesta" Type="Self.Encuesta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RespuestasEncuesta">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Encuesta">
+              <PropertyRef Name="idRespuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_localidad_provincia">
+          <End Role="provincia" Type="Self.provincia" Multiplicity="1" />
+          <End Role="localidad" Type="Self.localidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="provincia">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="localidad">
+              <PropertyRef Name="idProvincia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_menu_menu">
+          <End Role="menu" Type="Self.menu" Multiplicity="0..1" />
+          <End Role="menu1" Type="Self.menu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="menu">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="menu1">
+              <PropertyRef Name="codPadre" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_nivelacion_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="nivelacion" Type="Self.nivelacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="nivelacion">
+              <PropertyRef Name="codigo_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_nivelacion_curso">
+          <End Role="curso" Type="Self.curso" Multiplicity="1" />
+          <End Role="nivelacion" Type="Self.nivelacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="curso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="nivelacion">
+              <PropertyRef Name="codigo_curso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="oferta" Type="Self.oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="docente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_AspNetUsers2">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="oferta" Type="Self.oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="coordinadorDocente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_curso">
+          <End Role="curso" Type="Self.curso" Multiplicity="1" />
+          <End Role="oferta" Type="Self.oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="curso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="curso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_curso2">
+          <End Role="curso" Type="Self.curso" Multiplicity="1" />
+          <End Role="oferta" Type="Self.oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="curso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="curso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_periodolectivo">
+          <End Role="periodolectivo" Type="Self.periodolectivo" Multiplicity="1" />
+          <End Role="oferta" Type="Self.oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="periodolectivo">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="periodoLectivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_periodolectivo2">
+          <End Role="periodolectivo" Type="Self.periodolectivo" Multiplicity="1" />
+          <End Role="oferta" Type="Self.oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="periodolectivo">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="periodoLectivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_sede">
+          <End Role="sede" Type="Self.sede" Multiplicity="0..1" />
+          <End Role="oferta" Type="Self.oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sede">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="sede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_sede2">
+          <End Role="sede" Type="Self.sede" Multiplicity="0..1" />
+          <End Role="oferta" Type="Self.oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sede">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="sede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_periodolectivo_tipocurso">
+          <End Role="tipocurso" Type="Self.tipocurso" Multiplicity="1" />
+          <End Role="periodolectivo" Type="Self.periodolectivo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipocurso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="periodolectivo">
+              <PropertyRef Name="tipoCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_permiso_AspNetRoles">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1" />
+          <End Role="permiso" Type="Self.permiso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="permiso">
+              <PropertyRef Name="tipoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_permiso_menu">
+          <End Role="menu" Type="Self.menu" Multiplicity="0..1" />
+          <End Role="permiso" Type="Self.permiso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="menu">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="permiso">
+              <PropertyRef Name="pagina" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_plantillaEmail_Sector">
+          <End Role="Sector" Type="Self.Sector" Multiplicity="0..1" />
+          <End Role="plantillaEmail" Type="Self.plantillaEmail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sector">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="plantillaEmail">
+              <PropertyRef Name="sector" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_precio_Sector">
+          <End Role="Sector" Type="Self.Sector" Multiplicity="0..1" />
+          <End Role="precio" Type="Self.precio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sector">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="precio">
+              <PropertyRef Name="sector" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sede_Sector">
+          <End Role="Sector" Type="Self.Sector" Multiplicity="0..1" />
+          <End Role="sede" Type="Self.sede" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sector">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="sede">
+              <PropertyRef Name="sector" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tipocurso_Sector">
+          <End Role="Sector" Type="Self.Sector" Multiplicity="0..1" />
+          <End Role="tipocurso" Type="Self.tipocurso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sector">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="tipocurso">
+              <PropertyRef Name="sector" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="ofertaDisponiblePorAlumno" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="socioculturalesModelStoreContainer">
+          <EntitySet Name="asistencia" EntityType="Self.asistencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="correlativa" EntityType="Self.correlativa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cursa" EntityType="Self.cursa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="curso" EntityType="Self.curso" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Encuesta" EntityType="Self.Encuesta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EstadoCursa" EntityType="Self.EstadoCursa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="frecuenciaCuota" EntityType="Self.frecuenciaCuota" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="localidad" EntityType="Self.localidad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="menu" EntityType="Self.menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="motivoBaja" EntityType="Self.motivoBaja" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="nivelacion" EntityType="Self.nivelacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="oferta" EntityType="Self.oferta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="periodolectivo" EntityType="Self.periodolectivo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="permiso" EntityType="Self.permiso" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="plantillaEmail" EntityType="Self.plantillaEmail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="precio" EntityType="Self.precio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="provincia" EntityType="Self.provincia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RespuestasEncuesta" EntityType="Self.RespuestasEncuesta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResultadoCursa" EntityType="Self.ResultadoCursa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sector" EntityType="Self.Sector" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sede" EntityType="Self.sede" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tipocurso" EntityType="Self.tipocurso" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tipodocumento" EntityType="Self.tipodocumento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="XX_usuarios" EntityType="Self.XX_usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__oferta__frecuenc__25518C17" Association="Self.FK__oferta__frecuenc__25518C17">
+            <End Role="frecuenciaCuota" EntitySet="frecuenciaCuota" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_asistencia_cursa" Association="Self.FK_asistencia_cursa">
+            <End Role="cursa" EntitySet="cursa" />
+            <End Role="asistencia" EntitySet="asistencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AspNetUsers_localidad" Association="Self.FK_AspNetUsers_localidad">
+            <End Role="localidad" EntitySet="localidad" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AspNetUsers_sede" Association="Self.FK_AspNetUsers_sede">
+            <End Role="sede" EntitySet="sede" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AspNetUsers_tipodocumento" Association="Self.FK_AspNetUsers_tipodocumento">
+            <End Role="tipodocumento" EntitySet="tipodocumento" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_correlativa_curso" Association="Self.FK_correlativa_curso">
+            <End Role="curso" EntitySet="curso" />
+            <End Role="correlativa" EntitySet="correlativa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_correlativa_curso_correlativa" Association="Self.FK_correlativa_curso_correlativa">
+            <End Role="curso" EntitySet="curso" />
+            <End Role="correlativa" EntitySet="correlativa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cursa_AspNetUsers" Association="Self.FK_cursa_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="cursa" EntitySet="cursa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cursa_EstadoCursa" Association="Self.FK_cursa_EstadoCursa">
+            <End Role="EstadoCursa" EntitySet="EstadoCursa" />
+            <End Role="cursa" EntitySet="cursa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cursa_motivoBaja" Association="Self.FK_cursa_motivoBaja">
+            <End Role="motivoBaja" EntitySet="motivoBaja" />
+            <End Role="cursa" EntitySet="cursa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cursa_oferta" Association="Self.FK_cursa_oferta">
+            <End Role="oferta" EntitySet="oferta" />
+            <End Role="cursa" EntitySet="cursa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cursa_ResultadoCursa" Association="Self.FK_cursa_ResultadoCursa">
+            <End Role="ResultadoCursa" EntitySet="ResultadoCursa" />
+            <End Role="cursa" EntitySet="cursa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_curso_precio" Association="Self.FK_curso_precio">
+            <End Role="precio" EntitySet="precio" />
+            <End Role="curso" EntitySet="curso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_curso_tipocurso" Association="Self.FK_curso_tipocurso">
+            <End Role="tipocurso" EntitySet="tipocurso" />
+            <End Role="curso" EntitySet="curso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Encuesta_AspNetUsers" Association="Self.FK_Encuesta_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Encuesta" EntitySet="Encuesta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Encuesta_cursa" Association="Self.FK_Encuesta_cursa">
+            <End Role="cursa" EntitySet="cursa" />
+            <End Role="Encuesta" EntitySet="Encuesta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Encuesta_RespuestasEncuesta" Association="Self.FK_Encuesta_RespuestasEncuesta">
+            <End Role="RespuestasEncuesta" EntitySet="RespuestasEncuesta" />
+            <End Role="Encuesta" EntitySet="Encuesta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_localidad_provincia" Association="Self.FK_localidad_provincia">
+            <End Role="provincia" EntitySet="provincia" />
+            <End Role="localidad" EntitySet="localidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_menu_menu" Association="Self.FK_menu_menu">
+            <End Role="menu" EntitySet="menu" />
+            <End Role="menu1" EntitySet="menu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_nivelacion_AspNetUsers" Association="Self.FK_nivelacion_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="nivelacion" EntitySet="nivelacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_nivelacion_curso" Association="Self.FK_nivelacion_curso">
+            <End Role="curso" EntitySet="curso" />
+            <End Role="nivelacion" EntitySet="nivelacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_AspNetUsers" Association="Self.FK_oferta_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_AspNetUsers2" Association="Self.FK_oferta_AspNetUsers2">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_curso" Association="Self.FK_oferta_curso">
+            <End Role="curso" EntitySet="curso" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_curso2" Association="Self.FK_oferta_curso2">
+            <End Role="curso" EntitySet="curso" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_periodolectivo" Association="Self.FK_oferta_periodolectivo">
+            <End Role="periodolectivo" EntitySet="periodolectivo" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_periodolectivo2" Association="Self.FK_oferta_periodolectivo2">
+            <End Role="periodolectivo" EntitySet="periodolectivo" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_sede" Association="Self.FK_oferta_sede">
+            <End Role="sede" EntitySet="sede" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_sede2" Association="Self.FK_oferta_sede2">
+            <End Role="sede" EntitySet="sede" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_periodolectivo_tipocurso" Association="Self.FK_periodolectivo_tipocurso">
+            <End Role="tipocurso" EntitySet="tipocurso" />
+            <End Role="periodolectivo" EntitySet="periodolectivo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_permiso_AspNetRoles" Association="Self.FK_permiso_AspNetRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="permiso" EntitySet="permiso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_permiso_menu" Association="Self.FK_permiso_menu">
+            <End Role="menu" EntitySet="menu" />
+            <End Role="permiso" EntitySet="permiso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_plantillaEmail_Sector" Association="Self.FK_plantillaEmail_Sector">
+            <End Role="Sector" EntitySet="Sector" />
+            <End Role="plantillaEmail" EntitySet="plantillaEmail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_precio_Sector" Association="Self.FK_precio_Sector">
+            <End Role="Sector" EntitySet="Sector" />
+            <End Role="precio" EntitySet="precio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sede_Sector" Association="Self.FK_sede_Sector">
+            <End Role="Sector" EntitySet="Sector" />
+            <End Role="sede" EntitySet="sede" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tipocurso_Sector" Association="Self.FK_tipocurso_Sector">
+            <End Role="Sector" EntitySet="Sector" />
+            <End Role="tipocurso" EntitySet="tipocurso" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="socioculturalesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="socioculturalesEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="ofertaDisponiblePorAlumno">
+          <Parameter Name="IdUsuario" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ofertaDisponiblePorAlumno1">
+            <Parameter Name="IdUsuario" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ofertaDisponiblePorAlumno2">
+          <Parameter Name="IdUsuario" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ofertaDisponiblePorAlumno3">
+          <Parameter Name="IdUsuario" Type="String" Mode="In" />
+          </FunctionImport>
+          <FunctionImport Name="ofertaDisponiblePorAlumno4" ReturnType="Collection(socioculturalesModel.ofertaDisponiblePorAlumno4_Result)">
+          <Parameter Name="IdUsuario" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="asistencia" EntityType="socioculturalesModel.asistencia" />
+          <EntitySet Name="EstadoCursa" EntityType="socioculturalesModel.EstadoCursa" />
+          <EntitySet Name="localidad" EntityType="socioculturalesModel.localidad" />
+          <EntitySet Name="menu" EntityType="socioculturalesModel.menu" />
+          <EntitySet Name="motivoBaja" EntityType="socioculturalesModel.motivoBaja" />
+          <EntitySet Name="nivelacion" EntityType="socioculturalesModel.nivelacion" />
+          <EntitySet Name="periodolectivo" EntityType="socioculturalesModel.periodolectivo" />
+          <EntitySet Name="permiso" EntityType="socioculturalesModel.permiso" />
+          <EntitySet Name="plantillaEmail" EntityType="socioculturalesModel.plantillaEmail" />
+          <EntitySet Name="precio" EntityType="socioculturalesModel.precio" />
+          <EntitySet Name="provincia" EntityType="socioculturalesModel.provincia" />
+          <EntitySet Name="sede" EntityType="socioculturalesModel.sede" />
+          <EntitySet Name="tipocurso" EntityType="socioculturalesModel.tipocurso" />
+          <EntitySet Name="tipodocumento" EntityType="socioculturalesModel.tipodocumento" />
+          <AssociationSet Name="FK_localidad_provincia" Association="socioculturalesModel.FK_localidad_provincia">
+            <End Role="provincia" EntitySet="provincia" />
+            <End Role="localidad" EntitySet="localidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_menu_menu" Association="socioculturalesModel.FK_menu_menu">
+            <End Role="menu" EntitySet="menu" />
+            <End Role="menu1" EntitySet="menu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_permiso_menu" Association="socioculturalesModel.FK_permiso_menu">
+            <End Role="menu" EntitySet="menu" />
+            <End Role="permiso" EntitySet="permiso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_periodolectivo_tipocurso" Association="socioculturalesModel.FK_periodolectivo_tipocurso">
+            <End Role="tipocurso" EntitySet="tipocurso" />
+            <End Role="periodolectivo" EntitySet="periodolectivo" />
+          </AssociationSet>
+          <EntitySet Name="AspNetRoles" EntityType="socioculturalesModel.AspNetRoles" />
+          <AssociationSet Name="FK_permiso_AspNetRoles" Association="socioculturalesModel.FK_permiso_AspNetRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="permiso" EntitySet="permiso" />
+          </AssociationSet>
+          <EntitySet Name="cursa" EntityType="socioculturalesModel.cursa" />
+          <AssociationSet Name="FK_asistencia_cursa" Association="socioculturalesModel.FK_asistencia_cursa">
+            <End EntitySet="cursa" Role="cursa" />
+            <End EntitySet="asistencia" Role="asistencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cursa_EstadoCursa" Association="socioculturalesModel.FK_cursa_EstadoCursa">
+            <End EntitySet="EstadoCursa" Role="EstadoCursa" />
+            <End EntitySet="cursa" Role="cursa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cursa_motivoBaja" Association="socioculturalesModel.FK_cursa_motivoBaja">
+            <End EntitySet="motivoBaja" Role="motivoBaja" />
+            <End EntitySet="cursa" Role="cursa" />
+          </AssociationSet>
+          <EntitySet Name="XX_usuarios" EntityType="socioculturalesModel.XX_usuarios" />
+          <EntitySet Name="frecuenciaCuota" EntityType="socioculturalesModel.frecuenciaCuota" />
+          <EntitySet Name="curso" EntityType="socioculturalesModel.curso" />
+          <AssociationSet Name="FK_curso_precio" Association="socioculturalesModel.FK_curso_precio">
+            <End Role="precio" EntitySet="precio" />
+            <End Role="curso" EntitySet="curso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_curso_tipocurso" Association="socioculturalesModel.FK_curso_tipocurso">
+            <End Role="tipocurso" EntitySet="tipocurso" />
+            <End Role="curso" EntitySet="curso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_nivelacion_curso" Association="socioculturalesModel.FK_nivelacion_curso">
+            <End Role="curso" EntitySet="curso" />
+            <End Role="nivelacion" EntitySet="nivelacion" />
+          </AssociationSet>
+          <AssociationSet Name="correlativa" Association="socioculturalesModel.correlativa">
+            <End Role="curso" EntitySet="curso" />
+            <End Role="curso1" EntitySet="curso" />
+          </AssociationSet>
+          <EntitySet Name="ResultadoCursa" EntityType="socioculturalesModel.ResultadoCursa" />
+          <AssociationSet Name="FK_cursa_ResultadoCursa" Association="socioculturalesModel.FK_cursa_ResultadoCursa">
+            <End Role="ResultadoCursa" EntitySet="ResultadoCursa" />
+            <End Role="cursa" EntitySet="cursa" />
+          </AssociationSet>
+          <EntitySet Name="oferta" EntityType="socioculturalesModel.oferta" />
+          <AssociationSet Name="FK_cursa_oferta" Association="socioculturalesModel.FK_cursa_oferta">
+            <End Role="oferta" EntitySet="oferta" />
+            <End Role="cursa" EntitySet="cursa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_curso" Association="socioculturalesModel.FK_oferta_curso">
+            <End Role="curso" EntitySet="curso" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_curso2" Association="socioculturalesModel.FK_oferta_curso2">
+            <End Role="curso" EntitySet="curso" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__oferta__frecuenc__25518C17" Association="socioculturalesModel.FK__oferta__frecuenc__25518C17">
+            <End Role="frecuenciaCuota" EntitySet="frecuenciaCuota" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_periodolectivo" Association="socioculturalesModel.FK_oferta_periodolectivo">
+            <End Role="periodolectivo" EntitySet="periodolectivo" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_periodolectivo2" Association="socioculturalesModel.FK_oferta_periodolectivo2">
+            <End Role="periodolectivo" EntitySet="periodolectivo" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_sede" Association="socioculturalesModel.FK_oferta_sede">
+            <End Role="sede" EntitySet="sede" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_sede2" Association="socioculturalesModel.FK_oferta_sede2">
+            <End Role="sede" EntitySet="sede" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <EntitySet Name="Sector" EntityType="socioculturalesModel.Sector" />
+          <AssociationSet Name="FK_sede_Sector" Association="socioculturalesModel.FK_sede_Sector">
+            <End Role="Sector" EntitySet="Sector" />
+            <End Role="sede" EntitySet="sede" />
+          </AssociationSet>
+          <AssociationSet Name="FK_plantillaEmail_Sector" Association="socioculturalesModel.FK_plantillaEmail_Sector">
+            <End Role="Sector" EntitySet="Sector" />
+            <End Role="plantillaEmail" EntitySet="plantillaEmail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_precio_Sector" Association="socioculturalesModel.FK_precio_Sector">
+            <End Role="Sector" EntitySet="Sector" />
+            <End Role="precio" EntitySet="precio" />
+          </AssociationSet>
+          <EntitySet Name="Encuesta" EntityType="socioculturalesModel.Encuesta" />
+          <EntitySet Name="RespuestasEncuesta" EntityType="socioculturalesModel.RespuestasEncuesta" />
+          <AssociationSet Name="FK_Encuesta_RespuestasEncuesta" Association="socioculturalesModel.FK_Encuesta_RespuestasEncuesta">
+            <End Role="RespuestasEncuesta" EntitySet="RespuestasEncuesta" />
+            <End Role="Encuesta" EntitySet="Encuesta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Encuesta_cursa" Association="socioculturalesModel.FK_Encuesta_cursa">
+            <End Role="cursa" EntitySet="cursa" />
+            <End Role="Encuesta" EntitySet="Encuesta" />
+          </AssociationSet>
+          <EntitySet Name="AspNetUsers" EntityType="socioculturalesModel.AspNetUsers" />
+          <AssociationSet Name="FK_AspNetUsers_localidad" Association="socioculturalesModel.FK_AspNetUsers_localidad">
+            <End Role="localidad" EntitySet="localidad" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AspNetUsers_sede" Association="socioculturalesModel.FK_AspNetUsers_sede">
+            <End Role="sede" EntitySet="sede" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AspNetUsers_tipodocumento" Association="socioculturalesModel.FK_AspNetUsers_tipodocumento">
+            <End Role="tipodocumento" EntitySet="tipodocumento" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cursa_AspNetUsers" Association="socioculturalesModel.FK_cursa_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="cursa" EntitySet="cursa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Encuesta_AspNetUsers" Association="socioculturalesModel.FK_Encuesta_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Encuesta" EntitySet="Encuesta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_nivelacion_AspNetUsers" Association="socioculturalesModel.FK_nivelacion_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="nivelacion" EntitySet="nivelacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_AspNetUsers" Association="socioculturalesModel.FK_oferta_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_oferta_AspNetUsers2" Association="socioculturalesModel.FK_oferta_AspNetUsers2">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="oferta" EntitySet="oferta" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="socioculturalesModel.AspNetUserRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tipocurso_Sector" Association="socioculturalesModel.FK_tipocurso_Sector">
+            <End Role="Sector" EntitySet="Sector" />
+            <End Role="tipocurso" EntitySet="tipocurso" />
+          </AssociationSet>
+          </EntityContainer>
+        <ComplexType Name="ofertaDisponiblePorAlumno4_Result">
+          <Property Type="String" Name="Horario" Nullable="true" MaxLength="70" />
+          <Property Type="String" Name="selected" Nullable="false" MaxLength="8" />
+          <Property Type="Int32" Name="curso" Nullable="false" />
+          <Property Type="Int32" Name="periodoLectivo" Nullable="false" />
+          <Property Type="DateTime" Name="fechaDesde" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="fechaHasta" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="habilitada" Nullable="false" />
+          <Property Type="Int32" Name="codigo" Nullable="false" />
+          <Property Type="Boolean" Name="lunes" Nullable="false" />
+          <Property Type="Boolean" Name="martes" Nullable="false" />
+          <Property Type="Boolean" Name="miercoles" Nullable="false" />
+          <Property Type="Boolean" Name="jueves" Nullable="false" />
+          <Property Type="Boolean" Name="viernes" Nullable="false" />
+          <Property Type="Boolean" Name="sabado" Nullable="false" />
+          <Property Type="Int32" Name="sede" Nullable="true" />
+          <Property Type="String" Name="docente" Nullable="true" MaxLength="128" />
+          <Property Type="Double" Name="precioAlumno" Nullable="false" />
+          <Property Type="Double" Name="precioNoAlumno" Nullable="false" />
+          <Property Type="Double" Name="precioMayorDe60" Nullable="false" />
+          <Property Type="Double" Name="descuentoUnaCuota" Nullable="true" />
+          <Property Type="Int32" Name="cantidadCuotas" Nullable="true" />
+          <Property Type="Int32" Name="cupo" Nullable="true" />
+          <Property Type="Int32" Name="codigoCurso" Nullable="false" />
+          <Property Type="Int32" Name="codCurso" Nullable="true" />
+          <Property Type="Int32" Name="concepto" Nullable="false" />
+          <Property Type="String" Name="descripcion" Nullable="false" MaxLength="250" />
+          <Property Type="Int32" Name="horasSemanales" Nullable="false" />
+          <Property Type="Int32" Name="nivel" Nullable="false" />
+          <Property Type="Int32" Name="tipoCurso" Nullable="false" />
+          <Property Type="String" Name="sedeNombre" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="tipoCursoNombre" Nullable="true" MaxLength="100" />
+          <Property Type="Time" Name="horaDesde" Nullable="true" />
+          <Property Type="Time" Name="horaHasta" Nullable="true" />
+          <Property Type="DateTime" Name="inscripcionDesde" Nullable="true" />
+          <Property Type="DateTime" Name="inscripcionHasta" Nullable="true" />
+          <Property Type="DateTime" Name="fechaPrimerCuota" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="esBandaNegativa" Nullable="false" />
+          <Property Type="Time" Name="horaInscripcionDesde" Nullable="true" />
+          <Property Type="Time" Name="horaInscripcionHasta" Nullable="true" />
+          <Property Type="Int32" Name="diasSegundoVencimiento" Nullable="true" />
+          <Property Type="Double" Name="recargoSegundoVencimiento" Nullable="true" />
+          <Property Type="Double" Name="precioEmpleado" Nullable="false" />
+          <Property Type="Double" Name="descuentoBandaNegativa" Nullable="true" />
+          <Property Type="Double" Name="recaudacionMinima" Nullable="true" />
+          <Property Type="Int32" Name="cupoMinimo" Nullable="true" />
+          <Property Type="Boolean" Name="RequierePreInscripcion" Nullable="false" />
+          <Property Type="String" Name="documentacion" Nullable="true" MaxLength="512" />
+          <Property Type="DateTime" Name="fechaDocumentacion" Nullable="true" />
+          <Property Type="Time" Name="horaDocumentacion" Nullable="true" />
+          <Property Type="DateTime" Name="DateCreated" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="DateModified" Nullable="false" Precision="23" />
+          <Property Type="String" Name="UserCreated" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="UserModified" Nullable="false" MaxLength="128" />
+          <Property Type="Boolean" Name="gratuito" Nullable="false" />
+          <Property Type="Int32" Name="frecuenciaCuota" Nullable="true" />
+          <Property Type="String" Name="coordinadorDocente" Nullable="true" MaxLength="128" />
+          <Property Type="Double" Name="descuentoBandaNegativaNoAlumno" Nullable="true" />
+          <Property Type="Double" Name="precioGraduado" Nullable="false" />
+          <Property Type="Int32" Name="sector" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="asistencia">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="cursa" Type="Int32" Nullable="false" />
+          <Property Name="asistencia1" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="asistio" Type="Boolean" Nullable="false" />
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="cursa1" Relationship="socioculturalesModel.FK_asistencia_cursa" FromRole="asistencia" ToRole="cursa" />
+        </EntityType>
+        <EntityType Name="EstadoCursa">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="cursa" Relationship="socioculturalesModel.FK_cursa_EstadoCursa" FromRole="EstadoCursa" ToRole="cursa" />
+        </EntityType>
+        <EntityType Name="localidad">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" />
+          <Property Name="idProvincia" Type="Int32" Nullable="false" />
+          <Property Name="localidad1" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="provincia" Relationship="socioculturalesModel.FK_localidad_provincia" FromRole="localidad" ToRole="provincia" />
+          <NavigationProperty Name="AspNetUsers" Relationship="socioculturalesModel.FK_AspNetUsers_localidad" FromRole="localidad" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="menu">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="codPadre" Type="Int32" />
+          <Property Name="descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="vista" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="accion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="orden" Type="Int32" Nullable="false" />
+          <Property Name="ancho" Type="Int32" />
+          <Property Name="icono" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="menu1" Relationship="socioculturalesModel.FK_menu_menu" FromRole="menu" ToRole="menu1" />
+          <NavigationProperty Name="menu2" Relationship="socioculturalesModel.FK_menu_menu" FromRole="menu1" ToRole="menu" />
+          <NavigationProperty Name="permiso" Relationship="socioculturalesModel.FK_permiso_menu" FromRole="menu" ToRole="permiso" />
+        </EntityType>
+        <EntityType Name="motivoBaja">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="cursa" Relationship="socioculturalesModel.FK_cursa_motivoBaja" FromRole="motivoBaja" ToRole="cursa" />
+        </EntityType>
+        <EntityType Name="nivelacion">
+          <Key>
+            <PropertyRef Name="codigo_usuario" />
+            <PropertyRef Name="codigo_curso" />
+          </Key>
+          <Property Name="codigo_usuario" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="codigo_curso" Type="Int32" Nullable="false" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="curso" Relationship="socioculturalesModel.FK_nivelacion_curso" FromRole="nivelacion" ToRole="curso" />
+          <NavigationProperty Name="AspNetUsers" Relationship="socioculturalesModel.FK_nivelacion_AspNetUsers" FromRole="nivelacion" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="periodolectivo">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="anio" Type="Int32" Nullable="false" />
+          <Property Name="periodo" Type="Int32" Nullable="false" />
+          <Property Name="desdeFecha" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="hastaFecha" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipoCurso" Type="Int32" Nullable="false" />
+          <Property Name="fechaInscripcionDesde" Type="DateTime" Precision="7" />
+          <Property Name="fechaInscripcionHasta" Type="DateTime" Precision="7" />
+          <Property Name="fechaPrimeraCuota" Type="DateTime" Precision="7" />
+          <Property Name="periodoHoraDesde" Type="Time" Precision="7" />
+          <Property Name="periodoHoraHasta" Type="Time" Precision="7" />
+          <Property Name="inscripcionHoraDesde" Type="Time" Precision="7" />
+          <Property Name="inscripcionHoraHasta" Type="Time" Precision="7" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tipocurso1" Relationship="socioculturalesModel.FK_periodolectivo_tipocurso" FromRole="periodolectivo" ToRole="tipocurso" />
+          <NavigationProperty Name="oferta" Relationship="socioculturalesModel.FK_oferta_periodolectivo" FromRole="periodolectivo" ToRole="oferta" />
+          <NavigationProperty Name="oferta1" Relationship="socioculturalesModel.FK_oferta_periodolectivo2" FromRole="periodolectivo" ToRole="oferta" />
+        </EntityType>
+        <EntityType Name="permiso">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="pagina" Type="Int32" />
+          <Property Name="tipoUsuario" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="menu" Relationship="socioculturalesModel.FK_permiso_menu" FromRole="permiso" ToRole="menu" />
+          <NavigationProperty Name="AspNetRoles" Relationship="socioculturalesModel.FK_permiso_AspNetRoles" FromRole="permiso" ToRole="AspNetRoles" />
+        </EntityType>
+        <EntityType Name="plantillaEmail">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="cuerpo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="asunto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="sector" Type="Int32" />
+          <NavigationProperty Name="Sector1" Relationship="socioculturalesModel.FK_plantillaEmail_Sector" FromRole="plantillaEmail" ToRole="Sector" />
+        </EntityType>
+        <EntityType Name="precio">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="alumno" Type="Double" Nullable="false" />
+          <Property Name="noalumno" Type="Double" Nullable="false" />
+          <Property Name="empleado" Type="Double" Nullable="false" />
+          <Property Name="descuentoBandaNegativa" Type="Double" />
+          <Property Name="descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="mayorDe60" Type="Double" Nullable="false" />
+          <Property Name="descuentoUnaCuota" Type="Double" />
+          <Property Name="diasSegundoVencimiento" Type="Int32" />
+          <Property Name="recargoSegundoVencimiento" Type="Double" />
+          <Property Name="concepto" Type="Int32" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="gratuito" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="curso" Relationship="socioculturalesModel.FK_curso_precio" FromRole="precio" ToRole="curso" />
+          <Property Name="graduado" Type="Double" />
+          <Property Name="sector" Type="Int32" />
+          <NavigationProperty Name="Sector1" Relationship="socioculturalesModel.FK_precio_Sector" FromRole="precio" ToRole="Sector" />
+          <Property Name="descuentoBandaNegativaNoAlumno" Type="Double" />
+        </EntityType>
+        <EntityType Name="provincia">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" />
+          <Property Name="provincia1" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="localidad" Relationship="socioculturalesModel.FK_localidad_provincia" FromRole="provincia" ToRole="localidad" />
+        </EntityType>
+        <EntityType Name="sede">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="domicilio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="contacto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="borradoLogico" Type="Boolean" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="oferta" Relationship="socioculturalesModel.FK_oferta_sede" FromRole="sede" ToRole="oferta" />
+          <NavigationProperty Name="oferta1" Relationship="socioculturalesModel.FK_oferta_sede2" FromRole="sede" ToRole="oferta" />
+          <Property Name="sector" Type="Int32" />
+          <NavigationProperty Name="Sector1" Relationship="socioculturalesModel.FK_sede_Sector" FromRole="sede" ToRole="Sector" />
+          <NavigationProperty Name="AspNetUsers" Relationship="socioculturalesModel.FK_AspNetUsers_sede" FromRole="sede" ToRole="AspNetUsers" />
+          </EntityType>
+        <EntityType Name="tipocurso">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="abreviado" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="periodolectivo" Relationship="socioculturalesModel.FK_periodolectivo_tipocurso" FromRole="tipocurso" ToRole="periodolectivo" />
+          <NavigationProperty Name="curso" Relationship="socioculturalesModel.FK_curso_tipocurso" FromRole="tipocurso" ToRole="curso" />
+          <Property Name="sector" Type="Int32" />
+          <NavigationProperty Name="Sector1" Relationship="socioculturalesModel.FK_tipocurso_Sector" FromRole="tipocurso" ToRole="Sector" />
+        </EntityType>
+        <EntityType Name="tipodocumento">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" />
+          <Property Name="descripcion" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="descLarga" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="socioculturalesModel.FK_AspNetUsers_tipodocumento" FromRole="tipodocumento" ToRole="AspNetUsers" />
+        </EntityType>
+        <Association Name="FK_localidad_provincia">
+          <End Type="socioculturalesModel.provincia" Role="provincia" Multiplicity="1" />
+          <End Type="socioculturalesModel.localidad" Role="localidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="provincia">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="localidad">
+              <PropertyRef Name="idProvincia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_menu_menu">
+          <End Type="socioculturalesModel.menu" Role="menu" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.menu" Role="menu1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="menu">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="menu1">
+              <PropertyRef Name="codPadre" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_permiso_menu">
+          <End Type="socioculturalesModel.menu" Role="menu" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.permiso" Role="permiso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="menu">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="permiso">
+              <PropertyRef Name="pagina" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_periodolectivo_tipocurso">
+          <End Type="socioculturalesModel.tipocurso" Role="tipocurso" Multiplicity="1" />
+          <End Type="socioculturalesModel.periodolectivo" Role="periodolectivo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipocurso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="periodolectivo">
+              <PropertyRef Name="tipoCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="permiso" Relationship="socioculturalesModel.FK_permiso_AspNetRoles" FromRole="AspNetRoles" ToRole="permiso" />
+          <NavigationProperty Name="AspNetUsers" Relationship="socioculturalesModel.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+        </EntityType>
+        <Association Name="FK_permiso_AspNetRoles">
+          <End Type="socioculturalesModel.AspNetRoles" Role="AspNetRoles" Multiplicity="1" />
+          <End Type="socioculturalesModel.permiso" Role="permiso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="permiso">
+              <PropertyRef Name="tipoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="cursa">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="oferta" Nullable="false" Type="Int32" />
+          <Property Name="fechaAlta" Nullable="false" Precision="7" Type="DateTime" />
+          <Property Name="aprobo" Nullable="false" Type="Boolean" />
+          <Property Name="nota" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="observacion" Nullable="false" MaxLength="350" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="alumno" MaxLength="128" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="codigo" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="estado" Type="Int32" />
+          <Property Name="cantidadCuotas" Type="Int32" />
+          <Property Name="RequierePreInscripcion" Nullable="false" Type="Boolean" />
+          <Property Name="baja" Type="Int32" />
+          <Property Name="DateCreated" Nullable="false" Precision="3" Type="DateTime" />
+          <Property Name="DateModified" Nullable="false" Precision="3" Type="DateTime" />
+          <Property Name="UserCreated" MaxLength="128" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="UserModified" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="porcentajeBeca" Type="Double" />
+          <NavigationProperty Name="asistencia" Relationship="socioculturalesModel.FK_asistencia_cursa" FromRole="cursa" ToRole="asistencia" />
+          <NavigationProperty Name="EstadoCursa" Relationship="socioculturalesModel.FK_cursa_EstadoCursa" FromRole="cursa" ToRole="EstadoCursa" />
+          <NavigationProperty Name="motivoBaja" Relationship="socioculturalesModel.FK_cursa_motivoBaja" FromRole="cursa" ToRole="motivoBaja" />
+          <Property Name="DescripcionBaja" MaxLength="250" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="EstadoAntBaja" Type="Int32" />
+          <Property Name="resultadoCursada" Type="Int32" />
+          <NavigationProperty Name="ResultadoCursa" Relationship="socioculturalesModel.FK_cursa_ResultadoCursa" FromRole="cursa" ToRole="ResultadoCursa" />
+          <Property Name="ValidarNota" Type="Boolean" />
+          <NavigationProperty Name="oferta1" Relationship="socioculturalesModel.FK_cursa_oferta" FromRole="cursa" ToRole="oferta" />
+          <NavigationProperty Name="Encuesta" Relationship="socioculturalesModel.FK_Encuesta_cursa" FromRole="cursa" ToRole="Encuesta" />
+          <NavigationProperty Name="AspNetUsers" Relationship="socioculturalesModel.FK_cursa_AspNetUsers" FromRole="cursa" ToRole="AspNetUsers" />
+        </EntityType>
+        <Association Name="FK_asistencia_cursa">
+          <End Type="socioculturalesModel.cursa" Multiplicity="1" Role="cursa" />
+          <End Type="socioculturalesModel.asistencia" Multiplicity="*" Role="asistencia" />
+          <ReferentialConstraint>
+            <Principal Role="cursa">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="asistencia">
+              <PropertyRef Name="cursa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cursa_EstadoCursa">
+          <End Type="socioculturalesModel.EstadoCursa" Multiplicity="0..1" Role="EstadoCursa" />
+          <End Type="socioculturalesModel.cursa" Multiplicity="*" Role="cursa" />
+          <ReferentialConstraint>
+            <Principal Role="EstadoCursa">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="cursa">
+              <PropertyRef Name="estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cursa_motivoBaja">
+          <End Type="socioculturalesModel.motivoBaja" Multiplicity="0..1" Role="motivoBaja" />
+          <End Type="socioculturalesModel.cursa" Multiplicity="*" Role="cursa" />
+          <ReferentialConstraint>
+            <Principal Role="motivoBaja">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="cursa">
+              <PropertyRef Name="baja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="XX_usuarios">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="nroDoc" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Name="clave" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="calle" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="nroCalle" Type="Int32" />
+          <Property Name="fechaNac" Type="DateTime" Precision="3" />
+          <Property Name="telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="tipoUsuario" Type="Int32" />
+          <Property Name="tipoDoc" Type="Int32" />
+          <Property Name="email" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="keyToken" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="telefono2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="piso" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="depto" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="localidad" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="provincia" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="codigo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="documento" Type="Int64" />
+          <Property Name="codLocaldiad" Type="Int32" />
+          <Property Name="codProvincia" Type="Int32" />
+          <Property Name="ape" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="frecuenciaCuota">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="oferta" Relationship="socioculturalesModel.FK__oferta__frecuenc__25518C17" FromRole="frecuenciaCuota" ToRole="oferta" />
+        </EntityType>
+        <EntityType Name="curso">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="horasSemanales" Type="Int32" Nullable="false" />
+          <Property Name="concepto" Type="Int32" Nullable="false" />
+          <Property Name="tipoCurso" Type="Int32" Nullable="false" />
+          <Property Name="nivel" Type="Int32" Nullable="false" />
+          <Property Name="extraInfo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="codCurso" Type="Int32" />
+          <Property Name="RequierePreInscripcion" Type="Boolean" Nullable="false" />
+          <Property Name="documentacion" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="fechaDocumentacion" Type="DateTime" Precision="0" />
+          <Property Name="horaDocumentacion" Type="Time" Precision="7" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="AdminCurso" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="AdminCurso2" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="AdminCurso3" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="AdminCurso4" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="gratuito" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="precio" Relationship="socioculturalesModel.FK_curso_precio" FromRole="curso" ToRole="precio" />
+          <NavigationProperty Name="tipocurso1" Relationship="socioculturalesModel.FK_curso_tipocurso" FromRole="curso" ToRole="tipocurso" />
+          <NavigationProperty Name="nivelacion" Relationship="socioculturalesModel.FK_nivelacion_curso" FromRole="curso" ToRole="nivelacion" />
+          <NavigationProperty Name="curso1" Relationship="socioculturalesModel.correlativa" FromRole="curso" ToRole="curso1" />
+          <NavigationProperty Name="curso2" Relationship="socioculturalesModel.correlativa" FromRole="curso1" ToRole="curso" />
+          <NavigationProperty Name="oferta" Relationship="socioculturalesModel.FK_oferta_curso" FromRole="curso" ToRole="oferta" />
+          <NavigationProperty Name="oferta1" Relationship="socioculturalesModel.FK_oferta_curso2" FromRole="curso" ToRole="oferta" />
+        </EntityType>
+        <Association Name="FK_curso_precio">
+          <End Type="socioculturalesModel.precio" Role="precio" Multiplicity="1" />
+          <End Type="socioculturalesModel.curso" Role="curso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="precio">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="curso">
+              <PropertyRef Name="concepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_curso_tipocurso">
+          <End Type="socioculturalesModel.tipocurso" Role="tipocurso" Multiplicity="1" />
+          <End Type="socioculturalesModel.curso" Role="curso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipocurso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="curso">
+              <PropertyRef Name="tipoCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_nivelacion_curso">
+          <End Type="socioculturalesModel.curso" Role="curso" Multiplicity="1" />
+          <End Type="socioculturalesModel.nivelacion" Role="nivelacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="curso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="nivelacion">
+              <PropertyRef Name="codigo_curso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="correlativa">
+          <End Type="socioculturalesModel.curso" Role="curso" Multiplicity="*" />
+          <End Type="socioculturalesModel.curso" Role="curso1" Multiplicity="*" />
+        </Association>
+        <EntityType Name="ResultadoCursa">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="cursa" Relationship="socioculturalesModel.FK_cursa_ResultadoCursa" FromRole="ResultadoCursa" ToRole="cursa" />
+        </EntityType>
+        <Association Name="FK_cursa_ResultadoCursa">
+          <End Type="socioculturalesModel.ResultadoCursa" Role="ResultadoCursa" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.cursa" Role="cursa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResultadoCursa">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="cursa">
+              <PropertyRef Name="resultadoCursada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="oferta">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="curso" Type="Int32" Nullable="false" />
+          <Property Name="periodoLectivo" Type="Int32" Nullable="false" />
+          <Property Name="fechaDesde" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fechaHasta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="habilitada" Type="Boolean" Nullable="false" />
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="lunes" Type="Boolean" Nullable="false" />
+          <Property Name="martes" Type="Boolean" Nullable="false" />
+          <Property Name="miercoles" Type="Boolean" Nullable="false" />
+          <Property Name="jueves" Type="Boolean" Nullable="false" />
+          <Property Name="viernes" Type="Boolean" Nullable="false" />
+          <Property Name="sabado" Type="Boolean" Nullable="false" />
+          <Property Name="horaDesde" Type="Time" Precision="7" />
+          <Property Name="horaHasta" Type="Time" Precision="7" />
+          <Property Name="sede" Type="Int32" />
+          <Property Name="inscripcionDesde" Type="DateTime" Precision="0" />
+          <Property Name="inscripcionHasta" Type="DateTime" Precision="0" />
+          <Property Name="fechaPrimerCuota" Type="DateTime" Precision="3" />
+          <Property Name="esBandaNegativa" Type="Boolean" Nullable="false" />
+          <Property Name="horaInscripcionDesde" Type="Time" Precision="7" />
+          <Property Name="horaInscripcionHasta" Type="Time" Precision="7" />
+          <Property Name="docente" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="coordinadorDocente" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="precioAlumno" Type="Double" Nullable="false" />
+          <Property Name="precioNoAlumno" Type="Double" Nullable="false" />
+          <Property Name="precioEmpleado" Type="Double" Nullable="false" />
+          <Property Name="descuentoBandaNegativa" Type="Double" />
+          <Property Name="precioMayorDe60" Type="Double" Nullable="false" />
+          <Property Name="descuentoUnaCuota" Type="Double" />
+          <Property Name="cantidadCuotas" Type="Int32" />
+          <Property Name="cupo" Type="Int32" />
+          <Property Name="diasSegundoVencimiento" Type="Int32" />
+          <Property Name="recargoSegundoVencimiento" Type="Double" />
+          <Property Name="recaudacionMinima" Type="Double" />
+          <Property Name="cupoMinimo" Type="Int32" />
+          <Property Name="RequierePreInscripcion" Type="Boolean" Nullable="false" />
+          <Property Name="documentacion" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="fechaDocumentacion" Type="DateTime" Precision="7" />
+          <Property Name="horaDocumentacion" Type="Time" Precision="7" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="gratuito" Type="Boolean" Nullable="false" />
+          <Property Name="frecuenciaCuota" Type="Int32" />
+          <NavigationProperty Name="cursa" Relationship="socioculturalesModel.FK_cursa_oferta" FromRole="oferta" ToRole="cursa" />
+          <NavigationProperty Name="curso1" Relationship="socioculturalesModel.FK_oferta_curso" FromRole="oferta" ToRole="curso" />
+          <NavigationProperty Name="curso2" Relationship="socioculturalesModel.FK_oferta_curso2" FromRole="oferta" ToRole="curso" />
+          <NavigationProperty Name="frecuenciaCuota1" Relationship="socioculturalesModel.FK__oferta__frecuenc__25518C17" FromRole="oferta" ToRole="frecuenciaCuota" />
+          <NavigationProperty Name="periodolectivo1" Relationship="socioculturalesModel.FK_oferta_periodolectivo" FromRole="oferta" ToRole="periodolectivo" />
+          <NavigationProperty Name="periodolectivo2" Relationship="socioculturalesModel.FK_oferta_periodolectivo2" FromRole="oferta" ToRole="periodolectivo" />
+          <NavigationProperty Name="sede1" Relationship="socioculturalesModel.FK_oferta_sede" FromRole="oferta" ToRole="sede" />
+          <NavigationProperty Name="sede2" Relationship="socioculturalesModel.FK_oferta_sede2" FromRole="oferta" ToRole="sede" />
+          <Property Name="precioGraduado" Type="Double" Nullable="false" />
+          <Property Name="descuentoBandaNegativaNoAlumno" Type="Double" />
+          <NavigationProperty Name="AspNetUsers" Relationship="socioculturalesModel.FK_oferta_AspNetUsers" FromRole="oferta" ToRole="AspNetUsers" />
+          <NavigationProperty Name="AspNetUsers1" Relationship="socioculturalesModel.FK_oferta_AspNetUsers2" FromRole="oferta" ToRole="AspNetUsers" />
+        </EntityType>
+        <Association Name="FK_cursa_oferta">
+          <End Type="socioculturalesModel.oferta" Role="oferta" Multiplicity="1" />
+          <End Type="socioculturalesModel.cursa" Role="cursa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="oferta">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="cursa">
+              <PropertyRef Name="oferta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_curso">
+          <End Type="socioculturalesModel.curso" Role="curso" Multiplicity="1" />
+          <End Type="socioculturalesModel.oferta" Role="oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="curso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="curso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_curso2">
+          <End Type="socioculturalesModel.curso" Role="curso" Multiplicity="1" />
+          <End Type="socioculturalesModel.oferta" Role="oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="curso">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="curso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__oferta__frecuenc__25518C17">
+          <End Type="socioculturalesModel.frecuenciaCuota" Role="frecuenciaCuota" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.oferta" Role="oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="frecuenciaCuota">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="frecuenciaCuota" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_periodolectivo">
+          <End Type="socioculturalesModel.periodolectivo" Role="periodolectivo" Multiplicity="1" />
+          <End Type="socioculturalesModel.oferta" Role="oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="periodolectivo">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="periodoLectivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_periodolectivo2">
+          <End Type="socioculturalesModel.periodolectivo" Role="periodolectivo" Multiplicity="1" />
+          <End Type="socioculturalesModel.oferta" Role="oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="periodolectivo">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="periodoLectivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_sede">
+          <End Type="socioculturalesModel.sede" Role="sede" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.oferta" Role="oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sede">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="sede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_sede2">
+          <End Type="socioculturalesModel.sede" Role="sede" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.oferta" Role="oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sede">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="sede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Sector">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SectorDescripcion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="sede" Relationship="socioculturalesModel.FK_sede_Sector" FromRole="Sector" ToRole="sede" />
+          <NavigationProperty Name="plantillaEmail" Relationship="socioculturalesModel.FK_plantillaEmail_Sector" FromRole="Sector" ToRole="plantillaEmail" />
+          <NavigationProperty Name="precio" Relationship="socioculturalesModel.FK_precio_Sector" FromRole="Sector" ToRole="precio" />
+          <NavigationProperty Name="tipocurso" Relationship="socioculturalesModel.FK_tipocurso_Sector" FromRole="Sector" ToRole="tipocurso" />
+        </EntityType>
+        <Association Name="FK_sede_Sector">
+          <End Type="socioculturalesModel.Sector" Role="Sector" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.sede" Role="sede" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sector">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="sede">
+              <PropertyRef Name="sector" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_plantillaEmail_Sector">
+          <End Type="socioculturalesModel.Sector" Role="Sector" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.plantillaEmail" Role="plantillaEmail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sector">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="plantillaEmail">
+              <PropertyRef Name="sector" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_precio_Sector">
+          <End Type="socioculturalesModel.Sector" Role="Sector" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.precio" Role="precio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sector">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="precio">
+              <PropertyRef Name="sector" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Encuesta">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="fecha" Type="DateTime" Precision="0" />
+          <Property Name="idRespuesta" Type="Int32" />
+          <NavigationProperty Name="RespuestasEncuesta" Relationship="socioculturalesModel.FK_Encuesta_RespuestasEncuesta" FromRole="Encuesta" ToRole="RespuestasEncuesta" />
+          <Property Name="idCursa" Type="Int32" />
+          <NavigationProperty Name="cursa" Relationship="socioculturalesModel.FK_Encuesta_cursa" FromRole="Encuesta" ToRole="cursa" />
+          <NavigationProperty Name="AspNetUsers" Relationship="socioculturalesModel.FK_Encuesta_AspNetUsers" FromRole="Encuesta" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="RespuestasEncuesta">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="respuesta" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Encuesta" Relationship="socioculturalesModel.FK_Encuesta_RespuestasEncuesta" FromRole="RespuestasEncuesta" ToRole="Encuesta" />
+        </EntityType>
+        <Association Name="FK_Encuesta_RespuestasEncuesta">
+          <End Type="socioculturalesModel.RespuestasEncuesta" Role="RespuestasEncuesta" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.Encuesta" Role="Encuesta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RespuestasEncuesta">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Encuesta">
+              <PropertyRef Name="idRespuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Encuesta_cursa">
+          <End Type="socioculturalesModel.cursa" Role="cursa" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.Encuesta" Role="Encuesta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cursa">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="Encuesta">
+              <PropertyRef Name="idCursa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Activo" Type="Boolean" />
+          <Property Name="passwordInicial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NroDocumento" Type="Int32" />
+          <Property Name="Apellido" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Calle" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="NroCalle" Type="Int32" />
+          <Property Name="FechaNacimiento" Type="DateTime" Precision="3" />
+          <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telefono2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="piso" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="dpto" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="localidad" Type="Int32" />
+          <Property Name="provincia" Type="Int32" />
+          <Property Name="TipoDocumento" Type="Int32" />
+          <Property Name="TipoAlumno" Type="Byte" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserCreated" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserModified" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="sede" Type="Int32" />
+          <NavigationProperty Name="localidad1" Relationship="socioculturalesModel.FK_AspNetUsers_localidad" FromRole="AspNetUsers" ToRole="localidad" />
+          <NavigationProperty Name="sede1" Relationship="socioculturalesModel.FK_AspNetUsers_sede" FromRole="AspNetUsers" ToRole="sede" />
+          <NavigationProperty Name="tipodocumento1" Relationship="socioculturalesModel.FK_AspNetUsers_tipodocumento" FromRole="AspNetUsers" ToRole="tipodocumento" />
+          <NavigationProperty Name="cursa" Relationship="socioculturalesModel.FK_cursa_AspNetUsers" FromRole="AspNetUsers" ToRole="cursa" />
+          <NavigationProperty Name="Encuesta" Relationship="socioculturalesModel.FK_Encuesta_AspNetUsers" FromRole="AspNetUsers" ToRole="Encuesta" />
+          <NavigationProperty Name="nivelacion" Relationship="socioculturalesModel.FK_nivelacion_AspNetUsers" FromRole="AspNetUsers" ToRole="nivelacion" />
+          <NavigationProperty Name="oferta" Relationship="socioculturalesModel.FK_oferta_AspNetUsers" FromRole="AspNetUsers" ToRole="oferta" />
+          <NavigationProperty Name="oferta1" Relationship="socioculturalesModel.FK_oferta_AspNetUsers2" FromRole="AspNetUsers" ToRole="oferta" />
+          <NavigationProperty Name="AspNetRoles" Relationship="socioculturalesModel.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+          <Property Name="Carrera" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_AspNetUsers_localidad">
+          <End Type="socioculturalesModel.localidad" Role="localidad" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="localidad">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="localidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AspNetUsers_sede">
+          <End Type="socioculturalesModel.sede" Role="sede" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sede">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="sede" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AspNetUsers_tipodocumento">
+          <End Type="socioculturalesModel.tipodocumento" Role="tipodocumento" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipodocumento">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="TipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cursa_AspNetUsers">
+          <End Type="socioculturalesModel.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.cursa" Role="cursa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="cursa">
+              <PropertyRef Name="alumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Encuesta_AspNetUsers">
+          <End Type="socioculturalesModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="socioculturalesModel.Encuesta" Role="Encuesta" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Encuesta">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_nivelacion_AspNetUsers">
+          <End Type="socioculturalesModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="socioculturalesModel.nivelacion" Role="nivelacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="nivelacion">
+              <PropertyRef Name="codigo_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_AspNetUsers">
+          <End Type="socioculturalesModel.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.oferta" Role="oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="docente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_oferta_AspNetUsers2">
+          <End Type="socioculturalesModel.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.oferta" Role="oferta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="oferta">
+              <PropertyRef Name="coordinadorDocente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Type="socioculturalesModel.AspNetRoles" Role="AspNetRoles" Multiplicity="*" />
+          <End Type="socioculturalesModel.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_tipocurso_Sector">
+          <End Type="socioculturalesModel.Sector" Role="Sector" Multiplicity="0..1" />
+          <End Type="socioculturalesModel.tipocurso" Role="tipocurso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sector">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="tipocurso">
+              <PropertyRef Name="sector" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="socioculturalesModelStoreContainer" CdmEntityContainer="socioculturalesEntities">
+          <FunctionImportMapping FunctionImportName="ofertaDisponiblePorAlumno4" FunctionName="socioculturalesModel.Store.ofertaDisponiblePorAlumno">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="socioculturalesModel.ofertaDisponiblePorAlumno4_Result">
+                <ScalarProperty Name="Horario" ColumnName="Horario" />
+                <ScalarProperty Name="selected" ColumnName="selected" />
+                <ScalarProperty Name="curso" ColumnName="curso" />
+                <ScalarProperty Name="periodoLectivo" ColumnName="periodoLectivo" />
+                <ScalarProperty Name="fechaDesde" ColumnName="fechaDesde" />
+                <ScalarProperty Name="fechaHasta" ColumnName="fechaHasta" />
+                <ScalarProperty Name="habilitada" ColumnName="habilitada" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="lunes" ColumnName="lunes" />
+                <ScalarProperty Name="martes" ColumnName="martes" />
+                <ScalarProperty Name="miercoles" ColumnName="miercoles" />
+                <ScalarProperty Name="jueves" ColumnName="jueves" />
+                <ScalarProperty Name="viernes" ColumnName="viernes" />
+                <ScalarProperty Name="sabado" ColumnName="sabado" />
+                <ScalarProperty Name="sede" ColumnName="sede" />
+                <ScalarProperty Name="docente" ColumnName="docente" />
+                <ScalarProperty Name="precioAlumno" ColumnName="precioAlumno" />
+                <ScalarProperty Name="precioNoAlumno" ColumnName="precioNoAlumno" />
+                <ScalarProperty Name="precioMayorDe60" ColumnName="precioMayorDe60" />
+                <ScalarProperty Name="descuentoUnaCuota" ColumnName="descuentoUnaCuota" />
+                <ScalarProperty Name="cantidadCuotas" ColumnName="cantidadCuotas" />
+                <ScalarProperty Name="cupo" ColumnName="cupo" />
+                <ScalarProperty Name="codigoCurso" ColumnName="codigoCurso" />
+                <ScalarProperty Name="codCurso" ColumnName="codCurso" />
+                <ScalarProperty Name="concepto" ColumnName="concepto" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="horasSemanales" ColumnName="horasSemanales" />
+                <ScalarProperty Name="nivel" ColumnName="nivel" />
+                <ScalarProperty Name="tipoCurso" ColumnName="tipoCurso" />
+                <ScalarProperty Name="sedeNombre" ColumnName="sedeNombre" />
+                <ScalarProperty Name="tipoCursoNombre" ColumnName="tipoCursoNombre" />
+                <ScalarProperty Name="horaDesde" ColumnName="horaDesde" />
+                <ScalarProperty Name="horaHasta" ColumnName="horaHasta" />
+                <ScalarProperty Name="inscripcionDesde" ColumnName="inscripcionDesde" />
+                <ScalarProperty Name="inscripcionHasta" ColumnName="inscripcionHasta" />
+                <ScalarProperty Name="fechaPrimerCuota" ColumnName="fechaPrimerCuota" />
+                <ScalarProperty Name="esBandaNegativa" ColumnName="esBandaNegativa" />
+                <ScalarProperty Name="horaInscripcionDesde" ColumnName="horaInscripcionDesde" />
+                <ScalarProperty Name="horaInscripcionHasta" ColumnName="horaInscripcionHasta" />
+                <ScalarProperty Name="diasSegundoVencimiento" ColumnName="diasSegundoVencimiento" />
+                <ScalarProperty Name="recargoSegundoVencimiento" ColumnName="recargoSegundoVencimiento" />
+                <ScalarProperty Name="precioEmpleado" ColumnName="precioEmpleado" />
+                <ScalarProperty Name="descuentoBandaNegativa" ColumnName="descuentoBandaNegativa" />
+                <ScalarProperty Name="recaudacionMinima" ColumnName="recaudacionMinima" />
+                <ScalarProperty Name="cupoMinimo" ColumnName="cupoMinimo" />
+                <ScalarProperty Name="RequierePreInscripcion" ColumnName="RequierePreInscripcion" />
+                <ScalarProperty Name="documentacion" ColumnName="documentacion" />
+                <ScalarProperty Name="fechaDocumentacion" ColumnName="fechaDocumentacion" />
+                <ScalarProperty Name="horaDocumentacion" ColumnName="horaDocumentacion" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="gratuito" ColumnName="gratuito" />
+                <ScalarProperty Name="frecuenciaCuota" ColumnName="frecuenciaCuota" />
+                <ScalarProperty Name="coordinadorDocente" ColumnName="coordinadorDocente" />
+                <ScalarProperty Name="descuentoBandaNegativaNoAlumno" ColumnName="descuentoBandaNegativaNoAlumno" />
+                <ScalarProperty Name="precioGraduado" ColumnName="precioGraduado" />
+                <ScalarProperty Name="sector" ColumnName="sector" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="asistencia">
+            <EntityTypeMapping TypeName="socioculturalesModel.asistencia">
+              <MappingFragment StoreEntitySet="asistencia">
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="asistio" ColumnName="asistio" />
+                <ScalarProperty Name="asistencia1" ColumnName="asistencia" />
+                <ScalarProperty Name="cursa" ColumnName="cursa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EstadoCursa">
+            <EntityTypeMapping TypeName="socioculturalesModel.EstadoCursa">
+              <MappingFragment StoreEntitySet="EstadoCursa">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="localidad">
+            <EntityTypeMapping TypeName="socioculturalesModel.localidad">
+              <MappingFragment StoreEntitySet="localidad">
+                <ScalarProperty Name="localidad1" ColumnName="localidad" />
+                <ScalarProperty Name="idProvincia" ColumnName="idProvincia" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="menu">
+            <EntityTypeMapping TypeName="socioculturalesModel.menu">
+              <MappingFragment StoreEntitySet="menu">
+                <ScalarProperty Name="icono" ColumnName="icono" />
+                <ScalarProperty Name="ancho" ColumnName="ancho" />
+                <ScalarProperty Name="orden" ColumnName="orden" />
+                <ScalarProperty Name="accion" ColumnName="accion" />
+                <ScalarProperty Name="vista" ColumnName="vista" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="codPadre" ColumnName="codPadre" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="motivoBaja">
+            <EntityTypeMapping TypeName="socioculturalesModel.motivoBaja">
+              <MappingFragment StoreEntitySet="motivoBaja">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="nivelacion">
+            <EntityTypeMapping TypeName="socioculturalesModel.nivelacion">
+              <MappingFragment StoreEntitySet="nivelacion">
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="codigo_curso" ColumnName="codigo_curso" />
+                <ScalarProperty Name="codigo_usuario" ColumnName="codigo_usuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="periodolectivo">
+            <EntityTypeMapping TypeName="socioculturalesModel.periodolectivo">
+              <MappingFragment StoreEntitySet="periodolectivo">
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="inscripcionHoraHasta" ColumnName="inscripcionHoraHasta" />
+                <ScalarProperty Name="inscripcionHoraDesde" ColumnName="inscripcionHoraDesde" />
+                <ScalarProperty Name="periodoHoraHasta" ColumnName="periodoHoraHasta" />
+                <ScalarProperty Name="periodoHoraDesde" ColumnName="periodoHoraDesde" />
+                <ScalarProperty Name="fechaPrimeraCuota" ColumnName="fechaPrimeraCuota" />
+                <ScalarProperty Name="fechaInscripcionHasta" ColumnName="fechaInscripcionHasta" />
+                <ScalarProperty Name="fechaInscripcionDesde" ColumnName="fechaInscripcionDesde" />
+                <ScalarProperty Name="tipoCurso" ColumnName="tipoCurso" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="hastaFecha" ColumnName="hastaFecha" />
+                <ScalarProperty Name="desdeFecha" ColumnName="desdeFecha" />
+                <ScalarProperty Name="periodo" ColumnName="periodo" />
+                <ScalarProperty Name="anio" ColumnName="anio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="permiso">
+            <EntityTypeMapping TypeName="socioculturalesModel.permiso">
+              <MappingFragment StoreEntitySet="permiso">
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="tipoUsuario" ColumnName="tipoUsuario" />
+                <ScalarProperty Name="pagina" ColumnName="pagina" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="plantillaEmail">
+            <EntityTypeMapping TypeName="socioculturalesModel.plantillaEmail">
+              <MappingFragment StoreEntitySet="plantillaEmail">
+                <ScalarProperty Name="sector" ColumnName="sector" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="asunto" ColumnName="asunto" />
+                <ScalarProperty Name="cuerpo" ColumnName="cuerpo" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="precio">
+            <EntityTypeMapping TypeName="socioculturalesModel.precio">
+              <MappingFragment StoreEntitySet="precio">
+                <ScalarProperty Name="descuentoBandaNegativaNoAlumno" ColumnName="descuentoBandaNegativaNoAlumno" />
+                <ScalarProperty Name="sector" ColumnName="sector" />
+                <ScalarProperty Name="graduado" ColumnName="graduado" />
+                <ScalarProperty Name="gratuito" ColumnName="gratuito" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="concepto" ColumnName="concepto" />
+                <ScalarProperty Name="recargoSegundoVencimiento" ColumnName="recargoSegundoVencimiento" />
+                <ScalarProperty Name="diasSegundoVencimiento" ColumnName="diasSegundoVencimiento" />
+                <ScalarProperty Name="descuentoUnaCuota" ColumnName="descuentoUnaCuota" />
+                <ScalarProperty Name="mayorDe60" ColumnName="mayorDe60" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="descuentoBandaNegativa" ColumnName="descuentoBandaNegativa" />
+                <ScalarProperty Name="empleado" ColumnName="empleado" />
+                <ScalarProperty Name="noalumno" ColumnName="noalumno" />
+                <ScalarProperty Name="alumno" ColumnName="alumno" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="provincia">
+            <EntityTypeMapping TypeName="socioculturalesModel.provincia">
+              <MappingFragment StoreEntitySet="provincia">
+                <ScalarProperty Name="provincia1" ColumnName="provincia" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sede">
+            <EntityTypeMapping TypeName="socioculturalesModel.sede">
+              <MappingFragment StoreEntitySet="sede">
+                <ScalarProperty Name="sector" ColumnName="sector" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="borradoLogico" ColumnName="borradoLogico" />
+                <ScalarProperty Name="contacto" ColumnName="contacto" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="domicilio" ColumnName="domicilio" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipocurso">
+            <EntityTypeMapping TypeName="socioculturalesModel.tipocurso">
+              <MappingFragment StoreEntitySet="tipocurso">
+                <ScalarProperty Name="sector" ColumnName="sector" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="abreviado" ColumnName="abreviado" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipodocumento">
+            <EntityTypeMapping TypeName="socioculturalesModel.tipodocumento">
+              <MappingFragment StoreEntitySet="tipodocumento">
+                <ScalarProperty Name="descLarga" ColumnName="descLarga" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="socioculturalesModel.AspNetRoles">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cursa">
+            <EntityTypeMapping TypeName="socioculturalesModel.cursa">
+              <MappingFragment StoreEntitySet="cursa">
+                <ScalarProperty Name="ValidarNota" ColumnName="ValidarNota" />
+                <ScalarProperty Name="resultadoCursada" ColumnName="resultadoCursada" />
+                <ScalarProperty Name="EstadoAntBaja" ColumnName="EstadoAntBaja" />
+                <ScalarProperty Name="DescripcionBaja" ColumnName="DescripcionBaja" />
+                <ScalarProperty Name="porcentajeBeca" ColumnName="porcentajeBeca" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="baja" ColumnName="baja" />
+                <ScalarProperty Name="RequierePreInscripcion" ColumnName="RequierePreInscripcion" />
+                <ScalarProperty Name="cantidadCuotas" ColumnName="cantidadCuotas" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="alumno" ColumnName="alumno" />
+                <ScalarProperty Name="observacion" ColumnName="observacion" />
+                <ScalarProperty Name="nota" ColumnName="nota" />
+                <ScalarProperty Name="aprobo" ColumnName="aprobo" />
+                <ScalarProperty Name="fechaAlta" ColumnName="fechaAlta" />
+                <ScalarProperty Name="oferta" ColumnName="oferta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="XX_usuarios">
+            <EntityTypeMapping TypeName="socioculturalesModel.XX_usuarios">
+              <MappingFragment StoreEntitySet="XX_usuarios">
+                <ScalarProperty Name="ape" ColumnName="ape" />
+                <ScalarProperty Name="codProvincia" ColumnName="codProvincia" />
+                <ScalarProperty Name="codLocaldiad" ColumnName="codLocaldiad" />
+                <ScalarProperty Name="documento" ColumnName="documento" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="provincia" ColumnName="provincia" />
+                <ScalarProperty Name="localidad" ColumnName="localidad" />
+                <ScalarProperty Name="depto" ColumnName="depto" />
+                <ScalarProperty Name="piso" ColumnName="piso" />
+                <ScalarProperty Name="telefono2" ColumnName="telefono2" />
+                <ScalarProperty Name="keyToken" ColumnName="keyToken" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="tipoDoc" ColumnName="tipoDoc" />
+                <ScalarProperty Name="tipoUsuario" ColumnName="tipoUsuario" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="fechaNac" ColumnName="fechaNac" />
+                <ScalarProperty Name="nroCalle" ColumnName="nroCalle" />
+                <ScalarProperty Name="calle" ColumnName="calle" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="clave" ColumnName="clave" />
+                <ScalarProperty Name="nroDoc" ColumnName="nroDoc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="frecuenciaCuota">
+            <EntityTypeMapping TypeName="socioculturalesModel.frecuenciaCuota">
+              <MappingFragment StoreEntitySet="frecuenciaCuota">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="curso">
+            <EntityTypeMapping TypeName="socioculturalesModel.curso">
+              <MappingFragment StoreEntitySet="curso">
+                <ScalarProperty Name="gratuito" ColumnName="gratuito" />
+                <ScalarProperty Name="AdminCurso4" ColumnName="AdminCurso4" />
+                <ScalarProperty Name="AdminCurso3" ColumnName="AdminCurso3" />
+                <ScalarProperty Name="AdminCurso2" ColumnName="AdminCurso2" />
+                <ScalarProperty Name="AdminCurso" ColumnName="AdminCurso" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="horaDocumentacion" ColumnName="horaDocumentacion" />
+                <ScalarProperty Name="fechaDocumentacion" ColumnName="fechaDocumentacion" />
+                <ScalarProperty Name="documentacion" ColumnName="documentacion" />
+                <ScalarProperty Name="RequierePreInscripcion" ColumnName="RequierePreInscripcion" />
+                <ScalarProperty Name="codCurso" ColumnName="codCurso" />
+                <ScalarProperty Name="extraInfo" ColumnName="extraInfo" />
+                <ScalarProperty Name="nivel" ColumnName="nivel" />
+                <ScalarProperty Name="tipoCurso" ColumnName="tipoCurso" />
+                <ScalarProperty Name="concepto" ColumnName="concepto" />
+                <ScalarProperty Name="horasSemanales" ColumnName="horasSemanales" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="correlativa" TypeName="socioculturalesModel.correlativa" StoreEntitySet="correlativa">
+            <EndProperty Name="curso1">
+              <ScalarProperty Name="codigo" ColumnName="codigo_correlativa" />
+            </EndProperty>
+            <EndProperty Name="curso">
+              <ScalarProperty Name="codigo" ColumnName="codigo_curso" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="ResultadoCursa">
+            <EntityTypeMapping TypeName="socioculturalesModel.ResultadoCursa">
+              <MappingFragment StoreEntitySet="ResultadoCursa">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="oferta">
+            <EntityTypeMapping TypeName="socioculturalesModel.oferta">
+              <MappingFragment StoreEntitySet="oferta">
+                <ScalarProperty Name="descuentoBandaNegativaNoAlumno" ColumnName="descuentoBandaNegativaNoAlumno" />
+                <ScalarProperty Name="precioGraduado" ColumnName="precioGraduado" />
+                <ScalarProperty Name="frecuenciaCuota" ColumnName="frecuenciaCuota" />
+                <ScalarProperty Name="gratuito" ColumnName="gratuito" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="horaDocumentacion" ColumnName="horaDocumentacion" />
+                <ScalarProperty Name="fechaDocumentacion" ColumnName="fechaDocumentacion" />
+                <ScalarProperty Name="documentacion" ColumnName="documentacion" />
+                <ScalarProperty Name="RequierePreInscripcion" ColumnName="RequierePreInscripcion" />
+                <ScalarProperty Name="cupoMinimo" ColumnName="cupoMinimo" />
+                <ScalarProperty Name="recaudacionMinima" ColumnName="recaudacionMinima" />
+                <ScalarProperty Name="recargoSegundoVencimiento" ColumnName="recargoSegundoVencimiento" />
+                <ScalarProperty Name="diasSegundoVencimiento" ColumnName="diasSegundoVencimiento" />
+                <ScalarProperty Name="cupo" ColumnName="cupo" />
+                <ScalarProperty Name="cantidadCuotas" ColumnName="cantidadCuotas" />
+                <ScalarProperty Name="descuentoUnaCuota" ColumnName="descuentoUnaCuota" />
+                <ScalarProperty Name="precioMayorDe60" ColumnName="precioMayorDe60" />
+                <ScalarProperty Name="descuentoBandaNegativa" ColumnName="descuentoBandaNegativa" />
+                <ScalarProperty Name="precioEmpleado" ColumnName="precioEmpleado" />
+                <ScalarProperty Name="precioNoAlumno" ColumnName="precioNoAlumno" />
+                <ScalarProperty Name="precioAlumno" ColumnName="precioAlumno" />
+                <ScalarProperty Name="coordinadorDocente" ColumnName="coordinadorDocente" />
+                <ScalarProperty Name="docente" ColumnName="docente" />
+                <ScalarProperty Name="horaInscripcionHasta" ColumnName="horaInscripcionHasta" />
+                <ScalarProperty Name="horaInscripcionDesde" ColumnName="horaInscripcionDesde" />
+                <ScalarProperty Name="esBandaNegativa" ColumnName="esBandaNegativa" />
+                <ScalarProperty Name="fechaPrimerCuota" ColumnName="fechaPrimerCuota" />
+                <ScalarProperty Name="inscripcionHasta" ColumnName="inscripcionHasta" />
+                <ScalarProperty Name="inscripcionDesde" ColumnName="inscripcionDesde" />
+                <ScalarProperty Name="sede" ColumnName="sede" />
+                <ScalarProperty Name="horaHasta" ColumnName="horaHasta" />
+                <ScalarProperty Name="horaDesde" ColumnName="horaDesde" />
+                <ScalarProperty Name="sabado" ColumnName="sabado" />
+                <ScalarProperty Name="viernes" ColumnName="viernes" />
+                <ScalarProperty Name="jueves" ColumnName="jueves" />
+                <ScalarProperty Name="miercoles" ColumnName="miercoles" />
+                <ScalarProperty Name="martes" ColumnName="martes" />
+                <ScalarProperty Name="lunes" ColumnName="lunes" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="habilitada" ColumnName="habilitada" />
+                <ScalarProperty Name="fechaHasta" ColumnName="fechaHasta" />
+                <ScalarProperty Name="fechaDesde" ColumnName="fechaDesde" />
+                <ScalarProperty Name="periodoLectivo" ColumnName="periodoLectivo" />
+                <ScalarProperty Name="curso" ColumnName="curso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sector">
+            <EntityTypeMapping TypeName="socioculturalesModel.Sector">
+              <MappingFragment StoreEntitySet="Sector">
+                <ScalarProperty Name="SectorDescripcion" ColumnName="SectorDescripcion" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Encuesta">
+            <EntityTypeMapping TypeName="socioculturalesModel.Encuesta">
+              <MappingFragment StoreEntitySet="Encuesta">
+                <ScalarProperty Name="idCursa" ColumnName="idCursa" />
+                <ScalarProperty Name="idRespuesta" ColumnName="idRespuesta" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RespuestasEncuesta">
+            <EntityTypeMapping TypeName="socioculturalesModel.RespuestasEncuesta">
+              <MappingFragment StoreEntitySet="RespuestasEncuesta">
+                <ScalarProperty Name="respuesta" ColumnName="respuesta" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="socioculturalesModel.AspNetUsers">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Carrera" ColumnName="Carrera" />
+                <ScalarProperty Name="sede" ColumnName="sede" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="TipoAlumno" ColumnName="TipoAlumno" />
+                <ScalarProperty Name="TipoDocumento" ColumnName="TipoDocumento" />
+                <ScalarProperty Name="provincia" ColumnName="provincia" />
+                <ScalarProperty Name="localidad" ColumnName="localidad" />
+                <ScalarProperty Name="dpto" ColumnName="dpto" />
+                <ScalarProperty Name="piso" ColumnName="piso" />
+                <ScalarProperty Name="Telefono2" ColumnName="Telefono2" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="NroCalle" ColumnName="NroCalle" />
+                <ScalarProperty Name="Calle" ColumnName="Calle" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="NroDocumento" ColumnName="NroDocumento" />
+                <ScalarProperty Name="passwordInicial" ColumnName="passwordInicial" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="socioculturalesModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUsers">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRoles">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

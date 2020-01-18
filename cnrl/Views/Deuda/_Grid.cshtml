@@ -1,0 +1,249 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "Id";
+        settings.Caption = Strings.TituloCuotas;
+        settings.CallbackRouteValues = new { Controller = "Deuda", Action = "PartialGrid" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+
+        //// Search Panel
+        //settings.SettingsSearchPanel.Visible = true;
+        //settings.SettingsSearchPanel.ShowApplyButton = true;
+        //settings.SettingsSearchPanel.ShowClearButton = true;
+        //settings.SettingsText.SearchPanelEditorNullText = @"Ingresa algunas letras a buscar...";
+
+        // Columnas
+        settings.Columns.Add(col => { col.FieldName = "Id"; col.Caption = Strings.ColId; col.Visible = false; });
+        settings.Columns.Add(col => { col.FieldName = "Dni"; col.Caption = Strings.ColDocumento; });
+        settings.Columns.Add(col => { col.FieldName = "Apellido"; col.Caption = "Apellido"; });
+        settings.Columns.Add(col => { col.FieldName = "Nombre"; col.Caption = Strings.ColNombre; });
+        settings.Columns.Add(col => { col.FieldName = "Concepto"; col.Caption = Strings.ColConcepto; });
+        settings.Columns.Add(col => { col.FieldName = "Curso"; col.Caption = Strings.ColCurso; });
+        settings.Columns.Add(col => { col.FieldName = "NroCuota"; col.Caption = Strings.ColNroCuota; });
+        settings.Columns.Add(col => { col.FieldName = "TotalCuota"; col.Caption = Strings.ColTotalCuota; });
+        settings.Columns.Add(col => { col.FieldName = "Importe"; col.Caption = Strings.ColImporte; col.PropertiesEdit.DisplayFormatString = "c"; });
+        settings.Columns.Add(col => { col.FieldName = "fechavto"; col.Caption = Strings.ColFechaVto; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "Importe2"; col.Caption = Strings.ColImporte2; col.PropertiesEdit.DisplayFormatString = "c"; });
+        settings.Columns.Add(col => { col.FieldName = "fechavto2"; col.Caption = Strings.ColFechaVto2; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "fechaPago"; col.Caption = Strings.ColFechaPago; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "EstadoDescripcion"; col.Caption = Strings.ColEstado; });
+        settings.Columns.Add(col => { col.FieldName = "fechaBaja"; col.Caption = Strings.ColFechaBaja; col.PropertiesEdit.DisplayFormatString = "d"; });
+
+        // Botones
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+                    ((((string)DataBinder.Eval(c.DataItem, "EstadoDescripcion")) == "Impaga") ? "<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>" : " "),
+                        @Url.Action("EmitirCuponCuota", "Deuda", new { id = DataBinder.Eval(c.DataItem, "Id") }),
+                        Strings.ColCuota,
+                        "<i class='fa fa-credit-card'></i>"
+                    ));
+            column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+                "Cupon"
+                ));
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 25;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+                    ((((string)DataBinder.Eval(c.DataItem, "EstadoDescripcion")) != "Paga") ? "<button type='button' class='btn btn-flat btn-xs btn-info imputar' onclick='pedirRecibo({0});' id='BotonImputar_{0}' name='BotonImputar' value='{0}' title='{1}'>{2}</button>&nbsp;": "") +
+                    ((((string)DataBinder.Eval(c.DataItem, "EstadoDescripcion")) != "Baja") ? "<button type='button' class='btn btn-flat btn-xs btn-info baja' onclick='bajaAjax({0});' id='BotonBaja_{0}' name='BotonBaja' value='{0}' title='{3}'>{4}</button>&nbsp;": "") +
+                    ((((string)DataBinder.Eval(c.DataItem, "EstadoDescripcion")) != "Impaga") ? "<button type='button' class='btn btn-flat btn-xs btn-info impaga' onclick='impagaAjax({0});' id='BotonImpaga_{0}' name='BotonImpaga' value='{0}' title='{5}'>{6}</button>&nbsp;": ""),
+                        DataBinder.Eval(c.DataItem, "Id"),
+                        "Imputar Pago",
+                        "<i class='fa fa-usd'></i>",
+                        "Baja Cuota",
+                        "<i class='fa fa-times'></i>",
+                        "Desvincular Pago",
+                        "<i class='fa fa-undo'></i>"
+                    ));
+            column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+                "Imputar/Baja/Desvincular"
+                ));
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 100;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+                   "<a class='btn btn-flat btn-xs btn-info' href='{6}' title='{7}'>{8}</a>&nbsp;" +
+                    "<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>" +
+                    "<a class='btn btn-flat btn-xs btn-info' href='{3}' title='{4}' style='margin-left:2px;'>{5}</a>&nbsp;",
+                        string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Edit", "Deuda", new { id = DataBinder.Eval(c.DataItem, "Id") })),
+                        Strings.BtnEditar,
+                        "<i class='fa fa-pencil'></i>",
+                        string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Delete", "Deuda", new { id = DataBinder.Eval(c.DataItem, "Id") })),
+                        Strings.BtnBorrar,
+                        "<i class='fa fa-trash'></i>",
+                        string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Details", "Deuda", new { id = DataBinder.Eval(c.DataItem, "Id") })),
+                        Strings.BtnVer,
+                        "<i class='fa fa-search'></i>"
+                    ));
+            column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+                "<a class='btn btn-flat btn-xs btn-info' href='{0}'><i class='icon-plus'></i>&nbsp;{1}</a>",
+                string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Create", "Deuda")),
+                Strings.BtnNuevo
+                ));
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 100;
+        });
+        // Filtros
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        settings.Styles.FilterRow.BackColor = Color.LightGray;
+        settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+    }
+).Bind(Model).GetHtml()
+
+<script>
+    //k='imputarAjax
+    //bajaAjax({9});
+    //='impagaAjax({
+
+    function pedirRecibo(codigoCuota) {
+        bootbox.prompt({
+            backdrop: false,
+            title: "Ingrese el Nro de Recibo a Vincular?", 
+            callback: function(result){ imputarAjax(codigoCuota, result); }
+        });
+    }
+
+    function imputarAjax(codigoCuota, nroRecibo) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/deuda/imputar",
+                data: { IdCuota: codigoCuota, NroRecibo: nroRecibo },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/deuda/imputar",
+                data: { IdCuota: codigoCuota, NroRecibo: nroRecibo },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+    }
+    function bajaAjax(codigoCuota) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/deuda/baja",
+                data: { IdCuota: codigoCuota },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/deuda/baja",
+                data: { IdCuota: codigoCuota },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+
+    }
+    function impagaAjax(codigoCuota) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/deuda/impaga",
+                data: { IdCuota: codigoCuota },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/deuda/impaga",
+                data: { IdCuota: codigoCuota },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+    }
+</script>

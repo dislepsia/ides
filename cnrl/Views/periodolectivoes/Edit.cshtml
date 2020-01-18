@@ -1,0 +1,247 @@
+﻿@using cnrl.Helpers
+@using cnrl.Logica
+@model cnrl.periodolectivo
+
+@{
+    Layout = null;
+    var tiposCurso = (SelectList)ViewBag.tiposCurso;
+}
+
+@Html.Hidden("Titulo", "Editar Periodo Lectivo")
+@Html.Hidden("Subtitulo", "")
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Ajax.BeginForm("Edit", "periodolectivoes", FormMethod.Post,
+                                                                        new AjaxOptions
+                                                                        {
+                                                                            OnSuccess = "AjaxOk",
+                                                                            HttpMethod = "POST"
+                                                                        }))
+        {
+
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.codigo)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="box box-solid box-success">
+                <div class="box-header">
+                    <h6 class="box-title" style="font-size: 1.5em;">Modificar campos del Periodo Lectivo</h6>
+                </div>
+
+                <div class="box-body">
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <span>@Strings.ErrorMensajeGenerico</span>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                    {
+                        <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+                    }
+
+                    @* Es una fila *@
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Año:</label>
+                                @Html.EditorFor(model => model.anio, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                                @Html.ValidationMessageFor(model => model.anio, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Periodo:</label>
+                                @Html.EditorFor(model => model.periodo, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                                @Html.ValidationMessageFor(model => model.periodo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @* Tipo de Curso *@
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Tipo de Curso</label>
+                                @Html.DropDownList("tipoCurso", tiposCurso, htmlAttributes: new { @class = "form-control IdTipoCurso" })
+                                @Html.ValidationMessageFor(model => model.tipoCurso, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @* Inicio del Periodo Lectivo *@
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Primera Cuota</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.fechaPrimeraCuota, new { htmlAttributes = new { @class = "form-control pull-right Fecha" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.fechaPrimeraCuota, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                    @* Es una fila *@
+                    <div class="row">
+                        @* Inicio del Periodo Lectivo *@
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Inicio del Periodo Lectivo</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.desdeFecha, new { htmlAttributes = new { @class = "form-control pull-right Fecha" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.desdeFecha, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @* Fin del Periodo Lectivo *@
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Fin del Periodo Lectivo</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.hastaFecha, new { htmlAttributes = new { @class = "form-control pull-right Fecha"} })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.hastaFecha, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @* Hora Desde*@
+                        <div class="col-md-3">
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <label>Hora Desde</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.periodoHoraDesde, new { htmlAttributes = new { @class = "form-control timepicker" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @* Hora Hasta *@
+                        <div class="col-md-3">
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <label>Hora Hasta</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.periodoHoraHasta, new { htmlAttributes = new { @class = "form-control timepicker" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* Es una fila *@
+                    <div class="row">
+                        @* Inicio de Inscripcion *@
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Inscripción Desde</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.fechaInscripcionDesde, new { htmlAttributes = new { @class = "form-control pull-right Fecha"} })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.fechaInscripcionDesde, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @* Fin de Inscripcion *@
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Inscripción Hasta</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.fechaInscripcionHasta, new { htmlAttributes = new { @class = "form-control pull-right Fecha" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.fechaInscripcionHasta, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @* Hora Desde*@
+                        <div class="col-md-3">
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <label>Hora Desde</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.inscripcionHoraDesde, new { htmlAttributes = new { @class = "form-control timepicker" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @* Hora Hasta *@
+                        <div class="col-md-3">
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <label>Hora Hasta</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.inscripcionHoraHasta, new { htmlAttributes = new { @class = "form-control timepicker" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            @* Botones *@
+            <div class="form-group">
+                <div class="pull-right">
+                    <input type="submit" value="Guardar" class="btn btn-flat btn-success" />
+                </div>
+                <div class="pull-left">
+                    <div class="btn btn-flat btn-default">
+                        @Html.ActionLink("Cerrar", "Index")
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $(".Fecha").inputmask("dd/mm/yyyy", { "placeholder": "dd/mm/yyyy" });
+
+        $(".Fecha").daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: "DD/MM/YYYY"
+        });
+
+        $(".timepicker").timepicker({
+            showInputs: false,
+            showMeridian: false
+        });
+
+        $('.IdTipoCurso').select2("val", "-1");
+
+        $(".IdTipoCurso").select2({
+            allowClear: true
+        });
+
+    });
+</script>

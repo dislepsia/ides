@@ -1,0 +1,309 @@
+﻿@model IEnumerable<cnrl.Encuesta>
+
+@{
+    ViewBag.Titulo = "Informe de la Encuesta";
+    ViewBag.Subtitulo = "Administración";
+    Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+
+    var Edades = (SelectList)ViewBag.Edad;
+    var Zonas = (SelectList)ViewBag.Zona;
+    var Periodo = (SelectList)ViewBag.Periodos;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdEdad"] = $('#IdEdad').val();
+        e.customArgs["IdZona"] = $('#IdZona').val();
+        e.customArgs["IdPeriodo"] = $('#IdPeriodo').val();
+        e.customArgs["VistaCompleta"] = $('#VistaCompleta').val();
+    }
+
+</script>
+
+<form action="@Url.Action("Exportar")" method="POST" name="frmExportar" id="frmExportar">
+
+    <div class="box box-default filtros">
+        <div class="box-body filtros">
+            @Html.Hidden("VistaCompleta", 0)
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdEdad">Grupo Etareo</label>
+                    @Html.DropDownList("IdEdad", Edades, new { @class = "form-control" })
+                </div>
+            </div>
+            @*<div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdZona">Localidad</label>
+                    @Html.DropDownList("IdZona", Zonas, new { @class = "form-control" })
+                </div>
+            </div>*@
+            <div class="col-sm-4">
+                <label for="IdZona">Localidad</label>
+                <div id="IdZona" name="IdZona" style="width: 100%"></div>
+                <input type="hidden" id="hiddenZona" name="hiddenZona" value="" />
+            </div>
+            @*Buscador de cursos por los campos Descripción y Código del grid*@
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdPeriodo">Periodo Lectivo</label>
+                    @Html.DropDownList("IdPeriodo", Periodo, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <br />
+            
+
+            <div class="col-sm-1">
+                <div class="pull-right">
+                    <button class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+<div class="page">
+    @Html.Action("PartialGrid")
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Grafico de Torta</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div style="width:70%;margin-left:auto;margin-right:auto">
+                        <canvas id="myChart" style="padding:0;margin:auto;display:block"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    @*<div class="col-sm-1">*@
+      
+    @*</div>*@
+</div>
+<br />
+@*<button type="button" class="btn btn-success" title="Exportar a Excel" value="1" onclick="document.getElementById('frmExportar').submit();">Exportar Excel</button>*@
+<button type="submit" class="btn btn-success" title="Exportar a Excel" name="btnSubmit" id="btnSubmit" value="1">Exportar Excel</button>
+
+
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+
+
+}
+
+@section scripts
+{
+    <script>
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+            $('#IdEdad').select2("val", "-1");
+            $('#IdZona').select2("val", "");
+            $('#IdPeriodo').select2("val", "-1");
+            $("#VistaCompleta").val("0");
+            refresh = true;
+            refrescar();
+        }
+        // Refrescar Grilla
+        function refrescar() {
+            if (refresh === true) {
+               
+                window.Grid.PerformCallback();
+                actualizarGrafico();
+            }
+        }
+
+        var dynamicColors = function (i, relleno) {
+            var cant = 6;
+            var r = [54, 255, 255, 255, 75, 153, 201, 162, 99, 159, 205, 192, 102, 203, 235, 132, 64, 86, 192, 255, 207, 162, 99, 159, 205, 192, 102, 203, 235, 132, 64, 86, 192, 255, 207, 54, 255, 255, 255, 75, 153, 201, 162, 99, 159];
+            var g = [162, 99, 159, 205, 192, 102, 203, 235, 132, 64, 86, 192, 255, 207, 54, 255, 255, 255, 75, 153, 201, 235, 132, 64, 86, 192, 255, 207, 54, 255, 255, 255, 75, 153, 201, 162, 99, 159, 205, 192, 102, 235, 132, 64, 86];
+            var b = [235, 132, 64, 86, 192, 255, 207, 54, 255, 255, 255, 75, 153, 201, 162, 99, 159, 205, 192, 102, 54, 255, 255, 255, 75, 153, 201, 162, 99, 159, 205, 192, 102, 203, 235, 132, 64, 86, 192, 255, 54, 255, 255, 255, 75];
+
+            if (relleno === true)
+                return "rgb(" + r[i] + "," + g[i] + "," + b[i] + ",0.6)";
+            else
+                return "rgb(" + r[i] + "," + g[i] + "," + b[i] + ")";
+        }
+
+        function ToJavaScriptDate(value) {
+            if (value != '') {
+                var pattern = /Date\(([^)]+)\)/;
+                var result = pattern.exec(value);
+                var dt = new Date(parseFloat(result[1]));
+                return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear();
+
+            }
+            return '';
+        }
+
+        function actualizarGrafico() {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("NewChart","Encuesta")',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {
+                    Edad: $('#IdEdad').val(),
+                    Periodo: $('#IdPeriodo').val(),
+                    Zona: $('#IdZona').val()
+
+                },
+                success: function (mems) {
+                    var i = 0;
+                    var j = 0;
+                    var aData = mems;
+                    var aLabels = aData[0];
+                    var aDatasetsl = aData[1];
+
+                    var dataT = {
+                        labels: aLabels,
+                        datasets: [{
+                            label: "",
+                            data: aDatasetsl,
+                            fill: false,
+                            backgroundColor: [dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true), dynamicColors(i++, true)],
+                            borderColor: [dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++), dynamicColors(j++)],
+                            borderWidth: 1
+                        }]
+                    };
+
+                    // window.onload = function () {
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    //var ctxBarra = document.getElementById('myChartBarra').getContext('2d');
+
+
+                    if (window.graficaTorta) {
+                        window.graficaTorta.clear();
+                        window.graficaTorta.destroy();
+                    }
+
+                    window.graficaTorta = new Chart(ctx, {
+                        type: 'pie',
+                        data: dataT,
+                        options: {
+                            responsive: true,
+                            title: { display: true, text: '' },
+                            legend: { position: 'bottom' },
+                        }
+                    });
+
+                    //if (window.graficaBarra) {
+                    //    window.graficaBarra.clear();
+                    //    window.graficaBarra.destroy();
+                    //}
+
+                    //window.graficaBarra = new Chart(ctxBarra, {
+                    //    type: 'bar',
+                    //    data: dataT,
+                    //    options: {
+                    //        responsive: true,
+                    //        title: { display: true, text: '' },
+                    //        legend: { position: 'bottom' },
+                    //    }
+                    //});
+                    //}
+
+                }
+            });
+        }
+
+        $(function () {
+            $('#IdEdad').change(function () { refrescar(); });
+            $('#IdZona').change(function () { refrescar(); });
+            $('#IdPeriodo').change(function () { refrescar(); });
+            $("#IdEdad").select2({
+                allowClear: true
+            });
+            //$("#IdZona").select2({
+            //    allowClear: true
+            //});
+            $("#IdPeriodo").select2({
+                allowClear: true
+            });
+
+            $("#IdZona").select2({
+                placeholder: "Ingresa Nombre de Localidad...",
+                language: "es",
+                allowClear: true,
+                minimumInputLength: 4,
+                ajax: {
+                    cache: true,
+                    dataType: "json",
+                    type: "GET",
+                    quietMillis: 500,
+                    delay: 100,
+                    url: "@Url.Action("Buscar", "Encuesta")",
+                    data: function (searchTerm) {
+                        return { q: searchTerm };
+                    },
+                    processResults: function (data /*, page*/) {
+                        return {
+                            
+                            results: data
+                        };
+                    }
+                }
+            });
+
+            @*@{string IdZona = ViewBag.IdUsuario;
+                 if (!string.IsNullOrEmpty(IdZona))
+                 {
+                     <text>
+            $("#IdZona").select2('data', { id: '@IdZona', text: '@ViewBag.NombreUsuario' });
+            //$('#IdUsuario').select2("val", '@IdZona').trigger('change.select2');;//.trigger('change');
+            //  refrescar();
+            </text>
+                 }
+             }*@
+        });
+
+
+
+        $(".Fecha").daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: "DD/MM/YYYY"
+        });
+
+        $('#btnSubmit').click(function () {
+
+
+            $("#VistaCompleta").val("1");
+
+            document.getElementById('frmExportar').submit();
+
+
+            return true;
+        });
+
+        $(document).ready(function () {
+            $("#frmExportar").keypress(function (e) {//Para deshabilitar el uso de la tecla "Enter"
+                if (e.which == 13) {
+
+                    return false;
+                }
+
+            });
+            actualizarGrafico();
+        })
+    </script>
+}
