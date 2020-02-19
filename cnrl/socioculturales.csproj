@@ -257,6 +257,7 @@
     <Compile Include="Controllers\DeudaController.cs" />
     <Compile Include="Controllers\PlantillaEmailController.cs" />
     <Compile Include="Controllers\precioController.cs" />
+    <Compile Include="Controllers\ReCaptcha.cs" />
     <Compile Include="Controllers\ReintegroController.cs" />
     <Compile Include="Controllers\SedeController.cs" />
     <Compile Include="Controllers\TipoCursoController.cs" />

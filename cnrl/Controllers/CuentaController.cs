@@ -18,6 +18,9 @@ using System.Web.Script.Serialization;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Configuration;
+using System.Net;
 
 namespace cnrl.Controllers
 {
@@ -65,6 +68,9 @@ namespace cnrl.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        public int MaxFailedAccessAttemptsBeforeLockout = 0;
+        public bool UserLockoutEnabledByDefault = false;
+
         public CuentaController()
         {
         }
@@ -73,6 +79,15 @@ namespace cnrl.Controllers
         {
             UserManager = userManager;
             SignInManager = signInManager;
+
+            //lockout users for 10 minutes
+            UserManager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(120);
+
+            // takes 6 incorrect attempts to lockout 
+            this.MaxFailedAccessAttemptsBeforeLockout = 5;
+
+            // when new user is created, they will be "lockable". 
+            this.UserLockoutEnabledByDefault = true;
         }
 
         public ApplicationSignInManager SignInManager
@@ -99,7 +114,7 @@ namespace cnrl.Controllers
             }
         }
 
-        private void PrepararViewBag(int IdProvinciaSeleccionada = 0)
+        private void PrepararViewBagDeportes(int IdProvinciaSeleccionada = 0)
         {
             socioculturalesEntities db = new socioculturalesEntities();
             ViewBag.Roles = new SelectList(
@@ -135,6 +150,17 @@ namespace cnrl.Controllers
                             )
                         , "Value", "Text");
 
+            //ViewBag.Nacionalidades = new SelectList(
+            //    db.Nacionalidad.ToList()
+            //    .ToSelectList(
+            //        x => x.PAIS_NAC,
+            //        x => x.ID_NAC.ToString(),
+            //        Strings.SeleccionarNacionalidad,
+            //        Constantes.ERROR.ToString(),
+            //        Constantes.ERROR.ToString()
+            //    )
+            //, "Value", "Text");
+
 
         }
 
@@ -143,29 +169,37 @@ namespace cnrl.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            var folder = Server.MapPath("~/Fichero2/");
-            if (!Directory.Exists(folder))
+            //var folder = Server.MapPath("~/Fichero2/");
+            //if (!Directory.Exists(folder))
+            //{
+            //    Directory.CreateDirectory(folder);
+
+            //    string filePath = System.IO.Path.Combine(folder, "fichero.txt");
+
+            //    using (StreamWriter writer = System.IO.File.CreateText(filePath))
+            //    {
+            //        writer.WriteLine(returnUrl);
+
+
+            //    }
+            //}
+            //if (returnUrl != null)
+            //{
+            //    if (returnUrl.Contains("%2Fnuevositio%2F") == true || returnUrl.Contains("/nuevositio/") == true || returnUrl.Contains("nuevositio") == true)
+            //    {
+            //        returnUrl = "/nuevositio/";
+            //    }
+            //}
+            string host = Dns.GetHostName();
+            IPAddress[] ip = Dns.GetHostAddresses(host);
+            if (ip[1].ToString().Contains("10.10.") == true)
             {
-                Directory.CreateDirectory(folder);
-
-                string filePath = System.IO.Path.Combine(folder, "fichero.txt");
-
-                using (StreamWriter writer = System.IO.File.CreateText(filePath))
-                {
-                    writer.WriteLine(returnUrl);
-
-
-                }
+                ViewBag.Ingreso = true;
             }
-
-            if (returnUrl != null)
+            else
             {
-                if (returnUrl.Contains("%2Fnuevositio%2F") == true || returnUrl.Contains("/nuevositio/") == true || returnUrl.Contains("nuevositio") == true)
-                {
-                    returnUrl = "/nuevositio/";
-                }
+                ViewBag.Ingreso = false;
             }
-
 
             ViewBag.ReturnUrl = returnUrl;
             socioculturalesEntities db = new socioculturalesEntities();
@@ -180,6 +214,11 @@ namespace cnrl.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            //string host = Dns.GetHostName();
+            //IPAddress[] ip = Dns.GetHostAddresses(host);
+
+
+
             socioculturalesEntities db = new socioculturalesEntities();
             ViewBag.TiposDocumento = new SelectList(db.tipodocumento, "codigo", "descripcion", "0");
 
@@ -189,17 +228,53 @@ namespace cnrl.Controllers
                 ViewBag.ReturnUrl = returnUrl;
                 return View(model);
             }
+
+            //Captcha
+            bool validarCapcha = bool.Parse(ConfigurationManager.AppSettings["validarCaptcha"]);
+            bool IsCaptchaValid = false;
+            if (validarCapcha)
+            {
+                string codigoValidacion = Request.Form["g-Recaptcha-Response"];
+                IsCaptchaValid = (ReCaptcha.Validar(codigoValidacion).ToUpper() == "TRUE" ? true : false);
+            }
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             int tipoDocumento = model.TipoDocumento;
             long nroDocumento = model.NroDocumento;
-            var usuario = db.AspNetUsers.Where(u => u.NroDocumento == nroDocumento && u.TipoDocumento == tipoDocumento);
-            SignInStatus result;
-            if (usuario.Count() == 1)
-                result = await SignInManager.PasswordSignInAsync(usuario.First().UserName, model.Password, model.RememberMe, shouldLockout: false);
-            else
-                result = await SignInManager.PasswordSignInAsync("123123", model.Password, model.RememberMe, shouldLockout: false);
+            //string datosLDAP = "";
+            //if (model.UserDominio != null)
+            //{
+            //    Usuario.Service servicio = new Usuario.Service();
+            //    System.Net.ServicePointManager.Expect100Continue = false;
+            //    datosLDAP = servicio.validaUsuarioDominio(model.UserDominio, model.Password);
 
+            //    if (datosLDAP != "")
+            //    {
+            //        int pos = datosLDAP.LastIndexOf(' ');
+            //        string ape = datosLDAP.Substring(pos + 1);
+            //        string doc = db.AspNetUsers.Where(x => x.Apellido.Equals(ape)).First().NroDocumento.Value.ToString();
+            //        tipoDocumento = 1;
+            //        nroDocumento = Int64.Parse(doc);
+            //    }
+            //}
+            var usuario = db.AspNetUsers.Where(u => u.NroDocumento == nroDocumento && u.TipoDocumento == tipoDocumento);
+            SignInStatus result = SignInStatus.Failure;
+
+            if (!validarCapcha || IsCaptchaValid)
+            {
+                if (usuario.Count() == 1 /*&& model.UserDominio == null*/)
+                    result = await SignInManager.PasswordSignInAsync(usuario.First().UserName, model.Password, model.RememberMe, shouldLockout: true);
+                //else
+                //{
+                //    if (datosLDAP != "")
+                //    {
+                //        result = await SignInManager.PasswordSignInAsync("0_32584402", "123456", model.RememberMe, shouldLockout: true);
+                //    }
+                    
+                //}
+                result = SignInStatus.Success;
+            }
 
             switch (result)
             {
@@ -208,103 +283,98 @@ namespace cnrl.Controllers
                     //{
                     var perfil = usuario.First().AspNetRoles.FirstOrDefault();
 
-
                     if (perfil != null && perfil.Id == "6")
                     {
-                        var folder = Server.MapPath("~/Fichero/");
-                        if (!Directory.Exists(folder))
-                        {
-                            Directory.CreateDirectory(folder);
+                        //var folder = Server.MapPath("~/Fichero/");
+                        //if (!Directory.Exists(folder))
+                        //{
+                        //    Directory.CreateDirectory(folder);
 
-                            string filePath = System.IO.Path.Combine(folder, "fichero.txt");
+                        //    string filePath = System.IO.Path.Combine(folder, "fichero.txt");
 
-                            using (StreamWriter writer = System.IO.File.CreateText(filePath))
-                            {
-                                writer.WriteLine(returnUrl);
+                        //    using (StreamWriter writer = System.IO.File.CreateText(filePath))
+                        //    {
+                        //        writer.WriteLine(returnUrl);
+                        //    }
+                        //}
 
-
-                            }
-                        }
-
-                        if (returnUrl == "/nuevositio/" || returnUrl == "%2Fnuevositio%2F")
-                        {
-                            returnUrl = "/nuevositio/cursa/inscripcion";
-                        }
-                        else
-                        {
-                            returnUrl = "/cursa/inscripcion";
-                        }
+                        //if (returnUrl == "/nuevositio/" || returnUrl == "%2Fnuevositio%2F")
+                        //{
+                        //    returnUrl = "/nuevositio/cursa/inscripcion";
+                        //}
+                        //else
+                        //{
+                        returnUrl = "/cursa/inscripcion";
+                        //}
 
                         //ViewBag.categoria = true;
 
                         //////////////////////ACTUALIZO TIPO ALUMNO/////////////////////////////
 
-                        var usuarioBase = db.AspNetUsers.Find(usuario.First().Id);
+                        //var usuarioBase = db.AspNetUsers.Find(usuario.First().Id);
 
-                        guarani.DatosAlumnosBecas s = new guarani.DatosAlumnosBecas();
+                        //guarani.DatosAlumnosBecas s = new guarani.DatosAlumnosBecas();
 
-                        string cadena = null;
+                        //string cadena = null;
 
-                        try
-                        {
+                        //try
+                        //{
+                        //    cadena = s.consultaDatosAlumnosG3(usuario.First().NroDocumento.Value.ToString());
 
-                            cadena = s.consultaDatosAlumnosG3(usuario.First().NroDocumento.Value.ToString());
+                        //    JavaScriptSerializer js = new JavaScriptSerializer();
+                        //    List<DatoGuarani> cadenaDeserealizada = js.Deserialize<List<DatoGuarani>>(cadena);
 
-                            JavaScriptSerializer js = new JavaScriptSerializer();
-                            List<DatoGuarani> cadenaDeserealizada = js.Deserialize<List<DatoGuarani>>(cadena);
+                        //    if (cadenaDeserealizada != null)
+                        //    {
+                        //        string[] resultados = cadena.Split(new Char[] { ';' });
+                        //        if (!cadenaDeserealizada[0].nombre.Equals("*"))
+                        //        {
+                        //            if (!cadenaDeserealizada[0].nombre.Equals("*"))
+                        //            {
+                        //                if (!cadenaDeserealizada[0].calidad.Equals("E"))
+                        //                {
+                        //                    usuarioBase.TipoAlumno = (byte)TiposAlumno.Alumno;
+                        //                    usuarioBase.Carrera = cadenaDeserealizada[0].descripcionCarrera;
+                        //                }
+                        //                else
+                        //                {
+                        //                    //usuarioBase.TipoAlumno = (byte)TiposAlumno.Graduado;
+                        //                    //Deportes sólo discrimina entre Alumno y Empleado
+                        //                    usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno;
+                        //                    usuarioBase.Carrera = cadenaDeserealizada[0].descripcionCarrera;
+                        //                }
+                        //            }
+                        //            else
+                        //            {
+                        //                usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno;
+                        //            }
+                        //        }
+                        //        else
+                        //        {
+                        //            usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno;
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno;
+                        //    }
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno;
+                        //}
 
-                            if (cadenaDeserealizada != null)
-                            {
-                                string[] resultados = cadena.Split(new Char[] { ';' });
-                                if (!cadenaDeserealizada[0].nombre.Equals("*"))
-                                {
-                                    if (!cadenaDeserealizada[0].nombre.Equals("*"))
-                                    {
-                                        if (!cadenaDeserealizada[0].calidad.Equals("E"))
-                                        {
-                                            usuarioBase.TipoAlumno = (byte)TiposAlumno.Alumno;
-                                            usuarioBase.Carrera = cadenaDeserealizada[0].descripcionCarrera;
-                                        }
-                                        else
-                                        {
-                                            usuarioBase.TipoAlumno = (byte)TiposAlumno.Graduado;
-                                            usuarioBase.Carrera = cadenaDeserealizada[0].descripcionCarrera;
-                                        }
+                        //try
+                        //{
 
-                                    }
-                                    else
-                                    {
-                                        usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno;
-                                    }
-                                }
-                                else
-                                {
-                                    usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno;
-                                }
-                            }
-                            else
-                            {
-                                usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno;
-
-                        }
-
-                        try
-                        {
-
-                            db.Entry(usuarioBase).State = EntityState.Modified;
-
-                            db.SaveChanges();
-                        }
-                        catch (Exception ex)
-                        {
-                            // UserManager.Delete(user);
-                            //throw new Exception("Ha ocurrido un error con la bases de datos, por favor comuniquese con el administrador del sistema.");
-                        }
+                        //    db.Entry(usuarioBase).State = EntityState.Modified;
+                        //    db.SaveChanges();
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    // UserManager.Delete(user);
+                        //    //throw new Exception("Ha ocurrido un error con la bases de datos, por favor comuniquese con el administrador del sistema.");
+                        //}
                         ////////////////////////////////////////////////////////////////////////
                     }
                     else
@@ -333,7 +403,6 @@ namespace cnrl.Controllers
                         }
                     }
 
-
                     //}
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
@@ -342,6 +411,16 @@ namespace cnrl.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, model.RememberMe });
                 default: // SignInStatus.Failure
                     ModelState.AddModelError("", "Credenciales incorrectas");
+                    string host = Dns.GetHostName();
+                    IPAddress[] ip = Dns.GetHostAddresses(host);
+                    if (ip[1].ToString().Contains("10.10.") == true)
+                    {
+                        ViewBag.Ingreso = true;
+                    }
+                    else
+                    {
+                        ViewBag.Ingreso = false;
+                    }
                     return View(model);
             }
         }
@@ -394,7 +473,7 @@ namespace cnrl.Controllers
         [AllowAnonymous]
         public ActionResult Registro()
         {
-            PrepararViewBag();
+            PrepararViewBagDeportes();
             return View();
         }
 
@@ -403,13 +482,86 @@ namespace cnrl.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Registro(ViewModelRegistro model)//RegisterViewModel model)
+        public ActionResult Registro(ViewModelRegistro model, HttpPostedFileBase fotoDNI)//RegisterViewModel model)
         {
+            //if (fotoDNI != null)
+            //{
+            //    int length = fotoDNI.ContentLength;
+            //    byte[] buffer = new byte[length];
+            //    fotoDNI.InputStream.Read(buffer, 0, length);
+            //    model.usuario.fotoDNI = buffer;
+
+            //}
+            //else
+            //{
+            //    ModelState.AddModelError("Error", "La foto del Documento Nacional de Identidad es obligatorio.");
+            //}
+
+            //if (model.usuario.idNacionalidad.HasValue && model.usuario.idNacionalidad.Value == -1)
+            //{
+            //    PrepararViewBagDeportes();
+            //    ModelState.AddModelError("Error", "El campo Nacionalidad es obligatorio.");
+            //}
+
+            //if (model.usuario.obraSocial == null || model.usuario.obraSocial == "")
+            //{
+            //    PrepararViewBagDeportes();
+            //    ModelState.AddModelError("Error", "El campo Obra Social es obligatorio.");
+            //}
+
+            //if (model.usuario.telCobertura == null || model.usuario.telCobertura == "")
+            //{
+            //    PrepararViewBagDeportes();
+            //    ModelState.AddModelError("Error", "El campo Teléfono de cobertura es obligatorio.");
+            //}
+
+            //if (model.usuario.numAfiliado == null || model.usuario.numAfiliado == "")
+            //{
+            //    PrepararViewBagDeportes();
+            //    ModelState.AddModelError("Error", "El campo Nº Afiliado es obligatorio.");
+            //}
+
+            //if (model.usuario.parentescoEmergencia == null || model.usuario.parentescoEmergencia == "")
+            //{
+            //    PrepararViewBagDeportes();
+            //    ModelState.AddModelError("Error", "El campo Parentesco es obligatorio.");
+            //}
+
+            //if (model.usuario.nomYapeEmergencia == null || model.usuario.nomYapeEmergencia == "")
+            //{
+            //    PrepararViewBagDeportes();
+            //    ModelState.AddModelError("Error", "El campo Nombre y Apellido en contacto de emergencia es obligatorio.");
+            //}
+
+            //if (model.usuario.telEmergencia == null || model.usuario.telEmergencia == "")
+            //{
+            //    PrepararViewBagDeportes();
+            //    ModelState.AddModelError("Error", "El campo Nº Telefónico en contacto de emergencia es obligatorio.");
+            //}
+
+            //if (model.usuario.parentescoAutorizado == null || model.usuario.parentescoAutorizado == "")
+            //{
+            //    PrepararViewBagDeportes();
+            //    ModelState.AddModelError("Error", "El campo Parentesco es obligatorio.");
+            //}
+
+            //if (model.usuario.nomYapeAutorizado == null || model.usuario.nomYapeAutorizado == "")
+            //{
+            //    PrepararViewBagDeportes();
+            //    ModelState.AddModelError("Error", "El campo Nombre y Apellido en contacto autorizado para retirar es obligatorio.");
+            //}
+
+            //if (model.usuario.telAutorizado == null || model.usuario.telAutorizado == "")
+            //{
+            //    PrepararViewBagDeportes();
+            //    ModelState.AddModelError("Error", "El campo Nº Telefónico en contacto autorizado para retirar es obligatorio.");
+            //}
+
             if (model.usuario.provincia.HasValue && model.usuario.provincia.Value != -1 && model.usuario.localidad.Value != -1)
-                PrepararViewBag(model.usuario.provincia.Value);
+                PrepararViewBagDeportes(model.usuario.provincia.Value);
             else
             {
-                PrepararViewBag();
+                PrepararViewBagDeportes();
                 ModelState.AddModelError("Error", "Los campos Provincia y Localidad son obligatorios.");
             }
 
@@ -422,6 +574,35 @@ namespace cnrl.Controllers
             if (model.usuario.dpto != null && model.usuario.dpto.Length > 4)
                 ModelState.AddModelError("Error", "El campo Dpto NO puede ser mayor a 4 caracteres.");
 
+            if (model.usuario.Telefono != null)
+            {
+                model.usuario.Telefono = model.usuario.Telefono.Replace("-", "").Replace("(", "").Replace(")", "");
+            }
+
+            if (model.usuario.Telefono2 != null)
+            {
+                model.usuario.Telefono2 = model.usuario.Telefono2.Replace("-", "").Replace("(", "").Replace(")", "");
+            }
+
+            //if (model.usuario.telAutorizado != null)
+            //{
+            //    model.usuario.telAutorizado = model.usuario.telAutorizado.Replace("-", "").Replace("(", "").Replace(")", "");
+            //}
+
+            //if (model.usuario.telCobertura != null)
+            //{
+            //    model.usuario.telCobertura = model.usuario.telCobertura.Replace("-", "").Replace("(", "").Replace(")", "");
+            //}
+
+            //if (model.usuario.telEmergencia != null)
+            //{
+            //    model.usuario.telEmergencia = model.usuario.telEmergencia.Replace("-", "").Replace("(", "").Replace(")", "");
+            //}
+
+
+
+
+            ModelState.Remove("fotoDNI");
             if (ModelState.IsValid)
             {
                 //string pass = GenerarAleatorio(15);
@@ -443,7 +624,20 @@ namespace cnrl.Controllers
                     provincia = model.usuario.provincia.Value,
                     Telefono = model.usuario.Telefono,
                     Telefono2 = model.usuario.Telefono2,
-                    TipoDocumento = model.usuario.TipoDocumento.Value
+                    TipoDocumento = model.usuario.TipoDocumento.Value,
+                    //fotoDni = model.usuario.fotoDNI,
+                    //idNacionalidad = model.usuario.idNacionalidad,
+                    //obraSocial = model.usuario.obraSocial,
+                    //telCobertura = model.usuario.telCobertura,
+                    //numAfiliado = model.usuario.numAfiliado,
+                    //parentescoEmergencia = model.usuario.parentescoEmergencia,
+                    //nomYapeEmergencia = model.usuario.nomYapeEmergencia,
+                    //telEmergencia = model.usuario.telEmergencia,
+                    //parentescoAutorizado = model.usuario.parentescoAutorizado,
+                    //nomYapeAutorizado = model.usuario.nomYapeAutorizado,
+                    //telAutorizado = model.usuario.telAutorizado
+
+
                 };
                 var result = UserManager.Create(user, model.resetPassword.Password);
                 if (result.Succeeded)
@@ -484,7 +678,9 @@ namespace cnrl.Controllers
                                     }
                                     else
                                     {
-                                        usuarioBase.TipoAlumno = (byte)TiposAlumno.Graduado;
+                                        //usuarioBase.TipoAlumno = (byte)TiposAlumno.Graduado;
+                                        //Deportes sólo discrimina entre Alumno y Empleado
+                                        usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno;
                                         usuarioBase.Carrera = cadenaDeserealizada[0].descripcionCarrera;
                                     }
 
@@ -536,6 +732,17 @@ namespace cnrl.Controllers
                         //-----------------------------------//
                         //usuarioBase.TipoAlumno = (byte)TiposAlumno.NoAlumno; //TODO: Levantar este valor desde el web service
 
+                        int edad = CalcularEdad(usuarioBase.FechaNacimiento.Value, DateTime.Today);
+                        if (edad >= 60)
+                        {
+                            ViewBag.Mayor60 = true;
+                            usuarioBase.TipoAlumno = (byte)TiposAlumno.Mayor60;
+                        }
+                        else
+                        {
+                            ViewBag.Mayor60 = false;
+                            usuarioBase.TipoAlumno = (byte)TiposAlumno.Mayor60;
+                        }
 
                         db.Entry(usuarioBase).State = EntityState.Modified;
 
@@ -547,15 +754,15 @@ namespace cnrl.Controllers
                         throw new Exception("Ha ocurrido un error con la bases de datos, por favor comuniquese con el administrador del sistema.");
                     }
 
-                    ViewBag.Mayor60 = false;
+                    //ViewBag.Mayor60 = false;
 
-                    var fecha = usuarioBase.FechaNacimiento.Value;
-                    var today = DateTime.Today;
-                    var age = today.Year - fecha.Year;
-                    if (fecha > today.AddYears(-age)) age--;
+                    //var fecha = usuarioBase.FechaNacimiento.Value;
+                    //var today = DateTime.Today;
+                    //var age = today.Year - fecha.Year;
+                    //if (fecha > today.AddYears(-age)) age--;
 
-                    if (age >= 60)
-                        ViewBag.Mayor60 = true;
+                    //if (age >= 60)
+                    //    ViewBag.Mayor60 = true;
 
                     return View("RegistroConfirmado");
 
@@ -597,6 +804,30 @@ namespace cnrl.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        public int CalcularEdad(DateTime birthDate, DateTime now)
+        {
+            int age = now.Year - birthDate.Year;
+            if (now.Month < birthDate.Month || (now.Month == birthDate.Month && now.Day < birthDate.Day))
+                age--;
+            return age;
+        }
+
+
+        public static byte[] Convertir_Imagen_Bytes(Image img)
+        {
+            string sTemp = Path.GetTempFileName();
+            FileStream fs = new FileStream(sTemp, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            img.Save(fs, System.Drawing.Imaging.ImageFormat.Png);
+            fs.Position = 0;
+
+            int imgLength = Convert.ToInt32(fs.Length);
+            byte[] bytes = new byte[imgLength];
+            fs.Read(bytes, 0, imgLength);
+            fs.Close();
+            return bytes;
+        }
+
 
         //
         // GET: /Cuenta/ConfirmEmail
@@ -651,7 +882,7 @@ namespace cnrl.Controllers
                     //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                     string texto = "Estimado. <BR><BR>Para reiniciar su contraseña haga click <a href=\"" + callbackUrl + "\">aquí</a>";
 
-                    Logica.App.enviarMailUsuario(user.First().Email, "Reinicio de Contraseaña", texto);
+                    Logica.App.enviarMailUsuario(user.First().Email, "Reinicio de Contraseña", texto);
                     // AppBuilderSecurityExtensions..
 
                     char[] mailCodificado;
