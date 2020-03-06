@@ -1,0 +1,208 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "codigo";
+        settings.Caption = "Cursadas";
+
+        settings.CallbackRouteValues = new { Controller = "cursa", Action = "PartialGridMisCursos" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.NextColumn;
+
+
+        // Columnas
+        settings.Columns.Add(col => { col.FieldName = "codigo"; col.Caption = Strings.ColId; col.Visible = false; });
+
+        settings.Columns.Add(col => { col.FieldName = "fechaAlta"; col.Caption = "Fecha de Inscripción"; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.periodolectivo1.descripcion"; col.Caption = "Periodo"; });
+        //settings.Columns.Add(col => { col.FieldName = "descripcion"; col.Caption = "Aprobado"; col.Width = Unit.Pixel(25); });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.curso1.codCurso"; col.Caption = "Código Curso"; col.CellStyle.HorizontalAlign = HorizontalAlign.Left; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.curso1.descripcion"; col.Caption = "Curso"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.horario"; col.Caption = "Horario"; });
+
+        settings.Columns.Add(col => { col.FieldName = "EstadoCursa.descripcion"; col.Caption = "Estado"; });
+
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+                "<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>",
+                 string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("DarBajaCursada", "cursa", new { codigo = DataBinder.Eval(c.DataItem, "codigo") })),
+                     "Solicitar Baja",
+                     "<i class='fa fa-check'></i>"
+
+                /*"<button type='button' class='btn btn-flat btn-xs btn-info habilitar' onclick=\"habilitarAjax({0});\" id='BotonHabilitar_{0}' name='BotonHabilitar' value='{0}' title='{1}'>{2}</button>&nbsp;",
+                            DataBinder.Eval(c.DataItem, "codigo"),
+                            "Solicitar Baja",
+                             "<i class='fa fa-check'></i>"*/
+
+                ));
+
+            column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+                "Baja"
+                ));
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 150;
+        });
+
+
+        // Filtros
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        settings.Styles.FilterRow.BackColor = Color.LightGray;
+        settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        //settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+    }
+).Bind(Model).GetHtml()
+
+<script>
+    function habilitarAjax(codigo) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/cursa/DarBajaCursada",
+                data: { codigo: codigo },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                        MensajeExito('Operación finalizada con éxito');
+
+                    }
+                    else {
+                        MensajeError('Operación finalizada con errores');
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/cursa/DarBajaCursada",
+                data: { codigo: codigo },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                        MensajeExito('Operación finalizada con éxito');
+
+                    }
+                    else {
+                        MensajeError('Operación finalizada con errores');
+                    }
+                }
+            });
+        }
+    }
+
+    function pedirRecibo(codigoCuota) {
+        bootbox.prompt({
+            backdrop: false,
+            title: "Ingrese el Nro de Recibo a Vincular?",
+            callback: function (result) { imputarAjax(codigoCuota, result); }
+        });
+    }
+
+    function imputarAjax(codigoCuota, nroRecibo) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/deuda/imputar",
+                data: { IdCuota: codigoCuota, NroRecibo: nroRecibo },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/deuda/imputar",
+                data: { IdCuota: codigoCuota, NroRecibo: nroRecibo },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+    }
+
+    function impagaAjax(codigoCuota) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/deuda/impaga",
+                data: { IdCuota: codigoCuota },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/deuda/impaga",
+                data: { IdCuota: codigoCuota },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+    }
+
+</script>

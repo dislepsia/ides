@@ -1,0 +1,106 @@
+﻿@using cnrl.Helpers
+@using cnrl.Logica
+@model cnrl.asistencia
+
+@{
+    ViewBag.Titulo = "Cargar Asistencia";
+    ViewBag.Subtitulo = "Administración de los Alumnos del Curso";
+    Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+    string InfoCurso = ViewBag.InfoCurso;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["fecha"] = $('.Asistencia').val();
+        e.customArgs["codOferta"] = $('#codOferta').val();
+    }
+</script>
+
+@if (!string.IsNullOrEmpty(ViewBag.MensajeExito))
+{
+    <div class="alert alert-success" id="mensaje">@ViewBag.MensajeExito</div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.MensajeError))
+{
+    <div class="alert alert-danger" id="mensaje">@ViewBag.MensajeError</div>
+}
+
+<div class="box box-default">
+    <div class="box-body">
+        <div class="col-sm-12">
+            <h4>@Html.Label(InfoCurso)</h4>
+        </div>
+        <br>
+        <div class="col-sm-6" align="left">
+            <div class="form-group" align="left">
+                @Html.Label("Seleccionar Fecha")
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.EditorFor(model => model.asistencia1, new { htmlAttributes = new { @class = "form-control pull-right Asistencia" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.asistencia1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<input type="hidden" id="codOferta" name="codOferta" value="" />
+
+
+<div class="row row-horizon">
+    @Html.Action("PartialGridAsistencias",new { codOferta = ViewBag.codOferta})
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".Asistencia").daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: "DD/MM/YYYY"
+        });
+
+        $('.Asistencia').val(moment().locale("es").format("DD/MM/YYYY"));
+    });
+
+    $('.Asistencia').change(function () {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/Docente/guardarFecha",
+                data: { fecha: $('.Asistencia').val() },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        $("#mensaje").hide();
+                        window.Grid.PerformCallback();
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/Docente/guardarFecha",
+                data: { fecha: $('.Asistencia').val() },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        $("#mensaje").hide();
+                        window.Grid.PerformCallback();
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+    });
+
+</script>

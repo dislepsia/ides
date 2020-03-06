@@ -1,0 +1,69 @@
+﻿@using cnrl.Helpers
+@model cnrl.tipocurso
+
+@{
+    Layout = null;
+}
+
+@Html.Hidden("Titulo", "Modificar Tipo de Curso")
+@Html.Hidden("Subtitulo", "")
+
+<div class="row">
+    <div class="col-md-12">
+@using (Ajax.BeginForm("Edit", "TipoCurso", FormMethod.Post,
+                        new AjaxOptions
+                        {
+                            OnSuccess = "AjaxOk",
+                            HttpMethod = "POST"
+                        }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.codigo)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="box box-solid box-success">
+        <div class="box-header">
+            <h6 class="box-title" style="font-size: 1.5em;">Modificar</h6>
+        </div>
+                
+        <div class="box-body">
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <span>@Strings.ErrorMensajeGenerico</span>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+            }
+
+            <div class="form-group">
+                <label>Nombre: </label>
+                <div>
+                    @Html.EditorFor(model => model.descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.descripcion)
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+        @* Botones *@
+        <div class="form-group">
+            <div class="pull-right">
+                <input type="submit" value="Guardar" class="btn btn-flat btn-success" />
+            </div>
+            <div class="pull-left">
+                <div class="btn btn-flat btn-default">
+                    @Html.ActionLink("Cerrar", "Index")
+                </div>
+            </div>
+        </div>
+}
+    </div>
+</div>

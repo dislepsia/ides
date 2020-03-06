@@ -523,7 +523,7 @@
     <value>Tipo Curso</value>
   </data>
   <data name="AppTitulo" xml:space="preserve">
-    <value>Cursos de Extensión Universitaria</value>
+    <value>Sistema de Inscripción de Cursos IDES</value>
   </data>
   <data name="MsgTodosRoles" xml:space="preserve">
     <value>(Todos los Roles)</value>

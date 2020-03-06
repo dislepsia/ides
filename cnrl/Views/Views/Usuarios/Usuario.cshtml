@@ -1,0 +1,340 @@
+﻿@using cnrl.Helpers
+@using cnrl.Logica
+@model cnrl.AspNetUsers
+
+@{
+    Layout = null;
+    string modo = ViewBag.modo;
+    var esAlta = modo == "Create";
+    var esVista = modo == "View";
+    var esEdit = modo == "Edit";
+    var esBaja = modo == "Delete";
+    var titulo = string.Format("{0} {1}", esAlta ? Strings.BtnNuevo : (esEdit ? Strings.BtnEditar : (esBaja ? Strings.BtnBorrar : Strings.BtnVer)), Strings.TituloUsuarios);
+    ViewBag.Titulo = Strings.TituloUsuarios;
+    ViewBag.Subtitulo = titulo;
+
+    var Roles = (SelectList)ViewBag.Roles;
+    var RolesDocentes = (SelectList)ViewBag.RolesDocentes;
+    var TiposDocumento = (SelectList)ViewBag.TiposDocumento;
+    var Provincias = (SelectList)ViewBag.Provincias;
+    var Localidades = (SelectList)ViewBag.Localidades;
+    var tiposAlumno = (SelectList)ViewBag.TiposAlumno;
+}
+
+
+@Html.Hidden("Titulo", Strings.TituloUsuarios)
+@Html.Hidden("Subtitulo", titulo)
+@* Por si sale en una 2 Pantalla de Modal *@
+@Html.Hidden("Titulo2", Strings.TituloUsuarios)
+@Html.Hidden("Subtitulo2", titulo)
+
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Ajax.BeginForm(modo, "Usuarios", FormMethod.Post,
+                                                                                                                    new AjaxOptions
+                                                                                                                    {
+                                                                                                                        OnSuccess = ViewBag.Callback,
+                                                                                                                        HttpMethod = "POST"
+                                                                                                                    }))
+        {
+            <div class="box-body" id="controles">
+                @if (esBaja)
+                {
+                    <p class="rojo alerta">@Strings.MsgDeseaBorrar</p>
+                }
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <span>@Strings.ErrorMensajeGenerico</span>
+                        <br />
+                        <span>@Html.ValidationMessage("Error", new { @style = "color:white" })</span>
+                    </div>
+
+                }
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+                }
+
+                @Html.HiddenFor(m => m.Id)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.TipoDocumento, "TipoDocumento", htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.DropDownList("TipoDocumento", TiposDocumento, htmlAttributes: new { @class = "form-control tipoDni" })
+                        @Html.ValidationMessageFor(model => model.TipoDocumento, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.NroDocumento, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.NroDocumento, new { htmlAttributes = new { @class = "form-control Dni" } })
+                        @Html.ValidationMessageFor(model => model.NroDocumento, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.Apellido, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.Apellido, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.Label("*Campo obligatorio", new { @style = "color:red" })
+                        @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.Nombre, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.Label("*Campo obligatorio", new { @style = "color:red" })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.FechaNacimiento, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.EditorFor(model => model.FechaNacimiento, new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })
+
+                        </div>
+                        @Html.Label("*Campo obligatorio", new { @style = "color:red" })
+                        @Html.ValidationMessageFor(model => model.FechaNacimiento, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.provincia, "provincia", htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.DropDownList("provincia", Provincias, htmlAttributes: new { @class = "form-control" })
+                        @Html.Label("*Campo obligatorio", new { @style = "color:red" })
+                        @Html.ValidationMessageFor(model => model.provincia, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.localidad, "localidad", htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.DropDownList("localidad", Localidades, htmlAttributes: new { @class = "form-control" })
+                        @Html.Label("*Campo obligatorio", new { @style = "color:red" })
+                        @Html.ValidationMessageFor(model => model.localidad, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.Calle, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.Calle, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Calle, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.NroCalle, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.NroCalle, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NroCalle, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.piso, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.piso, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.piso, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.dpto, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.dpto, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.dpto, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.Telefono, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.Label("*Campo obligatorio", new { @style = "color:red" })
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.Telefono2, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.Telefono2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Telefono2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.Email, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" }, type = "email" })
+                        @Html.Label("*Campo obligatorio", new { @style = "color:red" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @if (cnrl.Logica.App.UsuarioTienePermiso("edit_tipo_usuario"))
+                {
+                    <div class="form-group">
+                        @Html.LabelForNormalizada(model => model.TipoAlumno, "TipoAlumno", htmlAttributes: new { @class = "control-label ", id = "TipoAlumno" })
+                        <div>
+                            @Html.DropDownList("TipoAlumno", tiposAlumno, htmlAttributes: new { @class = "form-control" })
+                            @Html.Label("*Campo obligatorio", new { @style = "color:red" })
+                            @Html.ValidationMessageFor(model => model.TipoAlumno, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @Html.HiddenFor(x => x.TipoAlumno);
+                }
+
+                <div class="form-group">
+                    @Html.LabelForNormalizada(model => model.Carrera, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.Carrera, new { htmlAttributes = new { @class = "form-control carrera" }, type = "carrera" })
+                        @*@Html.Label("*Campo obligatorio", new { @style = "color:red" })*@
+                        @Html.ValidationMessageFor(model => model.Carrera, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @if (cnrl.Logica.App.UsuarioTienePermiso("edit_tipo_usuario"))
+                {
+                    <div class="form-group">
+                        @Html.LabelForNormalizada(model => model.AspNetRoles, "TipoRol", htmlAttributes: new { @class = "control-label " })
+                        <div>
+                            @Html.DropDownList("TipoRol", RolesDocentes, htmlAttributes: new { @class = "form-control Rol", id = "TipoRol" })
+                            @*@Html.Label("*Campo obligatorio", new { @style = "color:red" })*@
+                            @Html.ValidationMessageFor(model => model.AspNetRoles, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @Html.HiddenFor(x => x.AspNetRoles);
+                }
+
+                <div id="roles">
+
+                </div>
+            </div>
+            <div class="box-footer">
+                <div class="pull-left">
+                    <button type="button" data-dismiss="modal" class="btn btn-flat btn-default">Cerrar</button>
+                </div>
+                <div class="pull-right">
+                    <div>
+                        @if (!esBaja)
+                        {
+                            if (!esVista)
+                            {
+                                <button type="submit" class="btn btn-flat btn-success">@Strings.BtnGuardar</button>
+                            }
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-flat btn-danger">@Strings.BtnBorrar</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(function () {
+        // customize all inputs (will search for checkboxes and radio buttons)
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+            increaseArea: '30%' // optional
+        });
+    });
+
+    $(document).ready(function () {
+        var modo = '@modo';
+        if (modo == "Delete" || modo == "View")
+            $('#controles').find('input[type!="hidden"], textarea, button, select').attr('disabled', 'disabled');
+
+        if (modo == "Edit") {
+            $(".Dni").attr('disabled', 'disabled');
+            $(".tipoDni").attr('disabled', 'disabled');
+            $(".carrera").attr('disabled', 'disabled');
+        }
+
+        $(".FechaNacimiento").inputmask("dd/mm/yyyy", { "placeholder": "dd/mm/yyyy" });
+
+        $(".FechaNacimiento").daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: "DD/MM/YYYY"
+        });
+
+        //$("#provincia").select2({
+        //    allowClear: true
+        //});
+        //$("#localidad").select2({
+        //    allowClear: true
+        //});
+        //$("#TipoAlumno").select2({
+        //    allowClear: true
+        //});
+        $("#provincia").select2({
+            allowClear: true
+        });
+        $("#localidad").select2({
+            allowClear: true
+        });
+
+        $('.Rol').change(function () {
+            var id = $('.Rol option:selected').text();
+            var ddlStates = $("#roles");
+            ddlStates.html('');
+
+            console.log(ddlStates.append($('<input type="hidden" name="selected"/>').val(id)));
+            $.ajax({
+                url: this.href,
+                type: "post",
+                data: { "idSelector": id },
+                success: function (data) {
+
+
+
+                }
+            })
+
+        });
+
+        $('#provincia').change(function () {
+            var selectedItem = $(this).val();
+            var ddlStates = $("#localidad");
+            var statesProgress = $("#states-loading-progress");
+            statesProgress.show();
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetLocalidades", "Usuarios")",
+                data: { "IdProvincia": selectedItem },
+                //datatype: "json",
+                //traditional: true,
+                success: function (data) {
+                    ddlStates.html('');
+
+                    //ddlStates.append($('<option></option>').val(Constantes.ERROR).html('cnrl.Strings.SeleccionarLocalidad'));
+                    $.each(data, function (id, option) {
+                        console.log(ddlStates.append($('<option></option>').val(option.Value).html(option.Text)));
+
+                    });
+                    statesProgress.hide();
+                }
+            });
+        });
+    });
+</script>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/select2-3.5.4/select2.min.js")"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}

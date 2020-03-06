@@ -1,0 +1,298 @@
+﻿@using cnrl.Helpers
+@model cnrl.Models.Cuota
+
+@{
+    Layout = null;
+    string modo = ViewBag.modo;
+    var esAlta = modo == "Create";
+    var esVista = modo == "View";
+    var esEdit = modo == "Edit";
+    var esBaja = modo == "Delete";
+    var titulo = string.Format("{0} {1}", esAlta ? Strings.BtnNuevo : (esEdit ? Strings.BtnEditar : (esBaja ? Strings.BtnBorrar : Strings.BtnVer)), Strings.ColCuota);
+    ViewBag.Titulo = Strings.ColCuota;
+    ViewBag.Subtitulo = titulo;
+
+    var usuarios = (SelectList)ViewBag.usuarios;
+    var ofertas = (SelectList)ViewBag.ofertas;
+    var estados = (SelectList)ViewBag.estados;
+
+}
+
+@Html.Hidden("Titulo", Strings.ColCuota)
+@Html.Hidden("Subtitulo", titulo)
+@* Por si sale en una 2 Pantalla de Modal *@
+@Html.Hidden("Titulo2", Strings.ColCuota)
+@Html.Hidden("Subtitulo2", titulo)
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Ajax.BeginForm(modo, "Deuda", FormMethod.Post,
+                                        new AjaxOptions
+                                        {
+                                            OnSuccess = ViewBag.Callback,
+                                            HttpMethod = "POST"
+                                        }))
+        {
+            <div class="box-body" id="controles">
+                @if (esBaja)
+                {
+                    <p class="rojo alerta">@Strings.MsgDeseaBorrar</p>
+                }
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <span>@Strings.ErrorMensajeGenerico</span>
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+                }
+
+                @Html.HiddenFor(m => m.Id)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Dni, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        <input type="hidden" id="Dni" name="Dni"  style="width:100%;" @(esBaja ? "disabled" : "") />
+                        @*@Html.DropDownList("Dni", usuarios, htmlAttributes: new { @class = "form-control" })*@
+                        @Html.ValidationMessageFor(model => model.Dni, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NroComision, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        <input type="hidden" id="NroComision" name="NroComision"  style="width:100%;" @(esBaja ? "disabled" : "")/>
+                        @*@Html.DropDownList("NroComision", ofertas, htmlAttributes: new { @class = "form-control" })*@
+                        @Html.ValidationMessageFor(model => model.NroComision, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NroCuota, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.NroCuota, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "1" } })
+                        @Html.ValidationMessageFor(model => model.NroCuota, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TotalCuota, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        @Html.EditorFor(model => model.TotalCuota, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "1" } })
+                        @Html.ValidationMessageFor(model => model.TotalCuota, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Importe, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-dollar"></i>
+                        </div>
+                        @Html.EditorFor(model => model.Importe, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Importe, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Importe2, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-dollar"></i>
+                        </div>
+                        @Html.EditorFor(model => model.Importe2, new { htmlAttributes = new { @class = "form-control"} })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Importe2, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fechavto, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        @Html.EditorFor(model => model.fechavto, new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fechavto, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fechavto2, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        @Html.EditorFor(model => model.fechavto2, new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fechavto2, "", new { @class = "text-danger" })
+                </div>
+                @if(!@esAlta)
+                { 
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.NroFactura, htmlAttributes: new { @class = "control-label " })
+                            <div class="form-control">
+                                @Html.DisplayFor(model => model.NroFactura)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label " })
+                            <div class="form-control">
+                                @Html.DisplayFor(model => model.EstadoDescripcion)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fechaPago, htmlAttributes: new { @class = "control-label " })
+                            <div class="form-control">
+                                @Html.DisplayFor(model => model.fechaPago)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fechaBaja, htmlAttributes: new { @class = "control-label " })
+                            <div class="form-control">
+                                @Html.DisplayFor(model => model.fechaBaja )
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Motivo, htmlAttributes: new { @class = "control-label " })
+                            <div class="form-control">
+                                @Html.HiddenFor(m => m.Motivo)
+                                @Html.DisplayFor(model => model.Motivo)
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                }
+            </div>
+            <div class="box-footer">
+                <div class="pull-left">
+                    <button type="button" data-dismiss="modal" class="btn btn-flat btn-default">Cerrar</button>
+                </div>
+                <div class="pull-right">
+                    <div>
+                        @if (!esBaja)
+                        {
+                            if (!esVista)
+                            {
+                                <button type="submit" class="btn btn-flat btn-success">@Strings.BtnGuardar</button>
+                            }
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-flat btn-danger">@Strings.BtnBorrar</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var modo = '@modo';
+        if (modo == "Delete" || modo == "View")
+            $('#controles').find('input[type!="hidden"], textarea, button, select').attr('disabled', 'disabled');
+
+
+        $("#Dni").select2({
+            placeholder: "Ingresa Nombre o documento...",
+            language: "es",
+            allowClear: true,
+            minimumInputLength: 4,
+            ajax: {
+                cache: true,
+                dataType: "json",
+                type: "GET",
+                quietMillis: 500,
+                delay: 250,
+                url: "@Url.Action("BuscarPorDNI", "Usuarios")",
+            data: function (searchTerm) {
+                return { q: searchTerm };
+            },
+            processResults: function (data /*, page*/) {
+                return {
+                    results: data
+                };
+            }
+        }
+        });
+
+    $("#NroComision").select2({
+        placeholder: "Ingresa Descripcion de la Oferta...",
+        language: "es",
+        allowClear: true,
+        minimumInputLength: 4,
+        ajax: {
+            cache: true,
+            dataType: "json",
+            type: "GET",
+            quietMillis: 500,
+            delay: 250,
+            url: "@Url.Action("Buscar", "Oferta")",
+        data: function (searchTerm) {
+            return { q: searchTerm };
+        },
+        processResults: function (data /*, page*/) {
+            return {
+                results: data
+            };
+        }
+    }
+    });
+        @{
+            int? NroComision = ViewBag.IdOferta;
+            if (NroComision.HasValue)
+            {
+                <text>
+                    $('#NroComision').select2("data", { "id": @NroComision.Value, "text": '@Html.Raw(ViewBag.Oferta.Replace(@"\", @" \\ "))' });
+                </text>
+            }
+        }
+        @{
+            long? Dni = ViewBag.IdUsuario;
+            if (Dni.HasValue)
+            {
+                <text>
+                $('#Dni').select2("data", { "id": @Dni.Value, "text": '@Html.Raw(ViewBag.Usuario.Replace(@"\", @" \\ "))' });
+                </text>
+            }
+        }
+    });
+
+    //$("#NroComision").select2({
+    //    allowClear: true
+    //})
+    //$("#Dni").select2({
+    //    allowClear: true
+    //})
+    moment.locale('es');
+
+    $(".FechaNacimiento").inputmask("dd/mm/yyyy", { "placeholder": "dd/mm/yyyy" });
+
+    $(".FechaNacimiento").daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        format: "DD/MM/YYYY"
+    });
+
+    $('#Estado').select2("val", "0");
+
+
+    
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

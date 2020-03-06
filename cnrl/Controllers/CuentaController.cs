@@ -261,6 +261,7 @@ namespace cnrl.Controllers
             var usuario = db.AspNetUsers.Where(u => u.NroDocumento == nroDocumento && u.TipoDocumento == tipoDocumento);
             SignInStatus result = SignInStatus.Failure;
 
+
             if (!validarCapcha || IsCaptchaValid)
             {
                 if (usuario.Count() == 1 /*&& model.UserDominio == null*/)

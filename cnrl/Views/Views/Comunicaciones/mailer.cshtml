@@ -1,0 +1,236 @@
+﻿@using System.Web.UI.WebControls
+@model cnrl.ViewModels.MailModel
+
+@{
+    Layout = null;
+    ViewBag.Titulo = Strings.TituloComunicaciones;
+    ViewBag.Subtitulo = Model.modo;
+    string modo = Model.modo;
+    var plantillas = (SelectList)ViewBag.plantillas;
+}
+
+
+@Html.Hidden("Titulo", Strings.TituloComunicaciones)
+@Html.Hidden("Subtitulo", modo)
+@* Por si sale en una 2 Pantalla de Modal *@
+@Html.Hidden("Titulo2", Strings.TituloUsuarios)
+@Html.Hidden("Subtitulo2", modo)
+
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Ajax.BeginForm("Enviar", "Comunicaciones", FormMethod.Post,
+                                            new AjaxOptions
+                                            {
+                                                OnSuccess = "OnSuccess",
+                                                HttpMethod = "POST"
+                                            },
+                                        new { id = "frmEnviarMails" }
+                                        ))
+        {
+            <h2>Se enviará el mail @ViewBag.CantidadMailsParaEnviar alumnos</h2>
+            <div class="col-md-12 no-padding">
+                <div class="box box-primary  box-solid">
+                    <div class="box-header with-border">
+                        <h5 class="box-title" style="font-size:medium">Confección Email</h5>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        </div><!-- /.box-tools -->
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="IdPeriodo">Seleccione una Plantilla</label>
+                                    @Html.DropDownList("plantilla", plantillas, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(m => m.asunto, new { @class = "control-label" })
+                                <div class="input-group">
+                                    <input type="text" value="@ViewBag.AsuntoPreFijado" class="form-control" disabled>
+                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                    <input type="text" class="form-control" id="asunto" name="asunto" placeholder="Asunto">
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        @Html.HiddenFor(m => m.modo)
+                        @Html.HiddenFor(m => m.codigos)
+                        <div class="row">
+                            @*<div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label>
+                                                @Html.CheckBoxFor(m => m.cco, new Dictionary<string, object>())
+                                                @Html.LabelFor(m => m.cco)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2>Variables disponibles</h2>
+                                <dl>
+                                    <dt>    %NOMBRE%                    </dt><dd> Nombre del Alumno             </dd>
+                                    <dt>    %APELLIDO%                  </dt><dd> Apellido del Alumno           </dd>
+                                    <dt>    %DOCUMENTO%                 </dt><dd> Documento del Alumno          </dd>
+                                </dl>
+                                @if (modo == "Oferta" || modo == "Deuda")
+                                {
+                                    
+                                    <dl>
+                                        <dt>    %SEDE%                      </dt><dd> Sede del Curso                </dd>
+                                        <dt>    %TIPO_CURSO%                </dt><dd> Tipo del Curso                </dd>
+                                        <dt>    %CURSO%                     </dt><dd> Nombre del Curso              </dd>
+                                        <dt>    %DIA_HORARIO%               </dt><dd> Descripción del Día y Horario </dd>
+                                        <dt>    %AULA%                      </dt><dd> Aula de Cursada               </dd>
+                                        <dt>    %FECHA_INICIO%              </dt><dd> Fecha de Inicio de Cursada    </dd>
+                                    </dl>
+                                }
+                                @if (modo == "Deuda")
+                                { 
+                                    <dl>
+                                        <dt>%NRO_CUOTA%</dt><dd> Nro de Cuota</dd>
+                                        <dt>%TOTAL_CUOTAS%</dt><dd> Total de Cuotas del plan de Cuota</dd>
+                                        <dt>%IMPORTE%</dt><dd> Importe 1er vencimiento de Cuota</dd>
+                                        <dt>%IMPORTE2%</dt><dd> Importe 2do vencimiento de Cuota</dd>
+                                        <dt>%FECHA_VENCIMIENTO%</dt><dd> Fecha de 1er Vencimiento de Cuota</dd>
+                                        <dt>%FECHA_VENCIMIENTO2%</dt><dd> Fecha de 2do Vencimiento de Cuota</dd>
+                                    </dl>
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(m => m.editor, new { @class = "control-label" })
+                                <textarea id="editor" name="editor" rows="10" cols="80">
+                                    Escriba su email aquí
+                                </textarea>
+                            </div>
+                        </div>
+                        @*<hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                Archivos Adjunto/s
+                                <input type="file" name="adjunto1" />
+                                <input type="file" name="adjunto2" />
+                                <input type="file" name="adjunto3" />
+                                <input type="file" name="adjunto4" />
+                            </div>
+                        </div>*@
+                        <hr />
+
+                        
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-12">
+                <button id="btnEnviar" class="btn btn-success" style="width:100%" title="Enviar Mails"
+                        @*onclick="document.getElementById('frmEnviarMails').submit();"*@>
+                    Enviar Mails
+                </button>
+            </div><!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-toolbar {
+        margin-bottom: 15px;
+    }
+</style>
+
+<script>
+    CKEDITOR.replace('editor');
+    //$(".textarea").wysihtml5();
+    $('#btnEnviar').click(function () {
+
+        var r = confirm("¿Esta seguro que desea enviar el Email a " + @ViewBag.CantidadMailsParaEnviar + " destinatarios? (Esta operación puede demorar algunos minutos, por favor no cierre la página)");
+        if (r == true) {
+            //$(this).modal('show');
+            LoadingIni();
+            $('#btnEnviar').hide();
+
+            $("#editor").val(CKEDITOR.instances.editor.getData());
+
+            $('#frmEnviarMails').submit();
+        }
+    });
+
+    function OnSuccess(data) {
+        console.log(data);
+        LoadingFin();
+        //$(this).modal('hide');
+        if (data.ok === true) {
+            MensajeExito('Operación finalizada con éxito');
+            $('.modal').modal('hide');
+        } else {
+            //Recarga el formulario con los errores recibidos
+            MensajeError('Operación finalizada con errores');
+            $('.modal').modal('hide');//$('#DlgGenericoBody').html(data);
+        }
+    }
+
+    $(function () {
+
+        $('#plantilla').change(function () {
+            var val = $('#plantilla').val();
+            if (val != null && val != "" && val != "-1") {
+                //TODO: LLAMADA AJAX QUE CARGUE LAS PLANTILLAS DISPONIBLES
+                var URLactual = window.location.pathname;
+                if (URLactual.search('nuevositio') != -1) {
+                    $.ajax({
+                        type: "post",
+                        url: "/nuevositio/plantillaEMail/GetPlantilla",
+                        data: { IdPlantilla: $('#plantilla').val() },
+                        datatype: "json",
+                        traditional: true,
+                        success: function (data) {
+                            $("#editor").val(data.cuerpo);
+                            CKEDITOR.instances['editor'].setData(data.cuerpo); // where editor1 is id
+
+                            $("#asunto").val(data.asunto);
+                        }
+                    });
+                }
+                else {
+                    $.ajax({
+                        type: "post",
+                        url: "/plantillaEMail/GetPlantilla",
+                        data: { IdPlantilla: $('#plantilla').val() },
+                        datatype: "json",
+                        traditional: true,
+                        success: function (data) {
+                            $("#editor").val(data.cuerpo);
+                            CKEDITOR.instances['editor'].setData(data.cuerpo); // where editor1 is id
+
+                            $("#asunto").val(data.asunto);
+                        }
+                    });
+                }
+            }
+        });
+
+        $("#plantilla").select2({
+            allowClear: true
+        });
+
+    });
+
+
+    $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+
+
+</script>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/select2-3.5.4/select2.min.js")"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}

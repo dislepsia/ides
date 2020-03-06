@@ -1,0 +1,38 @@
+﻿@using cnrl.Helpers
+@model cnrl.curso
+
+@{
+    Layout = null;
+    var titulo = "Correlativas"; // string.Format("{0} {1}", esAlta ? Strings.BtnNuevo : (esEdit ? Strings.BtnEditar : (esBaja ? Strings.BtnBorrar : Strings.BtnVer)), Strings.ColCurso);
+    ViewBag.Titulo = Strings.TituloCorrelativas;
+    ViewBag.Subtitulo = titulo;
+    }
+
+    @Html.Hidden("Titulo", Strings.TituloCorrelativas)
+@Html.Hidden("Subtitulo", titulo)
+@* Por si sale en una 2 Pantalla de Modal *@
+@Html.Hidden("Titulo2", Strings.TituloCorrelativas)
+@Html.Hidden("Subtitulo2", titulo)
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdCurso"] = $('#codigo').val();
+    }
+</script>
+<div class="row">
+    <div class="col-md-12">
+            @Html.Action("PartialGridCorrelativas", new { IdCurso = ViewBag.IdCurso })
+
+            <div class="box-footer">
+                <div class="pull-left">
+                    <button type="button" data-dismiss="modal" class="btn btn-flat btn-default">Cerrar</button>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

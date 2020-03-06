@@ -1,0 +1,75 @@
+﻿@using cnrl.Logica
+@model IEnumerable<cnrl.cursa>
+@using cnrl.Helpers
+
+@{
+    ViewBag.Title = "Documentacion";
+    var id = ViewBag.Id;
+    var us = ViewBag.Us;
+    var preInscripcion = true;
+}
+
+<h2>Documentacion a Presentar</h2>
+<input type="hidden" name="codigo" value="@id" />
+<input type="hidden" name="user" value="@us" />
+
+<script>
+    $(document).ready(function () {
+
+        var aviso = "<h1>¡Atención!</h1>"
+        + "<p>Estimados, se le informa acaba de Preinscribir a un curso, dentro de los 5 días hábiles debe acercarse a la Oficina de Atención al Público para presentar la documentación correspondiente a cada curso. Una vez que haya alcanzado la misma y que el personal la haya corroborado se procederá a confirmar su inscripción para que posteriormente pueda acceder al comprobante de pago a traves del menú Alumno, opción Forma de Pago. \nRecuerde que de no traer los papeles dentro del plazo establecido se dará de baja la inscripción quedando la vacante libre y de querer inscribirse deberá hacer nuevamente todo el procedimiento.</p>"
+
+@if (preInscripcion == true)
+{
+    <text>
+        var dialog = bootbox.dialog({
+        title: '¡Atención!',
+        size: 'large',
+        class: "class-with-width",
+        closeButton: false,
+        message: aviso,
+        buttons: {
+        ok: {
+        label: "Acepto",
+        className: 'btn-success',
+        }
+        }
+        });
+    </text>
+}
+
+    });
+</script>
+
+
+@Html.Action("PartialGridDocumentacion")
+
+@*<div class="row">
+    <div class="form-group">
+            Codigo: @Html.DisplayFor(model => model.FirstOrDefault().oferta1.curso1.codigo)
+            Nombre de Curso: @Html.DisplayFor(model=>model.FirstOrDefault().oferta1.curso1.descripcion)
+        </div>
+        <br />
+        <div class="col-md-12">
+            <div class="form-group">
+                <h3 style="color:green"> @Html.LabelForNormalizada(model => model.FirstOrDefault().oferta1.documentacion, htmlAttributes: new { @class = "control-label" }):</h3>
+                <h4> @Html.DisplayFor(model => model.FirstOrDefault().oferta1.documentacion)</h4>
+                @Html.ValidationMessageFor(model => model.FirstOrDefault().oferta1.documentacion, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <h3 style="color:green"> @Html.LabelForNormalizada(model => model.FirstOrDefault().oferta1.fechaDocumentacion, htmlAttributes: new { @class = "control-label" }):</h3>
+
+                <h4> @Html.DisplayFor(model => model.FirstOrDefault().oferta1.fechaDocumentacion, Model.FirstOrDefault().oferta1.fechaDocumentacion.Value.ToShortDateString())</h4>
+                @Html.ValidationMessageFor(model => model.FirstOrDefault().oferta1.fechaDocumentacion, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <h3 style="color:green"> @Html.LabelForNormalizada(model => model.FirstOrDefault().oferta1.horaDocumentacion, htmlAttributes: new { @class = "control-label" }):</h3>
+                <h4> @Html.DisplayFor(model => model.FirstOrDefault().oferta1.horaDocumentacion)Hs.</h4>
+                @Html.ValidationMessageFor(model => model.FirstOrDefault().oferta1.horaDocumentacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    </div>
+*@

@@ -1,0 +1,422 @@
+﻿@using cnrl.Logica
+
+@{
+    ViewBag.Titulo = Strings.TituloCuotas;
+    ViewBag.Subtitulo = Strings.TituloAdmin;
+
+    var sedes = (SelectList)ViewBag.sedes;
+    var cursos = (SelectList)ViewBag.cursos;
+    var periodosLectivos = (SelectList)ViewBag.periodosLectivos;
+
+    var ofertas = (SelectList)ViewBag.ofertas;
+    var estados = (SelectList)ViewBag.estados;
+    var Conceptos = (SelectList)ViewBag.Conceptos;
+    var TiposCurso = (SelectList)ViewBag.TiposCurso;
+    //, NroCuotaDesde
+    //, NroCuotaHasta
+    //, ImporteDesde
+    //, ImporteHasta
+    //, Importe2Desde
+    //, Importe2Hasta
+    //, FechaVtoDesde
+    //, FechaVtoHasta
+    //, FechaVto2Desde
+    //, FechaVto2Hasta
+    //, FechaPagoDesde
+    //, FechaPagoHasta
+    //, FechaBajaDesde
+    //, FechaBajaHasta
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdSede"] = $('#IdSede').val();
+        e.customArgs["IdCurso"] = $('#IdCurso').val();
+        e.customArgs["IdUsuario"] = $('#IdUsuario').val();
+        e.customArgs["IdPeriodo"] = $('#IdPeriodo').val();
+        e.customArgs["IdOferta"] = $('#IdOferta').val();
+        e.customArgs["Estado"] = $('#Estado').val();
+        e.customArgs["IdConcepto"] = $('#IdConcepto').val();
+        e.customArgs["IdTipoCurso"] = $('#IdTipoCurso').val();
+        e.customArgs["NroCuotaDesde"] = $('#NroCuotaDesde').val();
+        e.customArgs["NroCuotaHasta"] = $('#NroCuotaHasta').val();
+        e.customArgs["ImporteDesde"] = $('#ImporteDesde').val();
+        e.customArgs["ImporteHasta"] = $('#ImporteHasta').val();
+        e.customArgs["Importe2Desde"] = $('#Importe2Desde').val();
+        e.customArgs["Importe2Hasta"] = $('#Importe2Hasta').val();
+        e.customArgs["FechaVtoDesde"] = $('#FechaVtoDesde').val();
+        e.customArgs["FechaVtoHasta"] = $('#FechaVtoHasta').val();
+        e.customArgs["FechaVto2Desde"] = $('#FechaVto2Desde').val();
+        e.customArgs["FechaVto2Hasta"] = $('#FechaVto2Hasta').val();
+        e.customArgs["FechaPagoDesde"] = $('#FechaPagoDesde').val();
+        e.customArgs["FechaPagoHasta"] = $('#FechaPagoHasta').val();
+        e.customArgs["FechaBajaDesde"] = $('#FechaBajaDesde').val();
+        e.customArgs["FechaBajaHasta"] = $('#FechaBajaHasta').val();
+        // e.customArgs[""] = $('#').val();
+
+    }
+
+
+</script>
+<form action="@Url.Action("Exportar")" method="POST" name="frmExportar" id="frmExportar">
+    @Html.Hidden("VistaCompleta", false)
+    <div class="box box-default filtros">
+        <div class="box-body filtros">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdUsuario">@Strings.ColAlumno</label>
+                    <div id="IdUsuario" name="IdUsuario" style="width: 100%"></div>
+                    <input type="hidden" id="hiddenUsuario" name="hiddenUsuario" value="" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="IdTipoCurso">@Strings.ColTipoCurso</label>
+                    @Html.DropDownList("IdTipoCurso", TiposCurso, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="IdConcepto">@Strings.ColConcepto</label>
+                    @Html.DropDownList("IdConcepto", Conceptos, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="IdCurso">@Strings.ColCurso</label>
+                    @Html.DropDownList("IdCurso", cursos, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="IdSede">@Strings.ColSede</label>
+                    @Html.DropDownList("IdSede", sedes, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="IdPeriodo">@Strings.ColPeriodo</label>
+                    @Html.DropDownList("IdPeriodo", periodosLectivos, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdOferta">@Strings.ColOferta</label>
+                    @Html.DropDownList("IdOferta", ofertas, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="Estado">@Strings.ColEstado</label>
+                    @Html.DropDownList("Estado", estados, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="col-sm-1">
+                <div class="pull-left">
+                    <button type="button" class="btn" onclick="javascript:filtroCompleto();"><i class="fa fa-filter"></i></button>
+                </div>
+                <div class="pull-right">
+                    <button type="button" class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>
+            <hr />
+            <div id="filtroCompleto" style="display:none">
+                <div class="col-md-2"><div class="form-group"><label> Importe 1er vto desde </label><div class="input-group"> <div class="input-group-addon"> <i class="fa fa-dollar"></i> </div> @Html.Editor("ImporteDesde", new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01", @placeholder = "Importe desde" } }) </div></div> </div>
+                <div class="col-md-2"><div class="form-group"><label> Importe 1er vto hasta </label><div class="input-group"> <div class="input-group-addon"> <i class="fa fa-dollar"></i> </div> @Html.Editor("ImporteHasta", new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01", @placeholder = "Importe hasta" } })</div></div></div>
+                <div class="col-md-2"><div class="form-group"><label> Importe 2do vto desde </label><div class="input-group"><div class="input-group-addon"><i class="fa fa-dollar"></i></div>@Html.Editor("Importe2Desde", new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01", @placeholder = "Importe 2 desde" } })</div></div></div>
+                <div class="col-md-2"><div class="form-group"><label> Importe 2do vto hasta </label><div class="input-group"><div class="input-group-addon"><i class="fa fa-dollar"></i></div>@Html.Editor("Importe2Hasta", new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01", @placeholder = "Importe 2 hasta" } })</div></div></div>
+                <div class="col-md-2"><div class="form-group"><label> Nro cuota desde 		</label><div class="input-group"> <div class="input-group-addon"> <i class="fa fa-dollar"></i> </div> @Html.Editor("NroCuotaDesde", new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "1", @step = "1", @placeholder = "Nro cuota desde" } }) </div></div> </div>
+                <div class="col-md-2"><div class="form-group"><label> Nro cuota hasta 		</label><div class="input-group"> <div class="input-group-addon"> <i class="fa fa-dollar"></i> </div> @Html.Editor("NroCuotaHasta", new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "1", @step = "1", @placeholder = "Nro cuota hasta" } }) </div></div> </div>
+
+
+                <div class="col-md-3"><div class="form-group"><label>Fecha 1er Vto Desde</label><div class="input-group"><div class="input-group-addon"><i class="fa fa-calendar"></i></div>@Html.Editor("FechaVtoDesde", new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })</div></div></div>
+                <div class="col-md-3"><div class="form-group"><label>Fecha 1er Vto Hasta</label><div class="input-group"><div class="input-group-addon"><i class="fa fa-calendar"></i></div>@Html.Editor("FechaVtoHasta", new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })</div></div></div>
+                <div class="col-md-3"><div class="form-group"><label>Fecha 2do Vto Desde</label><div class="input-group"><div class="input-group-addon"><i class="fa fa-calendar"></i></div>@Html.Editor("FechaVto2Desde", new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })</div></div></div>
+                <div class="col-md-3"><div class="form-group"><label>Fecha 2do Vto Hasta</label><div class="input-group"><div class="input-group-addon"><i class="fa fa-calendar"></i></div>@Html.Editor("FechaVto2Hasta", new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })</div></div></div>
+                <div class="col-md-3"><div class="form-group"><label>Fecha Pago Desde</label><div class="input-group"><div class="input-group-addon"><i class="fa fa-calendar"></i></div>@Html.Editor("FechaPagoDesde", new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })</div></div></div>
+                <div class="col-md-3"><div class="form-group"><label>Fecha Pago Hasta</label><div class="input-group"><div class="input-group-addon"><i class="fa fa-calendar"></i></div>@Html.Editor("FechaPagoHasta", new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })</div></div></div>
+                <div class="col-md-3"><div class="form-group"><label>Fecha Baja Desde</label><div class="input-group"><div class="input-group-addon"><i class="fa fa-calendar"></i></div>@Html.Editor("FechaBajaDesde", new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })</div></div></div>
+                <div class="col-md-3"><div class="form-group"><label>Fecha Baja Hasta</label><div class="input-group"><div class="input-group-addon"><i class="fa fa-calendar"></i></div>@Html.Editor("FechaBajaHasta", new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })</div></div></div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <button type="button" class="btn btn-success btn-block" onclick="javascript:refrescar();">Filtrar</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row row-horizon">
+        @Html.Action("PartialGrid", new { IdUsuario = ViewBag.IdUsuario })
+    </div>
+</form>
+<br />
+<button type="button" class="btn btn-success" title="Exportar a Excel" onclick="submitExportar();">Exportar Excel</button>
+<a class='btn btn-warning ' href='javascript:dlgModal.Ver("@Url.Action("Deuda", "Comunicaciones")")'><i class='icon-plus'></i>Enviar E-Mail a Todos los Alumnos de las Cuotas visibles</a>
+
+
+
+
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script>
+
+        function submitExportar() {
+            $('#hiddenUsuario').val($('#IdUsuario').val());
+            document.getElementById('frmExportar').submit();
+        }
+
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+            $('#IdSede').select2("val", "-1");
+            $('#IdCurso').select2("val", "-1");
+            $('#IdDia').select2("val", "-1");
+            $('#IdPeriodo').select2("val", "-1");
+            $('#IdUsuario').select2("val", "");
+            $('#IdOferta').select2("val", "-1");
+            $('#Estado').select2("val", "-1");
+            $('#IdTipoCurso').select2("val", "-1");
+            $('#IdConcepto').select2("val", "-1");
+            $('#NroCuotaDesde').val("");
+            $('#NroCuotaHasta').val("");
+            $('#ImporteDesde').val("");
+            $('#ImporteHasta').val("");
+            $('#Importe2Desde').val("");
+            $('#Importe2Hasta').val("");
+            $('#FechaVtoDesde').val("");
+            $('#FechaVtoHasta').val("");
+            $('#FechaVto2Desde').val("");
+            $('#FechaVto2Hasta').val("");
+            $('#FechaPagoDesde').val("");
+            $('#FechaPagoHasta').val("");
+            $('#FechaBajaDesde').val("");
+            $('#FechaBajaHasta').val("");
+
+            refresh = true;
+            refrescar();
+        }
+        // Refrescar Grilla
+        function refrescar() {
+            if (refresh === true) {
+                window.Grid.PerformCallback();
+            }
+        }
+        $(function () {
+            //$('#IdSede').change(function () { refrescar(); CargarComboCursos(); CargarComboOfertas(); });
+            //$('#IdCurso').change(function () { refrescar(); });
+            //$('#IdDia').change(function () { refrescar(); });
+            //$('#IdPeriodo').change(function () { refrescar(); CargarComboCursos(); CargarComboOfertas(); });
+            $('#IdPeriodo').change(function () {  CargarComboOfertas(); });
+            //$('#IdUsuario').change(function () { refrescar(); CargarComboCursos(); CargarComboOfertas(); });
+            //$('#IdOferta').change(function () { refrescar(); });
+            //$('#Estado').change(function () { refrescar(); });
+            //$('#IdTipoCurso').change(function () { refrescar(); CargarComboCursos(); CargarComboOfertas(); });
+            //$('#IdConcepto').change(function () { refrescar(); CargarComboCursos(); CargarComboOfertas(); });
+
+            $("#IdSede").select2({
+                allowClear: true
+            });
+            $("#IdTipoCurso").select2({
+                allowClear: true
+            });
+            $("#IdConcepto").select2({
+                allowClear: true
+            });
+            $("#IdCurso").select2({
+                allowClear: true
+            });
+            $("#IdDia").select2({
+                allowClear: true
+            });
+            $("#IdPeriodo").select2({
+                allowClear: true
+            });
+            $("#IdUsuario").select2({
+                placeholder: "Ingresa Nombre o documento...",
+                language: "es",
+                allowClear: true,
+                minimumInputLength: 4,
+                ajax: {
+                    cache: true,
+                    dataType: "json",
+                    type: "GET",
+                    quietMillis: 500,
+                    delay: 250,
+                    url: "@Url.Action("Buscar", "Usuarios")",
+                    data: function (searchTerm) {
+                        return { q: searchTerm };
+                    },
+                    processResults: function (data /*, page*/) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+            $("#IdOferta").select2({
+                allowClear: true
+            });
+            $("#Estado").select2({
+                allowClear: true
+            });
+
+            @{string idUsuario = ViewBag.IdUsuario;
+                if (!string.IsNullOrEmpty(idUsuario))
+                {
+                    <text>
+            $("#IdUsuario").select2('data', { id: '@idUsuario', text: '@ViewBag.NombreUsuario' });
+            //$('#IdUsuario').select2("val", '@idUsuario').trigger('change.select2');;//.trigger('change');
+            //  refrescar();
+            </text>
+                }
+            }
+        });
+
+        function CargarComboCursos() {
+            $('#IdCurso').select2("val", "-1");
+            var combo = $("#IdCurso");
+            var statesProgress = $("#states-loading-progress");
+            statesProgress.show();
+            var URLactual = window.location.pathname;
+            if (URLactual.search('nuevositio') != -1) {
+                $.ajax({
+                    type: "post",
+                    url: "/nuevositio/Cursos/GetCursos",
+                    data: {
+                        IdSede: $('#IdSede').val(),
+                        IdPeriodo: $('#IdPeriodo').val(),
+                        IdUsuario: $('#IdUsuario').val(),
+                        IdTipoCurso: $('#IdTipoCurso').val(),
+                        IdConcepto: $('#IdConcepto').val()
+                    },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        combo.html('');
+                        $.each(data, function (id, option) {
+                            combo.append($('<option></option>').val(option.Value).html(option.Text));
+                        });
+                        statesProgress.hide();
+                    }
+                });
+            }
+            else
+            {
+                $.ajax({
+                    type: "post",
+                    url: "/Cursos/GetCursos",
+                    data: {
+                        IdSede: $('#IdSede').val(),
+                        IdPeriodo: $('#IdPeriodo').val(),
+                        IdUsuario: $('#IdUsuario').val(),
+                        IdTipoCurso: $('#IdTipoCurso').val(),
+                        IdConcepto: $('#IdConcepto').val()
+                    },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        combo.html('');
+                        $.each(data, function (id, option) {
+                            combo.append($('<option></option>').val(option.Value).html(option.Text));
+                        });
+                        statesProgress.hide();
+                    }
+                });
+            }
+        }
+
+        function CargarComboOfertas() {
+            $('#IdOferta').select2("val", "-1");
+            var combo = $("#IdOferta");
+            var statesProgress = $("#states-loading-progress");
+            statesProgress.show();
+            var URLactual = window.location.pathname;
+            if (URLactual.search('nuevositio') != -1) {
+                $.ajax({
+                    type: "post",
+                    url: "/nuevositio/oferta/GetOfertas",
+                    data: {
+                        IdSede: $('#IdSede').val(),
+                        IdPeriodo: $('#IdPeriodo').val(),
+                        IdUsuario: $('#IdUsuario').val(),
+                        IdCurso: $('#IdCurso').val(),
+                        IdTipoCurso: $('#IdTipoCurso').val(),
+                        IdConcepto: $('#IdConcepto').val()
+                    },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        combo.html('');
+                        $.each(data, function (id, option) {
+                            combo.append($('<option></option>').val(option.Value).html(option.Text));
+                        });
+                        statesProgress.hide();
+                    }
+                });
+            }
+            else
+            {
+                $.ajax({
+                    type: "post",
+                    url: "/oferta/GetOfertas",
+                    data: {
+                        IdSede: $('#IdSede').val(),
+                        IdPeriodo: $('#IdPeriodo').val(),
+                        IdUsuario: $('#IdUsuario').val(),
+                        IdCurso: $('#IdCurso').val(),
+                        IdTipoCurso: $('#IdTipoCurso').val(),
+                        IdConcepto: $('#IdConcepto').val()
+                    },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        combo.html('');
+                        $.each(data, function (id, option) {
+                            combo.append($('<option></option>').val(option.Value).html(option.Text));
+                        });
+                        statesProgress.hide();
+                    }
+                });
+            }
+        }
+
+        function filtroCompleto() {
+            if ($('#VistaCompleta').val() == "true") {
+                $('#VistaCompleta').val("false");
+                $('#filtroCompleto').hide();
+            } else {
+                $('#VistaCompleta').val("true");
+                $('#filtroCompleto').show();
+            }
+
+        }
+
+        $(".FechaNacimiento").inputmask("dd/mm/yyyy", { "placeholder": "dd/mm/yyyy" });
+
+        $(".FechaNacimiento").daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: "DD/MM/YYYY"
+        });
+
+        $(document).ready(function () {
+            $("#frmExportar").keypress(function (e) {//Para deshabilitar el uso de la tecla "Enter"
+                if (e.which == 13) {
+                    return false;
+                }
+            });
+        });
+    </script>
+}

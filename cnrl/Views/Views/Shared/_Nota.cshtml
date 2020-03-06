@@ -1,0 +1,160 @@
+﻿@using cnrl
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>@Strings.AppTitulo</title>
+    <meta name="author" content="AVroad">
+    <meta name="description" content="AVroad Portal Comunidad">
+	<meta name="keyword" content="AVroad, Comunidad, Publicidad">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- CSS -->
+	<link href="~/Content/simpliq/assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="~/Content/simpliq/assets/css/style.min.css" rel="stylesheet">
+    <link href="~/Content/simpliq/assets/css/retina.min.css" rel="stylesheet">
+    <link href="~/Scripts/charts/dc.css" rel="stylesheet" />
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	  	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<script src="~/Content/simpliq/assets/js/respond.min.js"></script>
+		<script src="~/Content/simpliq/assets/css/ie6-8.css"></script>
+	<![endif]-->
+	<!--[if !IE]>-->
+	    <script src="~/Content/simpliq/assets/js/jquery-2.0.3.min.js"></script>
+	<!--<![endif]-->
+    <!--[if IE]>
+		<script src="~/Content/simpliq/assets/js/jquery-1.10.2.min.js"></script>
+	<![endif]-->
+	<!--[if !IE]>-->
+	    <script type="text/javascript">
+    	    window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
+    	</script>
+	<!--<![endif]-->
+    <!--[if IE]>
+		<script type="text/javascript">
+		    window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+    <![endif]-->
+    <!-- CSS customizado-->
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="~/Content/avroad.css" />
+	<!-- Favicon and Touch Icons -->
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/Content/simpliq/assets/ico/apple-touch-icon-144-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/Content/simpliq/assets/ico/apple-touch-icon-114-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/Content/simpliq/assets/ico/apple-touch-icon-72-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" href="~/Content/simpliq/assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="~/favicon.ico">
+    <style>
+        html, body {
+            background: #cdeaf8;
+        }
+        #Titulo {
+            margin-left: -15px;
+            margin-right: -15px;
+            background: #4b4b4b;
+            padding: 20px;
+        }
+        #MsgTitulo {
+            color: white;
+        }
+        #Logo {
+            height: 58px;
+            min-height: 58px;
+        }
+    </style>
+    @RenderSection("styles", false)
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="row" id="Titulo">
+            <div class="col-sm-2">
+                <a href="@Url.Action("Index", "Home", new { area = "" })"><span><img id="Logo" class="img-responsive" alt="AVroad Comunidad" src="@Url.Content("~/Content/logo-blanco.png")" /></span></a>
+            </div>
+            <div class="col-sm-10">
+                <h1 id="MsgTitulo">@RenderSection("titulo", false)</h1>
+            </div>
+        </div>
+        <div class="row">
+            @RenderBody()
+        </div>
+    </div>
+    <!-- scripts -->
+    <script src="~/Scripts/avroad.js"></script>
+    <script src="~/Content/simpliq/assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="~/Content/simpliq/assets/js/bootstrap.min.js"></script>
+    <script src="~/Content/simpliq/assets/js/jquery.noty.min.js"></script>
+    <script src="~/Scripts/spin.min.js"></script>
+        <!-- Validación en el Cliente -->
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        var spinner;
+        var opts = {
+            lines: 7, // The number of lines to draw
+            length: 0, // The length of each line
+            width: 30, // The line thickness
+            radius: 30, // The radius of the inner circle
+            corners: 1, // Corner roundness (0..1)
+            rotate: 0, // The rotation offset
+            direction: 1, // 1: clockwise, -1: counterclockwise
+            color: '#000', // #rgb or #rrggbb or array of colors
+            speed: 1, // Rounds per second
+            trail: 50, // Afterglow percentage
+            shadow: false, // Whether to render a shadow
+            hwaccel: true, // Whether to use hardware acceleration
+            className: 'spinner', // The CSS class to assign to the spinner
+            zIndex: 2e9, // The z-index (defaults to 2000000000)
+            top: '50%', // Top position relative to parent
+            left: '50%' // Left position relative to parent
+        };
+        function MostrarSpinner(idElemento, segundos) {
+            if (idElemento == '') idElemento = 'container';
+            window.spinner = new Spinner(opts).spin(document.getElementById(idElemento));
+            if (segundos != 0) {
+                setTimeout(function () {
+                    OcultarSpinner();
+                }, segundos * 1000);
+            }
+        }
+        function OcultarSpinner() {
+            window.spinner.stop();
+        }
+        // Notificaciones
+        // http://ned.im/noty
+        $.noty.defaults = {
+            layout: 'top',
+            animation: {
+                open: { height: 'toggle' },
+                close: { height: 'toggle' },
+                easing: 'swing',
+                // opening & closing animation speed
+                speed: 500
+            },
+            // 10 segundos
+            timeout: 10000,
+            // ['click', 'button', 'hover', 'backdrop']
+            // backdrop click will close all open notifications
+            closeWith: ['click', 'button']
+        };
+        function MostrarAviso(msg) {
+            noty({ text: msg, type: 'information' });
+        }
+        function MostrarError(msg) {
+            noty({ text: msg, type: 'error' });
+        }
+        function MostrarExito(msg) {
+            noty({ text: msg, type: 'success' });
+        }
+
+        $(function() {
+            // Al ingresar...
+            $.validator.setDefaults({
+                focusCleanup: true,
+                onkeyup: false
+            });
+        });
+    </script>
+    @RenderSection("scripts", false)
+</body>
+</html>

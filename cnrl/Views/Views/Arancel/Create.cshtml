@@ -1,0 +1,277 @@
+﻿@model cnrl.precio
+@using cnrl.Helpers
+<script src="../../Scripts/MicrosoftAjax.js" type="text/javascript"></script>
+<script src="../../Scripts/MicrosoftMvcValidation.js" type="text/javascript"></script>
+
+
+@{
+    Layout = null;
+}
+
+@Html.Hidden("Titulo", "Arancel")
+@Html.Hidden("Subtitulo", "Nuevo Arancel")
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.EnableLocalizedClientValidation()
+
+        @using (Ajax.BeginForm("Create", "Arancel", FormMethod.Post, new AjaxOptions
+        {
+            OnSuccess = "AjaxOk",
+            HttpMethod = "POST"
+        }
+                                                                                                                                                                    ))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="box box-solid box-success">
+                <div class="box-header">
+                    <h6 class="box-title" style="font-size: 1.5em;">Ingrese los datos del nuevo arancel</h6>
+                </div>
+
+                <div class="box-body">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <span>@Strings.ErrorMensajeGenerico</span>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                    {
+                        <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Concepto:</label>
+                                @Html.EditorFor(model => model.concepto, new { htmlAttributes = new { @class = "form-control", @type = "text", maxlength = "249" } })
+                                @Html.ValidationMessageFor(model => model.concepto, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Descripción:</label>
+                                @Html.EditorFor(model => model.descripcion, new { htmlAttributes = new { @class = "form-control", @type = "text", maxlength = "249" } })
+                                @Html.ValidationMessageFor(model => model.descripcion, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.CheckBoxFor(model => model.gratuito, htmlAttributes: new { id = "uno" })
+                                @Html.LabelForNormalizada(model => model.gratuito, htmlAttributes: new { @class = "control-label" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="box box-solid box-success" id="cajaPrecio">
+                <div class="box-header">
+                    <h6 class="box-title" style="font-size: 1.5em;">Precios</h6>
+                </div>
+
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Alumno:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-dollar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.alumno, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.alumno, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>No Alumnos:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-dollar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.noalumno, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.noalumno, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Empleado:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-dollar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.empleado, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.empleado, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Mayor de 60:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-dollar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.mayorDe60, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.mayorDe60, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Graduado:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-dollar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.graduado, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.graduado, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        @*Banda Negativa Alumno*@
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Descuento Banda Negativa:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-dollar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.descuentoBandaNegativa, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.descuentoBandaNegativa, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @*Banda Negativa No Alumno*@
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Descuento Banda Negativa No Alumno:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-dollar"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.descuentoBandaNegativaNoAlumno, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.descuentoBandaNegativaNoAlumno, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Descuento una Cuota:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <!-- <i class="fa fa-dollar"></i>-->
+                                        <i class="fa fa-percent"></i>
+                                    </div>
+                                    @Html.EditorFor(model => model.descuentoUnaCuota, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @max = "100", @step = "0.01" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.descuentoUnaCuota, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Dias Segundo Vencimiento:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <!--<i class="fa fa-dollar"></i>-->
+                                    </div>
+                                    @Html.EditorFor(model => model.diasSegundoVencimiento, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @max = 31, @step = "1" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.diasSegundoVencimiento, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Recargo Segundo Vencimiento:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <!--<i class="fa fa-dollar"></i>-->
+                                        <i class="fa fa-percent"></i>
+
+                                    </div>
+                                    @Html.EditorFor(model => model.recargoSegundoVencimiento, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @max = 100, @step = "0.01" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.recargoSegundoVencimiento, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* Botones *@
+            <div class="form-group">
+                <div class="pull-left">
+                    <input type="submit" value="Crear" class="btn btn-flat btn-success" />
+                </div>
+                <div class="pull-right">
+                    <div class="btn btn-flat btn-default">
+                        @Html.ActionLink("Cerrar", "Index")
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+            increaseArea: '30%' // optional
+        });
+
+        $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+
+        $("[name='gratuito']").change(function () {
+            var $checkbox = $('#uno');
+            //console.log($('#uno').val());
+            if ($checkbox.prop('checked')) {
+                $("#cajaPrecio").hide();
+                //console.log("lado verdadero");
+            } else {
+                $("#cajaPrecio").show();
+                //console.log("FALSO");
+            }
+        });
+    });
+
+</script>

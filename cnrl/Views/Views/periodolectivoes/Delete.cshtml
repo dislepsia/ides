@@ -1,0 +1,126 @@
+﻿@model cnrl.periodolectivo
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+@Html.Hidden("Titulo", "Eliminar Periodo Lectivo")
+@Html.Hidden("Subtitulo", "")
+
+<div class="row">
+    <div class="col-md-12">
+@using (Ajax.BeginForm("Delete", "periodolectivoes", FormMethod.Post,
+                                                                    new AjaxOptions
+                                                                    {
+                                                                        OnSuccess = "ChequeoOferta",
+                                                                        HttpMethod = "POST"
+                                                                    }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.codigo)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="box box-solid box-success">
+        <div class="box-header">
+            <h6 class="box-title" style="font-size: 1.5em;">¿Desea eliminar el Periodo Lectivo?</h6>
+        </div>
+
+        <div class="box-body">
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <span>@Strings.ErrorMensajeGenerico</span>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+            }
+
+            <div align="left" style="font-size:13pt">
+                <dl class="dl-horizontal">
+                    <div>
+                        <dd>
+                            <label>Fecha Desde:</label>
+                            @Html.DisplayFor(model => model.desdeFecha)
+                        </dd>
+                        <dd>
+                            <label>Fecha Hasta:</label>
+                            @Html.DisplayFor(model => model.hastaFecha)
+                        </dd>
+
+                        <dd>
+                            <label>Hora de Inicio del Curso:</label>
+                            @Html.DisplayFor(model => model.periodoHoraDesde)
+                        </dd>
+                        <dd>
+                            <label>Hora de Fin del Curso:</label>
+                            @Html.DisplayFor(model => model.periodoHoraDesde)
+                        </dd>
+
+                        <dd>
+                            <label>Inscripcion Desde:</label>
+                            @Html.DisplayFor(model => model.fechaInscripcionDesde)
+                        </dd>
+                        <dd>
+                            <label>Inscripcion Hasta:</label>
+                            @Html.DisplayFor(model => model.fechaInscripcionHasta)
+                        </dd>
+
+                        <dd>
+                            <label>Hora de Inicio de la Inscripción:</label>
+                            @Html.DisplayFor(model => model.inscripcionHoraDesde)
+                        </dd>
+                        <dd>
+                            <label>Hora de Inicio de la Inscripción:</label>
+                            @Html.DisplayFor(model => model.inscripcionHoraHasta)
+                        </dd>
+
+                        <dd>
+                            <label>Fecha de Primera Cuota:</label>
+                            @Html.DisplayFor(model => model.fechaPrimeraCuota)
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+
+        </div>
+
+    </div>
+
+    @* Botones *@
+    <div class="form-group">
+        <div class="pull-right">
+            <input type="submit" value="Eliminar" class="btn btn-flat btn-success" />
+        </div>
+        <div class="pull-left">
+            <div class="btn btn-flat btn-default">
+                @Html.ActionLink("Cerrar", "Index")
+            </div>
+        </div>
+    </div>
+}
+            
+    </div>
+</div>
+
+<script>
+    function ChequeoOferta(data) {
+            console.log(data);
+            if (data.ok === true) {
+                MensajeExito('Operación finalizada con éxito');
+            } else {
+                //Recarga el formulario con los errores recibidos
+                MensajeError('No se puede eliminar aquellos periodos lectivos que tienen una oferta asociada');
+                //$('#DlgGenericoBody').html(data);
+            }
+            $('.modal').modal('hide');
+    }
+
+</script>

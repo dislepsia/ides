@@ -1,0 +1,115 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "Id";
+        settings.Caption = "Alumnos";
+
+        settings.CallbackRouteValues = new { Controller = "cursa", Action = "PartialGrid" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        // Columnas
+        settings.Columns.Add(col => { col.FieldName = "Id"; col.Caption = Strings.ColId; col.Visible = false; });
+        settings.Columns.Add(col => { col.FieldName = "curso.codigo"; col.Caption = Strings.ColId; col.Visible = false; });
+        settings.Columns.Add(col => { col.FieldName = "curso.descripcion"; col.Caption = "Curso"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.NroDocumento"; col.Caption = "N° Doc"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Nombre"; col.Caption = "Nombre"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Apellido"; col.Caption = "Apellido"; });
+
+        // Botones
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+
+            "<button type='button' class='btn btn-flat btn-xs btn-info eliminar' onclick='EliminarNivel({0},{1});' id='BotonEliminarNivel_{0}' name='BotonEliminarNivel' value='{0}' title='{2}'>{3}</button>&nbsp;",
+
+            DataBinder.Eval(c.DataItem, "AspNetUsers.NroDocumento"),
+            DataBinder.Eval(c.DataItem, "curso.codigo"),
+            "Eliminar Nivel",
+            "<i class='fa fa-trash'></i>"
+
+                                                                            )
+                                            );
+            column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+        "Operaciones"
+        ));
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 150;
+        });
+
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+
+    }
+).Bind(Model).GetHtml()
+
+<script>
+    function EliminarNivel(dni, curso) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/cursa/EliminarNivelGrid",
+                data: { texto: dni, IdCurso: curso },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        MensajeExito('Operación finalizada con éxito');
+                        window.Grid.PerformCallback();
+                    }
+                    else {
+                        MensajeError('Operación finalizada con errores');
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/cursa/EliminarNivelGrid",
+                data: { texto: dni, IdCurso: curso },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        MensajeExito('Operación finalizada con éxito');
+                        window.Grid.PerformCallback();
+                    }
+                    else {
+                        MensajeError('Operación finalizada con errores');
+                    }
+                }
+            });
+        }
+    }
+</script>

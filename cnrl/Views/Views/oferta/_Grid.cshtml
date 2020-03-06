@@ -1,0 +1,238 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+@{
+    var vistaCompleta = (bool?)ViewBag.VistaCompleta;
+}
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "Id";
+        settings.Caption = Strings.TituloOfertas;
+        settings.CallbackRouteValues = new { Controller = "Oferta", Action = "PartialGrid" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.NextColumn;
+
+        // Columnas
+
+        if (vistaCompleta.HasValue && vistaCompleta.Value)
+        {
+            settings.Columns.Add(col => { col.FieldName = "curso1.tipocurso1.descripcion"; col.Caption = Strings.ColTipoCurso; });
+            settings.Columns.Add(col => { col.FieldName = "curso1.descripcion"; col.Caption = Strings.ColCurso; });
+            settings.Columns.Add(col => { col.FieldName = "sede1.nombre"; col.Caption = Strings.ColSede; });
+            settings.Columns.Add(col => { col.FieldName = "periodolectivo1.descripcion"; col.Caption = Strings.ColPeriodo; });
+            settings.Columns.Add(col => { col.FieldName = "horario"; col.Caption = "Horario"; });
+            settings.Columns.Add(col => { col.FieldName = "cantidadInscriptos"; col.Caption = "Inscriptos"; });
+            settings.Columns.Add(col => { col.FieldName = "cantidadInscriptosConfirmados"; col.Caption = "Confirmados "; });
+            
+            settings.Columns.Add(col => { col.FieldName = "cupo"; col.Caption = "Cupo"; });
+            settings.Columns.Add(col => { col.FieldName = "cupoMinimo"; col.Caption = "Cupo Mínimo"; });
+            settings.Columns.Add(col => { col.FieldName = "recaudacionMinima"; col.Caption = "Recaudacion Mínima"; col.PropertiesEdit.DisplayFormatString = "c"; });
+            settings.Columns.Add(col => { col.FieldName = "importeInscritos"; col.Caption = "Recaudación Parcial"; col.PropertiesEdit.DisplayFormatString = "c"; });
+            settings.Columns.Add(col => { col.FieldName = "AspNetUsers.descripcion"; col.Caption = Strings.ColDocente; });
+
+            settings.Columns.Add(col => { col.FieldName = "habilitada"; col.Caption = "Habilitada"; col.ColumnType = MVCxGridViewColumnType.CheckBox; });
+            settings.Columns.Add(col => { col.FieldName = "fechaDesde"; col.Caption = "Desde"; col.PropertiesEdit.DisplayFormatString = "d"; });
+            settings.Columns.Add(col => { col.FieldName = "fechaHasta"; col.Caption = "Hasta"; col.PropertiesEdit.DisplayFormatString = "d"; });
+            settings.Columns.Add(col => { col.FieldName = "inscripcionDesde"; col.Caption = "Inscripcion Desde"; col.PropertiesEdit.DisplayFormatString = "d"; });
+            settings.Columns.Add(col => { col.FieldName = "inscripcionHasta"; col.Caption = "Inscripcion Hasta"; col.PropertiesEdit.DisplayFormatString = "d"; });
+
+            // Colorea los registros que no cumplen con requisitos
+            settings.HtmlRowPrepared = (sender, e) =>
+            {
+                int inscriptos = 0; e.GetValue("cantidadInscriptos");
+                if(e.GetValue("cantidadInscriptos") != null && e.GetValue("cantidadInscriptos").ToString() != "")
+                {
+                    inscriptos = int.Parse(e.GetValue("cantidadInscriptos").ToString());
+                }
+
+                int inscriptosMinimos = 0; e.GetValue("cupoMinimo");
+                if (e.GetValue("cupoMinimo") != null && e.GetValue("cupoMinimo").ToString() != "")
+                {
+                    inscriptosMinimos = int.Parse(e.GetValue("cupoMinimo").ToString());
+                }
+
+                decimal recaudacion = 0; e.GetValue("importeInscritos");
+                if (e.GetValue("importeInscritos") != null && e.GetValue("importeInscritos").ToString() != "")
+                {
+                    recaudacion = decimal.Parse(e.GetValue("importeInscritos").ToString());
+                }
+                decimal recaudacionMinima = 0;  e.GetValue("recaudacionMinima");
+                if (e.GetValue("recaudacionMinima") != null && e.GetValue("recaudacionMinima").ToString() != "")
+                {
+                    recaudacionMinima = decimal.Parse(e.GetValue("recaudacionMinima").ToString());
+                }
+                if (inscriptos < inscriptosMinimos && recaudacion < recaudacionMinima)
+                {
+                    e.Row.BackColor = Color.FromArgb(255,150, 150);
+                }
+                if (inscriptos < inscriptosMinimos)
+                {
+                    e.Row.BackColor = Color.FromArgb(255, 175, 150);
+                }
+                if (recaudacion < recaudacionMinima)
+                {
+                    e.Row.BackColor = Color.FromArgb(255, 150, 175);
+                }
+
+                //var referente = e.GetValue("Referente");
+                //if (referente != null && bool.Parse(referente.ToString()))
+                //    e.Row.BackColor = Color.LightGoldenrodYellow;
+                //var referenteJurisdiccional = e.GetValue("ReferenteJurisdiccional");
+                //if (referenteJurisdiccional != null && bool.Parse(referenteJurisdiccional.ToString()))
+                //    e.Row.BackColor = Color.LightGreen;
+                //var activo = e.GetValue("Activo");
+                //if (activo == null)
+                //    return;
+                //if (!bool.Parse(activo.ToString()))
+                //    e.Row.BackColor = Color.FromArgb(255, 220, 220);
+            };
+        }
+        else
+        {
+            settings.Columns.Add(col => { col.FieldName = "codigo"; col.Caption = Strings.ColId; col.Visible = false; });
+            settings.Columns.Add(col => { col.FieldName = "curso1.tipocurso1.descripcion"; col.Caption = Strings.ColTipoCurso; });
+            settings.Columns.Add(col => { col.FieldName = "curso1.descripcion"; col.Caption = Strings.ColCurso; });
+            settings.Columns.Add(col => { col.FieldName = "sede1.nombre"; col.Caption = Strings.ColSede; });
+            settings.Columns.Add(col => { col.FieldName = "fechaDesde"; col.Caption = "Desde"; col.PropertiesEdit.DisplayFormatString = "d"; });
+            settings.Columns.Add(col => { col.FieldName = "fechaHasta"; col.Caption = "Hasta"; col.PropertiesEdit.DisplayFormatString = "d"; });
+            settings.Columns.Add(col => { col.FieldName = "habilitada"; col.Caption = "Habilitada"; col.ColumnType = MVCxGridViewColumnType.CheckBox; });
+            settings.Columns.Add(col => { col.FieldName = "inscripcionDesde"; col.Caption = "Inscripcion Desde"; col.PropertiesEdit.DisplayFormatString = "d"; });
+            settings.Columns.Add(col => { col.FieldName = "inscripcionHasta"; col.Caption = "Inscripcion Hasta"; col.PropertiesEdit.DisplayFormatString = "d"; });
+            settings.Columns.Add(col => { col.FieldName = "RequierePreInscripcion"; col.Caption = "Requiere Pre Inscripción"; col.ColumnType = MVCxGridViewColumnType.CheckBox; });
+        }
+
+        // Botones
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+                    "<button type='button' class='btn btn-flat btn-xs btn-info habilitar' onclick='habilitarAjax({12});' id='BotonHabilitar_{12}' name='BotonHabilitar' value='{12}' title='{13}'>{14}</button>&nbsp;" +
+                    //"<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>&nbsp;" +
+                    "<a class='btn btn-flat btn-xs btn-info' href='{9}' title='{10}'>{11}</a>&nbsp;" +
+                    "<a class='btn btn-flat btn-xs btn-info' href='{3}' title='{4}'>{5}</a>" +
+                    "<a class='btn btn-flat btn-xs btn-info' href='{6}' title='{7}' style='margin-left:2px;'>{8}</a>&nbsp;"+
+                    "<a class='btn btn-flat btn-xs btn-info' href='{15}' target=\"_blank\" title='{16}'>{17}</a>",
+
+                    string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("", "Oferta", new { id = DataBinder.Eval(c.DataItem, "codigo") })),
+                    "Precargar Notas",
+                    "<i class='fa fa-plus'></i>",
+
+                    string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Edit", "Oferta", new { id = DataBinder.Eval(c.DataItem, "codigo") })),
+                    Strings.BtnEditar,
+                    "<i class='fa fa-pencil'></i>",
+
+                    string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Delete", "Oferta", new { id = DataBinder.Eval(c.DataItem, "codigo") })),
+                    Strings.BtnBorrar,
+                    "<i class='fa fa-trash'></i>",
+
+                    string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Details", "Oferta", new { id = DataBinder.Eval(c.DataItem, "codigo") })),
+                    Strings.BtnVer,
+                    "<i class='fa fa-search'></i>",
+
+                    DataBinder.Eval(c.DataItem, "codigo"),
+                    Strings.BtnHabilitar,
+                    ((bool)DataBinder.Eval(c.DataItem, "habilitada") == false) ? "<i class='fa fa-check'></i>" : "<i class='fa fa-times'></i>",
+                    @Url.Action("Ficha", "Asistencia", new { id = DataBinder.Eval(c.DataItem, "codigo"), imprimir = true }),
+                    //string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Ficha", "Asistencia", new { id = DataBinder.Eval(c.DataItem, "codigo") })),
+                    "Imprimir planilla de Asistencia",
+                    "<i class='fa fa-print'></i>"
+
+                    ));
+            column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+                "<a class='btn btn-flat btn-xs btn-info' href='{0}'><i class='icon-plus'></i>&nbsp;{1}</a>",
+                string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Create", "Oferta")),
+                Strings.BtnNuevo
+                ));
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 150;
+        });
+        //<a class="btn btn-flat btn-success" href="@Url.Action("Ficha", "Asistencia", new { id = Model.codigo , imprimir = true })" target="_blank">Imprimir<i class="fa fa-print"></i></a>
+
+        // Filtros
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        settings.Styles.FilterRow.BackColor = Color.LightGray;
+        settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+    }
+).Bind(Model).GetHtml()
+
+
+<script>
+    //$(".habilitar").click(function () {
+    //    $.ajax({
+    //        type: "post",
+    //        url: "/oferta/Habilitar",
+    //        data: { IdOferta: $(this).val() },
+    //        datatype: "json",
+    //        traditional: true,
+    //        success: function (data) {
+    //            if (data.ok === true) {
+    //                window.Grid.PerformCallback();
+    //            }
+    //        }
+    //    });
+    //});
+    function habilitarAjax(codigoOferta) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/oferta/Habilitar",
+                data: { IdOferta: codigoOferta },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/oferta/Habilitar",
+                data: { IdOferta: codigoOferta },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                    }
+                }
+            });
+        }
+    }
+</script>

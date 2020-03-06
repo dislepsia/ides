@@ -1,0 +1,208 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "Id";
+        settings.Caption = Strings.TituloUsuarios;
+        settings.CallbackRouteValues = new { Controller = "Usuarios", Action = "PartialGrid" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        // Columnas
+        settings.Columns.Add(col => { col.FieldName = "Id"; col.Caption = Strings.ColId; col.Visible = false; });
+        settings.Columns.Add(col => { col.FieldName = "tipodocumento1.descripcion"; col.Caption = "Tipo Doc"; col.Width = Unit.Pixel(30); });
+        settings.Columns.Add(col => { col.FieldName = "NroDocumento"; col.Caption = "N° Doc"; });
+        settings.Columns.Add(col => { col.FieldName = "Nombre"; col.Caption = "Nombre"; });
+        settings.Columns.Add(col => { col.FieldName = "Apellido"; col.Caption = "Apellido"; });
+        settings.Columns.Add(col => { col.FieldName = "Email"; col.Caption = "Email"; });
+        settings.Columns.Add(col => { col.FieldName = "Telefono"; col.Caption = "Telefono"; });
+        settings.Columns.Add(col => { col.FieldName = "Telefono2"; col.Caption = "Telefono 2"; });
+        settings.Columns.Add(col => { col.FieldName = "TipoAlumnoDescripcion"; col.Caption = "Tipo"; });
+        settings.Columns.Add(col => { col.FieldName = "Carrera"; col.Caption = "Carrera"; });
+        settings.Columns.Add(col => { col.FieldName = "localidad1.localidad1"; col.Caption = "Localidad"; });
+        settings.Columns.Add(col => { col.FieldName = "localidad1.provincia.provincia1"; col.Caption = "Provincia"; });
+        settings.Columns.Add(col => { col.FieldName = "FechaNacimiento"; col.Caption = "Fec Nac"; col.PropertiesEdit.DisplayFormatString = "d"; });
+
+
+        //column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+        //            ((((string)DataBinder.Eval(c.DataItem, "EstadoDescripcion")) != "Paga") ? "<button type='button' class='btn btn-flat btn-xs btn-info imputar' onclick='pedirRecibo({0});' id='BotonImputar_{0}' name='BotonImputar' value='{0}' title='{1}'>{2}</button>&nbsp;" : "") +
+        //            ((((string)DataBinder.Eval(c.DataItem, "EstadoDescripcion")) != "Baja") ? "<button type='button' class='btn btn-flat btn-xs btn-info baja' onclick='bajaAjax({0});' id='BotonBaja_{0}' name='BotonBaja' value='{0}' title='{3}'>{4}</button>&nbsp;" : "") +
+        //            ((((string)DataBinder.Eval(c.DataItem, "EstadoDescripcion")) != "Impaga") ? "<button type='button' class='btn btn-flat btn-xs btn-info impaga' onclick='impagaAjax({0});' id='BotonImpaga_{0}' name='BotonImpaga' value='{0}' title='{5}'>{6}</button>&nbsp;" : ""),
+        //                DataBinder.Eval(c.DataItem, "Id"),
+        //                "Imputar Pago",
+        //                "<i class='fa fa-usd'></i>",
+        //                "Baja Cuota",
+        //                "<i class='fa fa-times'></i>",
+        //                "Desvincular Pago",
+        //                "<i class='fa fa-undo'></i>"
+        //            ));
+
+        // Botones
+        settings.Columns.Add(column =>
+        {
+            if (string.IsNullOrEmpty(ViewBag.SelectController))//SelectAction
+            {
+                column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+                "<a class='btn btn-flat btn-xs btn-info' href='{9}' title='{10}'>{11}</a>&nbsp;" +
+                "<a class='btn btn-flat btn-xs btn-info' href='{15}' title='{16}'>{17}</a>&nbsp;" +
+                "<a class='btn btn-flat btn-xs btn-info' href='{12}' title='{13}'>{14}</a>&nbsp;" +
+                "<a class='btn btn-flat btn-xs btn-info' href='{18}' title='{19}'>{20}</a>&nbsp;" +
+                "<button type='button' class='btn btn-flat btn-xs btn-info ' onclick=\"pedirPassword('{21}');\" id='BotonPedirPassword_{21}' name='BotonPedirPassword' value='{21}' title='{22}'>{23}</button>&nbsp;" +
+                "<a class='btn btn-flat btn-xs btn-info' href='{6}' title='{7}'>{8}</a>&nbsp;" +
+                "<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>" +
+                "<a class='btn btn-flat btn-xs btn-info' href='{3}' title='{4}' style='margin-left:2px;'>{5}</a>",
+                string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Edit", "Usuarios", new { id = DataBinder.Eval(c.DataItem, "Id") })),
+                Strings.BtnEditar,
+                "<i class='fa fa-pencil'></i>",
+                string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Delete", "Usuarios", new { id = DataBinder.Eval(c.DataItem, "Id") })),
+                Strings.BtnBorrar,
+                "<i class='fa fa-trash'></i>",
+                string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Details", "Usuarios", new { id = DataBinder.Eval(c.DataItem, "Id") })),
+                Strings.BtnVer,
+                "<i class='fa fa-search'></i>",
+
+                string.Format("{0}", @Url.Action("Inscripcion", "Cursa", new { id = DataBinder.Eval(c.DataItem, "Id") })),
+
+                Strings.BtnInscribir,
+                "<i class='fa fa-plus-square'></i>",
+                string.Format("{0}", @Url.Action("Index", "Deuda", new { usuario = DataBinder.Eval(c.DataItem, "Id") })),
+                Strings.TituloCuotas,
+                "<i class='fa fa-dollar'></i>",
+                string.Format("{0}", @Url.Action("FormaDePago", "Cursa", new { Id = DataBinder.Eval(c.DataItem, "Id") })),
+                "Forma de pago",
+                "<i class='fa fa-credit-card'></i>",
+                
+                string.Format("{0}", @Url.Action("Index", "Cursa", new { usuario = DataBinder.Eval(c.DataItem, "Id") })),
+                "Cursadas",
+                "<i class='fa fa-graduation-cap '></i>",
+                
+                DataBinder.Eval(c.DataItem, "Id"),
+                "Cambiar Contraseña",
+                "<i class='fa fa-lock'></i>"
+                ));
+
+                //"<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>&nbsp;" +
+                //"<a class='btn btn-flat btn-xs btn-info' href='{3}' title='{4}'>{5}</a>&nbsp;" +
+                //"<btn class='btn btn-flat btn-xs btn-info' onclick='{6}' title='{7}'>{8}</btn>",
+                //@Url.Action("Index", "Servicios", new { instituto = DataBinder.Eval(c.DataItem, "Id") }),
+                //Strings.ColServicios,
+                //DataBinder.Eval(c.DataItem, "Servicios"),
+                //@Url.Action("Index", "Nodos", new { instituto = DataBinder.Eval(c.DataItem, "Id") }),
+                //Strings.ColNodos,
+                //DataBinder.Eval(c.DataItem, "Nodos"),
+                //string.Format("dlgResponsables.Ver({0},{1})", (int)TipoResponsable.Instituto, DataBinder.Eval(c.DataItem, "Id")),
+                //Strings.ColResponsables,
+                //DataBinder.Eval(c.DataItem, "Responsables")
+            }
+            else
+            {
+                column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+               "<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>&nbsp;",
+               string.Format("{0}", @Url.Action(ViewBag.SelectAction,ViewBag.SelectController, new { id = DataBinder.Eval(c.DataItem, "Id") })),
+               Strings.BtnSeleccionar,
+               "<i class='fa fa-check'></i>"
+               ));
+            }
+            //column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+            //    "<a class='btn btn-flat btn-xs btn-info' href='{0}'><i class='icon-plus'></i>&nbsp;{1}</a>",
+            //    string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Create", "Cursos")),
+            //    Strings.BtnNuevo
+            //    ));
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 250;
+        });
+        // Filtros
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        settings.Styles.FilterRow.BackColor = Color.LightGray;
+        settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+                settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";  
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";     
+    }
+).Bind(Model).GetHtml()
+
+
+<script>
+    function pedirPassword(IdUsuario) {
+        bootbox.prompt({
+            backdrop: false,
+            title: "Ingrese la nueva Contraseña",
+            callback: function (result) { cambiarPassword(IdUsuario, result); }
+        });
+    }
+
+    function cambiarPassword(IdUsuario, nuevoPassword) {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/cuenta/CambiarPassword",
+                data: { IdUsuario: IdUsuario, NuevoPassword: nuevoPassword },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        //window.Grid.PerformCallback();
+                        MensajeExito('La contraseña se cambió correctamente');
+                    }
+                    else
+                    {
+                        MensajeError('Ocurrió un error al cambiar la contraseña');
+
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/cuenta/CambiarPassword",
+                data: { IdUsuario: IdUsuario, NuevoPassword: nuevoPassword },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        //window.Grid.PerformCallback();
+                        MensajeExito('La contraseña se cambió correctamente');
+                    }
+                    else
+                    {
+                        MensajeError('Ocurrió un error al cambiar la contraseña');
+
+                    }
+                }
+            });
+        }
+    }
+</script>

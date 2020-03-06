@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit
+  http://go.microsoft.com/fwlink/?LinkId=301880
+  -->
+<configuration>
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+    <sectionGroup name="devExpress">
+      <section name="themes" type="DevExpress.Web.ThemesConfigurationSection, DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false" />
+      <section name="compression" type="DevExpress.Web.CompressionConfigurationSection, DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false" />
+      <section name="settings" type="DevExpress.Web.SettingsConfigurationSection, DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false" />
+      <section name="errors" type="DevExpress.Web.ErrorsConfigurationSection, DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false" />
+    </sectionGroup>
+    <sectionGroup name="applicationSettings" type="System.Configuration.ApplicationSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <section name="cnrl.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+    </sectionGroup>
+  </configSections>
+  <connectionStrings>
+    <add name="Cnrl" providerName="System.Data.SqlClient" connectionString="data source=localhost;initial catalog=socioculturalesExtension;persist security info=True;user id=sa;password=Casares4467;MultipleActiveResultSets=True;App=EntityFramework" />
+    <add name="socioculturalesEntities" connectionString="metadata=res://*/base.csdl|res://*/base.ssdl|res://*/base.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=localhost;initial catalog=socioculturalesExtension;persist security info=True;user id=sa;password=Casares4467;multipleactiveresultsets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+    <!--<add name="Cnrl" providerName="System.Data.SqlClient" connectionString="data source=10.10.200.23\sql2014;initial catalog=socioculturalesExtension;persist security info=True;user id=sa;password=desarrollo123;MultipleActiveResultSets=True;App=EntityFramework" />
+    <add name="socioculturalesEntities" connectionString="metadata=res://*/base.csdl|res://*/base.ssdl|res://*/base.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=10.10.200.23\sql2014;initial catalog=socioculturalesExtension;persist security info=True;user id=sa;password=desarrollo123;multipleactiveresultsets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient" />-->
+   
+
+
+  </connectionStrings>
+  <appSettings>
+    <add key="webpages:Version" value="3.0.0.0" />
+    <add key="webpages:Enabled" value="false" />
+    <add key="ClientValidationEnabled" value="true" />
+
+    <add key="validarCaptcha" value="true" />
+    
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+    <!--<add key="OrigenTeso" value="IDIO" />-->
+    <add key="OrigenTeso" value="EXTE" />
+    <add key="ServicioTeso2" value="http://10.10.200.119/api/" />
+    <add key="ServicioTeso" value="http://localhost:40722/api/" />
+    <add key="ServicioTeso1" value="http://10.10.200.163:8080/api/" />
+    <add key="CupoDefault" value="35" />
+    <add key="DiasSegundoVencimientoDefault" value="10" />
+    <add key="Descuento1CuotaDefault" value="10" />
+    <add key="RecargoSegundoVencimientoDefault" value="10" />
+    <add key="DiasNuevaCuotaPorCambioDeComision" value="10" />
+    <add key="mails" value="" />
+    <!--afungueirino@anlis.gov.ar; adrian013@gmail.com-->
+    <add key="Dias1erCuota" value="5" />
+    <add key="ComunicacionesMailGraduado" value="graduados@unlam.edu.ar" />
+    <add key="ComunicacionesMail" value="idiomasins@unlam.edu.ar" />
+    <add key="ComunicacionesPass" value="QAZwsx123" />
+    <!--<add key="ComunicacionesSmtpDireccion" value="10.10.200.204" />
+    <add key="ComunicacionesSmtpPuerto" value="25" />-->
+    <add key="ComunicacionesSmtpDireccion" value="smtp.sparkpostmail.com" />
+
+    <add key="ComunicacionesSmtpPuerto" value="587" />
+    <!--
+   <add key="ComunicacionesMail" value="afungue@unlam.edu.ar" />
+    <add key="ComunicacionesPass" value="adrian017" />
+    <add key="ComunicacionesSmtpDireccion" value="smtp.office365.com" />
+    <add key="ComunicacionesSmtpPuerto" value="587" />
+	  -->
+
+    
+    <add key="MailAvisoBajaSanJustoIdiomas" value="maspiccia@unlam.edu.ar; idiomasins@unlam.edu.ar" />
+    <add key="MailAvisoBajaSanJustoExtensionMagali" value="maspiccia@unlam.edu.ar; idiomasins@unlam.edu.ar" />
+    <add key="MailAvisoBajaSanJustoExtensionGallegoCastro" value="egallego@unlam.edu.ar; scastro@unlam.edu.ar; idiomasins@unlam.edu.ar" />
+
+    <add key="MailAvisoBajaCongreso" value="maspiccia@unlam.edu.ar; idiomascongreso@unlam.edu.ar" />
+    <add key="MailAvisoBajaItuzaingo" value="maspiccia@unlam.edu.ar; idiomaitu@yahoo.com.ar" />
+    <add key="MailAvisoBajaLaFerrere" value="cursosunlam@laferrere.com.ar" />
+    <add key="LinkAvisoBaja" value="http://idiomas.unlam.edu.ar/baja" />
+
+    <add key="MailAvisoBajaGraduados" value="graduados@unlam.edu.ar" />
+    <add key="LinkAvisoBajaGraduados" value="https://cursosgraduados.unlam.edu.ar/nuevositio/baja" />
+    <!--<add key="MailAvisoBajaSanJustoIdiomas" value="damian.vitiritti@gmail.com" />
+    <add key="MailAvisoBajaSanJustoExtensionMagali" value="damian.vitiritti@gmail.com" />
+    <add key="MailAvisoBajaSanJustoExtensionGallegoCastro" value="damian.vitiritti@gmail.com" />
+
+    <add key="MailAvisoBajaCongreso" value="damian.vitiritti@gmail.com" />
+    <add key="MailAvisoBajaItuzaingo" value="damian.vitiritti@gmail.com" />
+    <add key="MailAvisoBajaLaFerrere" value="damian.vitiritti@gmail.com" />
+    <add key="LinkAvisoBaja" value="http://idiomas.unlam.edu.ar/baja" />-->
+
+    <add key="ServicioTesoUsuario" value="servicio_tesoreria:teso_1234" />
+
+  </appSettings>
+  <system.web>
+    <authentication mode="None" />
+    <compilation debug="true" targetFramework="4.5">
+      <assemblies>
+        <add assembly="DevExpress.Data.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+        <add assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+        <add assembly="DevExpress.Web.Mvc5.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+        <add assembly="DevExpress.Utils.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+        <add assembly="DevExpress.Web.ASPxThemes.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+        <add assembly="DevExpress.RichEdit.v15.1.Core, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+      </assemblies>
+    </compilation>
+    <pages controlRenderingCompatibilityVersion="4.0">
+      <namespaces>
+        <add namespace="System.Web.Helpers" />
+        <add namespace="System.Web.Mvc" />
+        <add namespace="System.Web.Mvc.Ajax" />
+        <add namespace="System.Web.Mvc.Html" />
+        <add namespace="System.Web.Optimization" />
+        <add namespace="System.Web.Routing" />
+        <add namespace="System.Web.WebPages" />
+        <!--DEVEXPRESS_MANUAL - INI-->
+        <add namespace="DevExpress.Web" />
+        <add namespace="DevExpress.Web.Mvc" />
+        <add namespace="DevExpress.Web.Mvc.UI" />
+        <add namespace="DevExpress.Utils" />
+        <!--DEVEXPRESS_MANUAL - FIN-->
+      </namespaces>
+      <controls>
+        <add tagPrefix="dx" namespace="DevExpress.Web" assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+      </controls>
+    </pages>
+    <globalization culture="es-AR" uiCulture="es-AR" />
+    <!--<customErrors mode="RemoteOnly" />-->
+    <customErrors mode="Off" />
+    <httpRuntime targetFramework="4.5" />
+
+
+  </system.web>
+  <system.webServer>
+    <modules runAllManagedModulesForAllRequests="true">
+      <remove name="FormsAuthentication" />
+      <add type="DevExpress.Web.ASPxHttpHandlerModule, DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" name="ASPxHttpHandlerModule" />
+    </modules>
+    <handlers>
+      <add type="DevExpress.Web.ASPxHttpHandlerModule, DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" verb="GET,POST" path="DX.ashx" name="ASPxHttpHandlerModule" preCondition="integratedMode" />
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers>
+    <staticContent>
+      <remove fileExtension=".svg" />
+      <remove fileExtension=".eot" />
+      <remove fileExtension=".otf" />
+      <remove fileExtension=".woff" />
+      <remove fileExtension=".woff2" />
+      <mimeMap fileExtension=".svg" mimeType="image/svg+xml" />
+      <mimeMap fileExtension=".eot" mimeType="application/vnd.ms-fontobject" />
+      <mimeMap fileExtension=".otf" mimeType="font/otf" />
+      <mimeMap fileExtension=".woff" mimeType="application/font-woff" />
+      <mimeMap fileExtension=".woff2" mimeType="application/font-woff2" />
+    </staticContent>
+  </system.webServer>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.OAuth" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.Cookies" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" culture="neutral" publicKeyToken="30ad4fe6b2a6aeed" />
+        <bindingRedirect oldVersion="0.0.0.0-9.0.0.0" newVersion="9.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-1.1.0.0" newVersion="1.1.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-1.6.5135.21930" newVersion="1.6.5135.21930" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Antlr3.Runtime" publicKeyToken="eb42632606e9261f" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-3.5.0.2" newVersion="3.5.0.2" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <devExpress>
+    <themes enableThemesAssembly="true" styleSheetTheme="" theme="MetropolisBlue" customThemeAssemblies="" />
+    <compression enableHtmlCompression="true" enableCallbackCompression="true" enableResourceCompression="true" enableResourceMerging="true" />
+    <settings doctypeMode="Html5" rightToLeft="false" embedRequiredClientLibraries="false" ieCompatibilityVersion="edge" />
+    <errors callbackErrorRedirectUrl="" />
+  </devExpress>
+  <entityFramework>
+    <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
+      <parameters>
+        <parameter value="mssqllocaldb" />
+      </parameters>
+    </defaultConnectionFactory>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+    </providers>
+  </entityFramework>
+  <location path="Content" allowOverride="false">
+    <system.web>
+      <authorization>
+        <allow users="*" />
+      </authorization>
+    </system.web>
+  </location>
+  <location path="Scripts" allowOverride="false">
+    <system.web>
+      <authorization>
+        <allow users="*" />
+      </authorization>
+    </system.web>
+  </location>
+  <system.net>
+    <mailSettings>
+      <smtp from="idiomasins@unlam.edu.ar">
+        <network host="10.10.200.204" />
+      </smtp>
+    </mailSettings>
+  </system.net>
+  <applicationSettings>
+    <cnrl.Properties.Settings>
+      <setting name="cnrl_guarani_DatosAlumnosBecas" serializeAs="String">
+        <value>http://guarani:8080/servicioGuarani/DatosAlumnosBecas</value>
+      </setting>
+    </cnrl.Properties.Settings>
+  </applicationSettings>
+</configuration>

@@ -1,0 +1,125 @@
+﻿@using cnrl.Helpers
+@model cnrl.curso
+
+@{
+        Layout = null;
+        string modo = ViewBag.modo;
+        var esAlta = modo == "CreateCorrelativa";
+        var esVista = modo == "ViewCorrelativa";
+        var esEdit = modo == "EditCorrelativa";
+        var esBaja = modo == "DeleteCorrelativa";
+        var titulo = string.Format("{0} {1}", esAlta ? Strings.BtnNuevo : (esEdit ? Strings.BtnEditar : (esBaja ? Strings.BtnBorrar : Strings.BtnVer)), Strings.ColCurso);
+        ViewBag.Titulo = Strings.ColCorrelativa;
+        ViewBag.Subtitulo = titulo;
+    }
+
+    @Html.Hidden("Titulo", Strings.ColCorrelativa)
+@Html.Hidden("Subtitulo", titulo)
+@* Por si sale en una 2 Pantalla de Modal *@
+@Html.Hidden("Titulo2", Strings.ColCorrelativa)
+@Html.Hidden("Subtitulo2", titulo)
+
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Ajax.BeginForm(modo, "Cursos", FormMethod.Post,
+                            new AjaxOptions
+                            {
+                                OnSuccess = ViewBag.Callback,
+                                HttpMethod = "POST"
+                            }))
+        {
+            <div class="box-body" id="controles">
+                @if (esBaja)
+                {
+                    <p class="rojo alerta">@Strings.MsgDeseaBorrar</p>
+                }
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <span>@Strings.ErrorMensajeGenerico</span>
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+                }
+
+                @Html.HiddenFor(m => m.codigo)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+               
+                Correlativas al curso @Model.codCurso - @Model.descripcion
+
+                <div class="form-group">
+                        <label for="codCurso">@Strings.ColCurso Correlativo</label>
+                        <input type="hidden" id="codCurso" name="codCurso" style="width: 100%"/>
+                    </div>
+            </div>
+
+            <div class="box-footer">
+                <div class="pull-left">
+                    <button type="button" data-dismiss="modal" class="btn btn-flat btn-default" id="cerrar" name="cerrar">Cerrar</button>
+                </div>
+                <div class="pull-right">
+                    <div>
+                        @if (!esBaja)
+                        {
+                            if (!esVista)
+                            {
+                                <button type="submit" class="btn btn-flat btn-success">@Strings.BtnGuardar</button>
+                            }
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-flat btn-danger">@Strings.BtnBorrar</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var modo = '@modo';
+        if (modo == "Delete" || modo == "View")
+            $('#controles').find('input[type!="hidden"], textarea, button, select').attr('disabled', 'disabled');
+    });
+
+    $('#cerrar').click(function () {
+        $("#DlgGenericoBody2").html('');
+        $("#DlgGenerico2").modal('hide');
+
+        return true;
+    });
+
+    $("#codCurso").select2({
+        placeholder: "Ingresa Nombre o codigo del curso...",
+        language: "es",
+        allowClear: true,
+        minimumInputLength: 4,
+        ajax: {
+            cache: true,
+            dataType: "json",
+            type: "GET",
+            quietMillis: 500,
+            delay: 250,
+            url: "@Url.Action("BuscarPosiblesCorrelativas", "Cursos")",
+        data: function (searchTerm) {
+            return { q: searchTerm, Id: @Model.codigo };
+        },
+        processResults: function (data /*, page*/) {
+            return {
+                results: data
+            };
+        }
+    }
+    });
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,309 @@
+﻿@model IEnumerable<cnrl.cursa>
+@using cnrl.Logica
+@using cnrl.Repositories
+@{
+    ViewBag.Title = "Index";
+    int cantidadCursos = 0;
+    var usuarioCompleto = (AspNetUsers)ViewBag.UsuarioCompleto;
+    // IEnumerable<IGrouping<string, ofertaDisponiblePorAlumno4_Result>> ofertaAgrupada = Model.GroupBy(ofer => ofer.sedeNombre);
+    string colapasado = "in";
+    bool hayAlgunoInscripto = false;
+    //if (Model.Where(x => x.selected == "selected").Count() > 0)
+    //{
+    //    hayAlgunoInscripto = true;
+    //}
+    var colapsedFiltro = "";
+    var colapsedBody = "";
+    var iconoFiltro = "";
+    var iconoBody = "";
+    if (usuarioCompleto != null && !string.IsNullOrEmpty(usuarioCompleto.Id))
+    {
+        colapsedFiltro = "collapsed-box";
+        colapsedBody = "";
+        iconoFiltro = "fa-plus";
+        iconoBody = "fa-minus";
+    }
+    else
+    {
+        colapsedFiltro = "";
+        colapsedBody = "collapsed-box";
+        iconoFiltro = "fa-minus";
+        iconoBody = "fa-plus";
+    }
+}
+<div class="box box-success @colapsedFiltro box-solid">
+    <div class="box-header with-border">
+        <h5 class="box-title" style="font-size:medium">Seleccionar Alumno</h5>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa @iconoFiltro"></i></button>
+        </div><!-- /.box-tools -->
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        @Html.Action("_Buscador", "Usuarios", new { SelectController = "Cursa", SelectAction = "formaDePagoAlumno" })
+    </div>
+</div>
+<div class="col-md-12 no-padding">
+    <div class="box box-success @colapsedBody box-solid">
+        <div class="box-header with-border">
+            <h5 class="box-title" style="font-size:medium">Forma de Pago</h5>
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa @iconoBody"></i></button>
+            </div><!-- /.box-tools -->
+        </div>
+        <div class="box-body">
+            <h2>Forma de Pago de  <b>@usuarioCompleto.Apellido, @usuarioCompleto.Nombre (@usuarioCompleto.NroDocumento)</b> </h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title box-solid">Forma de pago del Alumno</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                            {
+                                <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+                            }
+                            else if (Model.Count() == 0)
+                            {
+                                <div class="callout callout-danger">
+                                    <h4>Advertencia!</h4>
+                                    <p>El alumno no se encuentra inscripto a ningún curso.</p>
+                                </div>
+                            }
+                            else
+                            {
+                                foreach (var cursada in Model)
+                                {
+                                    using (Ajax.BeginForm("FormaDePago", "Cursa", FormMethod.Post,
+                                                new AjaxOptions
+                                                {
+                                                    OnSuccess = "GuardadoOk",
+                                                    HttpMethod = "POST"
+                                                }))
+                                    //using (Html.BeginForm("FormaDePago", "Cursa", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                    {
+                                        <input type="hidden" value="@cursada.codigo" name="codigo" />
+                                        <input type="hidden" value="@cursada.alumno" name="alumno" />
+                                        <div class="box box-success box-solid">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title" style="font-size:medium">@cursada.oferta1.curso1.codCurso - @cursada.oferta1.curso1.descripcion</h3>
+                                                <div class="box-tools pull-right">
+                                                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                                </div><!-- /.box-tools -->
+                                            </div><!-- /.box-header -->
+                                            <div class="box-body">
+                                                @{
+                                                    cantidadCursos++;
+                                                    //string horario = "";
+                                                    string horario = "Sede " + cursada.oferta1.sede1.nombre.ToUpper() + " - ";
+                                                    if (cursada.oferta1.lunes == true)
+                                                    {
+                                                        horario += "Lunes - ";
+                                                    }
+                                                    if (cursada.oferta1.martes == true)
+                                                    {
+                                                        horario += "Martes - ";
+                                                    }
+                                                    if (cursada.oferta1.miercoles == true)
+                                                    {
+                                                        horario += "Miercoles - ";
+                                                    }
+                                                    if (cursada.oferta1.jueves == true)
+                                                    {
+                                                        horario += "Jueves - ";
+                                                    }
+                                                    if (cursada.oferta1.viernes == true)
+                                                    {
+                                                        horario += "Viernes - ";
+                                                    }
+                                                    if (cursada.oferta1.sabado == true)
+                                                    {
+                                                        horario += "Sabado - ";
+                                                    }
+                                                    horario += cursada.oferta1.horaDesde.Value.ToString();
+                                                    horario += " a ";
+                                                    horario += cursada.oferta1.horaHasta.Value.ToString();
+
+                                                    double precio1Cuota = CuotaData.ObtenerPrecioUnaCuota(cursada);
+                                                    double precioCuota = CuotaData.ObtenerPrecioCuotas(cursada);
+
+                                                    string seleccioandoCuotas = "";
+                                                    string seleccioando1 = "";
+
+                                                    string visibility = "hidden";
+                                                    string noVisibility = "visible";
+                                                    string disabled = "";
+                                                    string hidden = "visible";
+                                                    if (cursada.estado == (int)EstadosCursada.FormaPago)// || cursada.estado == (int)EstadosCursada.PlanGenerado)
+                                                    {
+                                                        hidden = "hidden";
+                                                        visibility = "visible";
+                                                        noVisibility = "hidden";
+                                                        disabled = "disabled";
+                                                        if (cursada.cantidadCuotas == 1)
+                                                        {
+                                                            seleccioando1 = "checked";
+                                                            seleccioandoCuotas = "";
+                                                        }
+                                                        else
+                                                        {
+                                                            seleccioandoCuotas = "checked";
+                                                            seleccioando1 = "";
+                                                        }
+                                                    }
+                                                }
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <h3>Lugar y Hora</h3>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <h3><b>@horario</b></h3>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        @{ if ((@cursada.oferta1.curso1.RequierePreInscripcion == false || @cursada.oferta1.cursa.First().estado != 9) && @cursada.oferta1.gratuito == false)
+                                                            {
+                                                                <h3>Forma de Pago:</h3>
+                                                            }
+                                                            else
+                                                            {
+                                                                if ((@cursada.oferta1.curso1.RequierePreInscripcion == true || @cursada.oferta1.cursa.First().estado == 9) && @cursada.oferta1.gratuito == false)
+                                                                {
+                                                                    <h3>Forma de Pago:</h3>
+                                                                }
+
+                                                            }
+                                                        }
+                                                    </div>
+                                                    <div class="col-md-2">
+
+                                                        @{ if ((@cursada.oferta1.curso1.RequierePreInscripcion == false || @cursada.oferta1.cursa.First().estado != 9) && @cursada.oferta1.gratuito == false)
+                                                            {
+                                                                <h3>
+                                                                    <input type="radio" value="1" @disabled id="radio1_@cursada.codigo" name="cantidadCuotas" @seleccioando1 class="flat-red" required/>
+                                                                    1 Cuota de $@precio1Cuota.ToString("0.##")
+                                                                </h3>
+                                                                if (@cursada.oferta1.cantidadCuotas > 1)
+                                                                {
+                                                                    <hr />
+                                                                    <h3>
+                                                                        <input type="radio" @disabled id="radio4_@cursada.codigo" value="@cursada.oferta1.cantidadCuotas" @seleccioandoCuotas name="cantidadCuotas" class="flat-red" />
+                                                                        @cursada.oferta1.cantidadCuotas Cuotas @cursada.oferta1.frecuenciaCuota1.descripcion de $@precioCuota.ToString("0.##")
+                                                                    </h3>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if ((@cursada.oferta1.curso1.RequierePreInscripcion == true || @cursada.oferta1.cursa.First().estado == 9) && @cursada.oferta1.gratuito == false)
+                                                                {
+                                                                    <h3>
+                                                                        <input type="radio" disabled value="1" @disabled id="radio1_@cursada.codigo" name="cantidadCuotas" @seleccioando1 class="flat-red" />
+                                                                        1 Cuota de $@precio1Cuota
+                                                                    </h3>
+                                                                    if (@cursada.oferta1.cantidadCuotas > 1)
+                                                                    {
+                                                                        <hr />
+                                                                        <h3>
+                                                                            <input type="radio" disabled @disabled id="radio4_@cursada.codigo" value="@cursada.oferta1.cantidadCuotas" @seleccioandoCuotas name="cantidadCuotas" class="flat-red" />
+                                                                            @cursada.oferta1.cantidadCuotas Cuotas @cursada.oferta1.frecuenciaCuota1.descripcion de $@precioCuota
+                                                                        </h3>
+                                                                    }
+                                                                    
+                                                                    <div class="col-md-10 col-md-offset-10" style="color:red"> <h4><b>Debe Presentar la Documentacion solicitada para Confirmar la Inscipción.</b></h4></div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    if ((@cursada.oferta1.curso1.RequierePreInscripcion == true || @cursada.oferta1.cursa.First().estado == 9) && @cursada.oferta1.gratuito == true)
+                                                                    {
+                                                                        <div class="col-md-10 col-md-offset-10" style="color:red"><h4> <b>Debe Presentar la Documentacion solicitada para Confirmar la Inscipción.</b></h4></div>
+                                                                    }
+                                                                }
+                                                            }
+
+                                                        }
+
+                                                    </div>
+                                                    <div class="col-lg-2" id="botonCupon_@cursada.codigo" style="visibility:@visibility">
+                                                        <div class="pull-right">
+                                                            <a class="btn btn-app btn-primary" href='@Url.Action("EmitirCupon", "Deuda", new { id = cursada.codigo })' target="_blank" style="height:80px">
+                                                                <i class="fa fa-credit-card" style="font-size:24px;"></i><h4>Cupón de Pago</h4>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <a class='btn btn-lg btn-danger ' style="visibility:@noVisibility" id="eliminarInscripcion_@cursada.codigo"
+                                                           href='@Url.Action("EliminarInscripcion", "Cursa", new { id = cursada.codigo, callbackView = "FormaDepagoAlumno", usuario = @ViewBag.Usuario })'><i class='icon-plus'></i>Eliminar Inscripción</a>
+                                                    </div>
+                                                   
+                                                    @{
+                                                        if ((@cursada.oferta1.curso1.RequierePreInscripcion == false || @cursada.oferta1.cursa.First().estado != 9) && @cursada.oferta1.gratuito == false)
+                                                        {
+                                                            <div class="col-md-2 col-md-offset-8" id="botonConfirmarInscripcion_@cursada.codigo" style="visibility:@hidden">
+                                                                <div class="pull-right">
+                                                                    <input type="submit" value="Confirmar Inscripción" class="btn btn-success btn-lg " />
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            if ((@cursada.oferta1.curso1.RequierePreInscripcion == false || @cursada.oferta1.cursa.First().estado != 9) && @cursada.oferta1.gratuito == true)
+                                                            {
+                                                                <div class="col-md-2 col-md-offset-8" id="botonConfirmarInscripcion_@cursada.codigo" style="visibility:@hidden">
+                                                                    <div class="pull-right">
+                                                                        <input type="submit" value="Confirmar Inscripción" class="btn btn-success btn-lg " />
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+
+                                                                <div class="col-md-2 col-md-offset-8" id="botonConfirmarInscripcion_@cursada.codigo" style="visibility:@hidden">
+                                                                    <input type="submit" disabled value="Confirmar Inscripción" class="btn btn-success btn-lg " />
+                                                                </div>
+
+
+                                                            }
+
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div><!-- /.box-body -->
+
+                                                                    }
+                                                                }
+                                                            }
+
+                        </div><!-- /.box-body -->
+
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div><!-- /.col -->
+        </div>
+    </div>
+</div>
+
+<script>
+    function GuardadoOk(data) {
+        console.log(data);
+        if (data.ok === true) {
+            MensajeExito('Su inscripción se guardó correctamente');
+            if (data.gratis === false)
+                $('#botonCupon_' + data.codigoCursa).css('visibility', 'visible');
+
+            
+            $('#eliminarInscripcion_' + data.codigoCursa).css('visibility', 'hidden');
+
+            $('#botonConfirmarInscripcion_' + data.codigoCursa).css('visibility', 'hidden');
+            $('#botonConfirmarInscripcion_' + data.codigoCursa).css('visibility', 'hidden');
+            $('#radio1_' + data.codigoCursa).prop("disabled", true);
+            $('#radio4_' + data.codigoCursa).prop("disabled", true);
+
+        } else {
+            //Recarga el formulario con los errores recibidos
+            MensajeError('Ocurrió un error intentrando guardar su inscripción');
+            //$('#DlgGenericoBody').html(data);
+        }
+    }
+</script>

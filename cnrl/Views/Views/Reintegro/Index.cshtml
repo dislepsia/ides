@@ -1,0 +1,59 @@
+﻿@using cnrl.Logica
+@model IEnumerable<cnrl.AspNetUsers>
+
+@{
+    ViewBag.Titulo = "Crear Reintegro";
+    Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["texto"] = $('#texto').val();
+    }
+</script>
+
+<div class="box box-default filtros">
+    <div class="box-body filtros">
+
+
+        <p>
+            <label for="Texto">Buscar alumno por Dni</label>
+            <br />
+            @Html.TextBox("texto", "", new { @type = "number", @class = "col-lg-pull-12", id = "texto", placeholder = string.Format("{0}...", "Buscar") })
+            <button type='button' class="btn btn-flat btn-success" onclick="javascript: refrescar();">Buscar persona</button>
+        </p>
+
+        @Html.Action("PartialGrid")
+    </div>
+</div>
+
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+<script>
+    var refresh = true;
+    function resetFiltros() {
+        refresh = false;
+        $('#texto').val("");
+        refresh = true;
+        refrescar();
+    }
+
+    // Refrescar Grilla
+    function refrescar() {
+        if (refresh === true) {
+            window.Grid.PerformCallback();
+        }
+    }
+
+    $(function () {
+        $('#texto').pressEnter(function () { refrescar(); });
+    });
+
+</script>

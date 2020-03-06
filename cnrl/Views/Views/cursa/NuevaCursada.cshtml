@@ -1,0 +1,312 @@
+﻿@model cnrl.cursa
+@using cnrl.Helpers
+
+@{
+    Layout = null;
+    string modo = ViewBag.modo;
+    var esAlta = modo == "Create";
+    var esVista = modo == "View";
+    var esEdit = modo == "Edit";
+    var esBaja = modo == "Delete";
+    var titulo = string.Format("{0} {1}", esAlta ? Strings.BtnNuevo : (esEdit ? Strings.BtnEditar : (esBaja ? Strings.BtnBorrar : Strings.BtnVer)), Strings.ColCurso);
+
+    ViewBag.Title = "Nueva Cursada";
+    ViewBag.Subtitulo = titulo;
+
+    var sedes = (SelectList)ViewBag.sedes;
+    var cursos = (SelectList)ViewBag.cursos;
+    var periodosLectivos = (SelectList)ViewBag.periodosLectivos;
+    var TiposCurso = (SelectList)ViewBag.TiposCurso;
+    var ofertas = (SelectList)ViewBag.Ofertas;
+}
+
+@Html.Hidden("Titulo", "Nueva Cursada")
+@Html.Hidden("Subtitulo", titulo)
+<div class="row">
+    <div class="col-md-12">
+        @using (Ajax.BeginForm("NuevaCursada", "Cursa", FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnSuccess = "GuardadoOk",
+                                                                                HttpMethod = "POST"
+                                                                            }))
+        {
+            <div class="box-body" id="controles">
+
+                @if (esBaja)
+                {
+                    <p class="rojo alerta">@Strings.MsgDeseaBorrar</p>
+                }
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <span>@Strings.ErrorMensajeGenerico</span>
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+                }
+                @Html.HiddenFor(m => m.codigo)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="box box-solid box-success">
+                    <div class="box-header">
+                        <h6 class="box-title" style="font-size: 1.5em;">Filtro Oferta</h6>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="SedeFiltroOferta" class="control-label ">@Strings.ColSede</label>
+                                    @Html.DropDownList("SedeFiltroOferta", sedes, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="PeriodoFiltroOferta" class="control-label ">@Strings.ColPeriodo</label>
+                                    @Html.DropDownList("PeriodoFiltroOferta", periodosLectivos, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="TipoCursoFiltroOferta" class="control-label ">@Strings.ColTipoCurso</label>
+                                    @Html.DropDownList("TipoCursoFiltroOferta", TiposCurso, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="CursoFiltroOferta" class="control-label ">@Strings.ColCurso</label>
+                                    @Html.DropDownList("CursoFiltroOferta", cursos, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label ">Oferta (Comisión)</label>
+                    <div>
+                        @Html.DropDownList("oferta", ofertas, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.oferta, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.alumno, htmlAttributes: new { @class = "control-label " })
+                    <div>
+                        <input type="hidden" id="alumno" name="alumno" style="width:100%;" @(esBaja ? "disabled" : "") />
+                        @*@Html.DropDownList("Dni", usuarios, htmlAttributes: new { @class = "form-control" })*@
+                        @Html.ValidationMessageFor(model => model.alumno, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+            </div>
+
+                <div class="box-footer">
+                    <div class="pull-left">
+                        <button type="button" data-dismiss="modal" class="btn btn-flat btn-default">Cerrar</button>
+                    </div>
+                    <div class="pull-right">
+                        <div>
+                            @if (!esBaja)
+                            {
+                                if (!esVista)
+                                {
+                                    <button type="submit" class="btn btn-flat btn-success">@Strings.BtnGuardar</button>
+                                }
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-flat btn-danger">@Strings.BtnBorrar</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+        }
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $('#SedeFiltroOferta').change(function () { CargarComboCursos(); CargarComboOfertas(); });
+        $('#CursoFiltroOferta').change(function () { CargarComboOfertas(); });
+        $('#PeriodoFiltroOferta').change(function () { CargarComboCursos(); CargarComboOfertas(); });
+        $('#TipoCursoFiltroOferta').change(function () { CargarComboCursos(); CargarComboOfertas(); });
+
+        $("#alumno").select2({
+            placeholder: "Ingresa Nombre o documento...",
+            language: "es",
+            allowClear: true,
+            minimumInputLength: 4,
+            ajax: {
+                cache: true,
+                dataType: "json",
+                type: "GET",
+                quietMillis: 500,
+                delay: 250,
+                url: "@Url.Action("Buscar", "Usuarios")",
+            data: function (searchTerm) {
+                return { q: searchTerm };
+            },
+            processResults: function (data /*, page*/) {
+                return {
+                    results: data
+                };
+            }
+        }
+        });
+
+        $("#SedeFiltroOferta").select2({
+            allowClear: true
+        });
+        $("#TipoCursoFiltroOferta").select2({
+            allowClear: true
+        });
+        $("#CursoFiltroOferta").select2({
+            allowClear: true
+        });
+        $("#PeriodoFiltroOferta").select2({
+            allowClear: true
+        });
+        $("#oferta").select2({
+            allowClear: true
+        });
+
+        $("#Estado").select2({
+            allowClear: true
+        });
+    });
+
+    function GuardadoOk(data) {
+        console.log(data);
+        if (data.ok === true) {
+            MensajeExito('Operación finalizada con éxito');
+
+        //    var url = '@Url.Action("formadepagoalumno", "Cursa")' + "/" + data.usuario;
+
+            window.location = "Cursa/formadepagoalumno/" + data.usuario;
+
+        } else {
+            //Recarga el formulario con los errores recibidos
+            MensajeError('Operación finalizada con errores');
+            $('#DlgGenericoBody').html(data);
+        }
+    }
+
+    function CargarComboCursos() {
+        console.log("CargarComboCursos");
+        var combo = $("#CursoFiltroOferta");
+        var statesProgress = $("#states-loading-progress");
+        statesProgress.show();
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/Cursos/GetCursos",
+                data: {
+                    IdSede: $('#SedeFiltroOferta').val(),
+                    IdPeriodo: $('#PeriodoFiltroOferta').val(),
+                    IdTipoCurso: $('#TipoCursoFiltroOferta').val(),
+                },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    combo.html('');
+                    $.each(data, function (id, option) {
+                        combo.append($('<option></option>').val(option.Value).html(option.Text));
+                    });
+                    statesProgress.hide();
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/Cursos/GetCursos",
+                data: {
+                    IdSede: $('#SedeFiltroOferta').val(),
+                    IdPeriodo: $('#PeriodoFiltroOferta').val(),
+                    IdTipoCurso: $('#TipoCursoFiltroOferta').val(),
+                },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    combo.html('');
+                    $.each(data, function (id, option) {
+                        combo.append($('<option></option>').val(option.Value).html(option.Text));
+                    });
+                    statesProgress.hide();
+                }
+            });
+        }
+    }
+
+    function CargarComboOfertas() {
+        console.log("CargarComboOfertas");
+        var combo = $("#oferta");
+        var statesProgress = $("#states-loading-progress");
+        statesProgress.show();
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/oferta/GetOfertas",
+                data: {
+                    IdSede: $('#SedeFiltroOferta').val(),
+                    IdPeriodo: $('#PeriodoFiltroOferta').val(),
+                    IdCurso: $('#CursoFiltroOferta').val(),
+                    IdTipoCurso: $('#TipoCursoFiltroOferta').val(),
+                    filtro: true
+                },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    combo.html('');
+                    $.each(data, function (id, option) {
+                        combo.append($('<option></option>').val(option.Value).html(option.Text));
+                    });
+                    statesProgress.hide();
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/oferta/GetOfertas",
+                data: {
+                    IdSede: $('#SedeFiltroOferta').val(),
+                    IdPeriodo: $('#PeriodoFiltroOferta').val(),
+                    IdCurso: $('#CursoFiltroOferta').val(),
+                    IdTipoCurso: $('#TipoCursoFiltroOferta').val(),
+                    filtro: true
+                },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    combo.html('');
+                    $.each(data, function (id, option) {
+                        combo.append($('<option></option>').val(option.Value).html(option.Text));
+                    });
+                    statesProgress.hide();
+                }
+            });
+        }
+    }
+
+
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+        increaseArea: '30%' // optional
+    });
+
+
+</script>

@@ -1,0 +1,91 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "Id";
+        settings.Caption = "Cursos dictados";
+
+        settings.CallbackRouteValues = new { Controller = "Docente", Action = "PartialGridImprimir" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 20;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        settings.Styles.Cell.HorizontalAlign = HorizontalAlign.Center;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.NextColumn;
+        // Columnas
+        settings.Columns.Add(col => { col.FieldName = "curso1.descripcion"; col.Caption = "Curso";});
+        settings.Columns.Add(col => { col.FieldName = "horario"; col.Caption = "Horario"; });
+        settings.Columns.Add(col => { col.FieldName = "fechaDesde"; col.Caption = "Fecha de Inicio"; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "fechaHasta"; col.Caption = "Fecha de Fin"; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "sede1.nombre"; col.Caption = "Sede"; });
+        //settings.Columns.Add(col => { col.FieldName = "telefono"; col.Caption = Strings.ColTelefono; });
+        //settings.Columns.Add(col => { col.FieldName = "mail"; col.Caption = "Correo"; });
+        //settings.Columns.Add(col => { col.FieldName = "contacto"; col.Caption = "Contacto"; });
+
+        // Botones
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c => ViewContext.Writer.Write(
+
+                    //"<a class='btn btn-flat btn-xs btn-info' href='{6}' title='{7}'>{8}</a>&nbsp;" +
+                    "<a class='btn btn-flat btn-xs btn-info' href='{0}' title='{1}'>{2}</a>&nbsp;" +
+                    "<a class='btn btn-flat btn-xs btn-info' href='{3}' title='{4}'>{5}</a>",
+
+                   @Url.Action("ImprimirActa", "Docente", new { codOferta = DataBinder.Eval(c.DataItem, "codigo") }),
+                    "Imprimir Acta de Aprobados",
+                    "<i class='fa fa-print'></i>",
+
+                    @Url.Action("ImprimirActaExcel", "Docente", new { codOferta = DataBinder.Eval(c.DataItem, "codigo") }),
+                    "Acta de Aprobados en Excel",
+                    "<i class='fa fa-download'></i>"
+
+                    //string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Details", "Sede", new { id = DataBinder.Eval(c.DataItem, "codigo") })),
+                    //Strings.BtnVer,
+                    //"<i class='fa fa-search'></i>"
+                    ));
+            //column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+            //    "<a class='btn btn-flat btn-xs btn-info' href='{0}'><i class='icon-plus'></i>&nbsp;{1}</a>",
+            //    string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("Create", "Sede")),
+            //    Strings.BtnNuevo
+            //    ));
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 100;
+        });
+
+        // Filtros
+        //settings.Settings.ShowHeaderFilterButton = false;
+        //settings.Settings.ShowFilterRow = false;
+        //settings.Settings.ShowFilterRowMenu = false;
+        //settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        //settings.Styles.FilterRow.BackColor = Color.LightGray;
+        //settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+    }
+).Bind(Model).GetHtml()

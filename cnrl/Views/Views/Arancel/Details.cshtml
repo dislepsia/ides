@@ -1,0 +1,90 @@
+﻿@model cnrl.precio
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>precio</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.alumno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.alumno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.noalumno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.noalumno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.empleado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.empleado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.descuentoBandaNegativa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.descuentoBandaNegativa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mayorDe60)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mayorDe60)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.descuentoUnaCuota)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.descuentoUnaCuota)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.diasSegundoVencimiento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.diasSegundoVencimiento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.recargoSegundoVencimiento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.recargoSegundoVencimiento)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.codigo }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

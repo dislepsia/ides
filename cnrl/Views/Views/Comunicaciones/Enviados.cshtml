@@ -1,0 +1,84 @@
+﻿@using System.Web.UI.WebControls
+
+@{
+  //  Layout = null;
+    ViewBag.Titulo = Strings.TituloComunicaciones + " - Resultado Envíos";
+    ViewBag.Subtitulo = Strings.TituloAdmin;
+
+    var error = (bool)ViewBag.Error;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        //e.customArgs["IdJurisdiccion"] = $('#IdJurisdiccion').val();
+        //e.customArgs["IdRed"] = $('#IdRed').val();
+        //e.customArgs["selectedValues"] = $('#SelectedRows').val();
+    }
+
+</script>
+@*<div class="box box-primary  box-solid">
+    <div class="box-header with-border">
+        <h5 class="box-title" style="font-size:medium">Enviado</h5>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div><!-- /.box-tools -->
+    </div><!-- /.box-header -->*@
+    <div class="box">
+        <div class="box-body">
+            @if (error == true)
+            {
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                    Ocurrió un error al enviar los emails.
+                    <hr />
+                    <div class="box box-danger collapsed-box box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title" style="font-size:medium">Detalle del error</h3>
+                            <div class="box-tools pull-right">
+                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                            </div><!-- /.box-tools -->
+                        </div><!-- /.box-header -->
+                        <div class="box-body" style="color:black">
+                             @ViewBag.Mensaje
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+    
+                </div>
+
+
+            }
+            else
+            {
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4>	<i class="icon fa fa-check"></i> Enviado!</h4>
+                    Se envió correctament el Email a @ViewBag.Enviados destinatarios.
+                </div>
+
+            }
+        </div>
+    </div>
+
+
+</div>
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script>
+        LoadingFin();
+
+
+
+
+
+    </script>
+}

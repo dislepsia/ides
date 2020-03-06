@@ -1,0 +1,179 @@
+﻿@using cnrl.Logica
+
+@{
+    ViewBag.Titulo = Strings.TituloUsuarios;
+    ViewBag.Subtitulo = Strings.TituloAdmin;
+
+    var Roles = (SelectList)ViewBag.Roles;
+    var TiposAlumnos = (SelectList)ViewBag.TiposAlumno;
+    var Provincias = (SelectList)ViewBag.Provincias;
+    var Localidades = (SelectList)ViewBag.Localidades;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdRol"] = $('#IdRol').val();
+        e.customArgs["TipoAlumno"] = $('#TipoAlumno').val();
+        e.customArgs["IdProvincia"] = $('#IdProvincia').val();
+        e.customArgs["IdLocalidad"] = $('#IdLocalidad').val();
+        e.customArgs["texto"] = $('#texto').val();
+    }
+</script>
+<form action="@Url.Action("Exportar")" method="POST" name="frmExportar" id="frmExportar">
+    <div class="box box-default filtros">
+        <div class="box-body filtros">
+            @if (User.IsInRole("SuperAdministrador"))
+            {
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="IdTipoCurso">@Strings.ColRol</label>
+                        @Html.DropDownList("IdRol", Roles, new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdTipoCurso">Tipo Alumno</label>
+                    @Html.DropDownList("TipoAlumno", TiposAlumnos, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="Texto">Buscar</label>
+                    @Html.TextBox("texto", "", new { @class = "form-control", id = "texto", placeholder = string.Format("{0}...", "Buscar") })
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdTipoCurso">Provincia</label>
+                    @Html.DropDownList("IdProvincia", Provincias, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="IdTipoCurso">Localidad</label>
+                    @Html.DropDownList("IdLocalidad", Localidades, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="pull-right">
+                    <button type="button" class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="row row-horizon">
+    @Html.Action("PartialGrid") @*, new { IdTipoCurso = ViewBag.IdTipoCurso, IdConcepto = ViewBag.IdConcepto })*@
+</div>
+<input type="button" class="btn btn-success" value="Exportar Excel" title="Exportar a Excel" onclick="document.getElementById('frmExportar').submit();" />
+
+
+
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script>
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+            $('#IdRol').select2("val", "-1");
+            $('#TipoAlumno').select2("val", "-1");
+            $('#IdProvincia').select2("val", "-1");
+            $('#IdLocalidad').select2("val", "-1");
+            $('#texto').val("");
+
+            refresh = true;
+            refrescar();
+        }
+        // Refrescar Grilla
+        function refrescar() {
+            if (refresh === true) {
+                window.Grid.PerformCallback();
+            }
+        }
+        $(function () {
+            $('#IdRol').change(function () { refrescar(); });
+            $('#TipoAlumno').change(function () { refrescar(); });
+            $('#IdLocalidad').change(function () { refrescar(); });
+
+
+            $('#texto').pressEnter(function () { refrescar(); });
+            $("#IdRol").select2({
+                allowClear: true
+            });
+            $("#TipoAlumno").select2({
+                allowClear: true
+            });
+            $("#IdProvincia").select2({
+                allowClear: true
+            });
+            $("#IdLocalidad").select2({
+                allowClear: true
+            });
+
+
+        });
+
+
+        $('#IdProvincia').change(function () {
+            var selectedItem = $(this).val();
+            var ddlStates = $("#IdLocalidad");
+            var statesProgress = $("#states-loading-progress");
+            statesProgress.show();
+            var URLactual = window.location.pathname;
+            if (URLactual.search('nuevositio') != -1) {
+                $.ajax({
+                    type: "post",
+                    url: "/nuevositio/Usuarios/GetLocalidades",
+                    data: { IdProvincia: $('#IdProvincia').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        ddlStates.html('');
+                        ddlStates.append($('<option></option>').val(@Constantes.ERROR).html('@cnrl.Strings.SeleccionarLocalidad'));
+                        $.each(data, function (id, option) {
+                            ddlStates.append($('<option></option>').val(option.Value).html(option.Text));
+                        });
+                        statesProgress.hide();
+                    }
+                });
+            }
+            else
+            {
+                $.ajax({
+                    type: "post",
+                    url: "/Usuarios/GetLocalidades",
+                    data: { IdProvincia: $('#IdProvincia').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        ddlStates.html('');
+                        ddlStates.append($('<option></option>').val(@Constantes.ERROR).html('@cnrl.Strings.SeleccionarLocalidad'));
+                        $.each(data, function (id, option) {
+                            ddlStates.append($('<option></option>').val(option.Value).html(option.Text));
+                        });
+                        statesProgress.hide();
+                    }
+                });
+            }
+            refrescar();
+        });
+
+        $(document).ready(function () {
+            $("#frmExportar").keypress(function (e) {//Para deshabilitar el uso de la tecla "Enter"
+                if (e.which == 13) {
+                    return false;
+                }
+            });
+        });
+    </script>
+}

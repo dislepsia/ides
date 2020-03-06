@@ -1,0 +1,362 @@
+﻿@using System.Web.UI.WebControls
+
+@model cnrl.ViewModels.MailModel
+
+
+@{
+
+    ViewBag.Titulo = Strings.TituloComunicaciones;
+    ViewBag.Subtitulo = Strings.TituloAdmin;
+    string modo = ViewBag.modo;
+    var tiposCurso = (SelectList)ViewBag.tiposCurso;
+    var sedes = (SelectList)ViewBag.sedes;
+    var cursos = (SelectList)ViewBag.cursos;
+    var periodosLectivos = (SelectList)ViewBag.periodosLectivos;
+    var ofertas = (SelectList)ViewBag.ofertas;
+    var plantillas = (SelectList)ViewBag.plantillas;
+}
+
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdTipoCurso"] = $('#IdTipoCurso').val();
+        e.customArgs["IdSede"] = $('#IdSede').val();
+        e.customArgs["IdCurso"] = $('#IdCurso').val();
+        e.customArgs["IdPeriodo"] = $('#IdPeriodo').val();
+        e.customArgs["IdOferta"] = $('#IdOferta').val();
+        e.customArgs["IdUsuario"] = $('#IdUsuario').val();
+        //e.customArgs["CursosCerrados"] = $('#CursosCerrados').prop('checked');
+        //e.customArgs["morosos"] = $('#morosos').prop('checked');
+
+        //referenteTematico
+
+        e.customArgs["selectedValues"] = $('#SelectedRows').val();
+    }
+    function OnGetValues(values) {
+        var userSelect = "";
+        for (var i in values) {
+            userSelect = userSelect + values[i] + ";";
+        }
+        // The "PerformCallback" method passes the string with the selected values
+        // to a server as a Request.Params["selectedValues"] item.
+        Grid.PerformCallback({ selectedValues: userSelect });
+    }
+    function SelectionChanged(s, e) {
+
+        // s.GetSelectedFieldValues('Id;Nombre', OnGetValues);
+
+        s.GetSelectedFieldValues("Email", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        SelectedRows.BeginUpdate();
+        try {
+            SelectedRows.ClearItems();
+            for (var i = 0; i < values.length; i++) {
+                SelectedRows.AddItem(values[i]);
+            }
+        } finally {
+            SelectedRows.EndUpdate();
+        }
+        $("#count").html(Grid.GetSelectedRowCount());
+
+    }
+</script>
+
+
+<div class="box box-primary  box-solid">
+    <div class="box-header with-border">
+        <h5 class="box-title" style="font-size:medium">Selección Destinatarios</h5>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div><!-- /.box-tools -->
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <div class="box box-default filtros">
+            <div class="box-body filtros">
+                @Html.Hidden("VistaCompleta", false)
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="IdSede">@Strings.ColSede</label>
+                        @Html.DropDownList("IdSede", sedes, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="IdPeriodo">@Strings.ColPeriodo</label>
+                        @Html.DropDownList("IdPeriodo", periodosLectivos, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="IdDia">@Strings.ColOferta</label>
+                        @Html.DropDownList("IdOferta", ofertas, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="IdUsuario">@Strings.ColAlumno</label>
+                        <div id="IdUsuario" name="IdUsuario" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="IdTipoCurso">@Strings.ColTipoCurso</label>
+                        @Html.DropDownList("IdTipoCurso", tiposCurso, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="IdCurso">@Strings.ColCurso</label>
+                        @Html.DropDownList("IdCurso", cursos, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="pull-right">
+                        <button type="button" class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+                @*<div class="col-md-1" id="filtroEstadoCurso" style="display:none">
+                    <div class="form-group">
+                        <div>
+                            @Html.CheckBox("CursosCerrados")
+                            <label>Cursos Cerrados</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1" id="filtroMorosos" style="display:none">
+                    <div class="form-group">
+                        <div>
+                            @Html.CheckBox("morosos")
+                            <label>Morosos</label>
+                        </div>
+                    </div>
+                </div>*@
+
+            </div>
+        </div>
+        @Html.Action("PartialGrid")
+
+    </div>
+</div>
+<form action="@Url.Action("Enviar")" method="POST" name="frmEnviarMails" id="frmEnviarMails" enctype="multipart/form-data" onkeydown="return event.keyCode !== 13">
+    <input type="hidden" value="@modo" id="modo" name="modo"/>
+    <div class="col-md-12 no-padding">
+        <div class="box box-primary  box-solid">
+            <div class="box-header with-border">
+                <h5 class="box-title" style="font-size:medium">Confección Email</h5>
+                <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div><!-- /.box-tools -->
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="IdPeriodo">Seleccione una Plantilla</label>
+                            @Html.DropDownList("plantilla", plantillas, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.asunto, new { @class = "control-label" })
+                        <div class="input-group">
+                            <input type="text" value="@ViewBag.AsuntoPreFijado" class="form-control" disabled>
+                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                            <input type="text" class="form-control" id="asunto" name="asunto" placeholder="Asunto">
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Variables disponibles</h2>
+                        <dl>
+                            <dt>    %NOMBRE%                    </dt>
+                            <dd> Nombre del Alumno             </dd>
+                            <dt>    %APELLIDO%                  </dt>
+                            <dd> Apellido del Alumno           </dd>
+                            <dt>    %DOCUMENTO%                 </dt>
+                            <dd> Documento del Alumno          </dd>
+                        </dl> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.editor, new { @class = "control-label" })
+                        <textarea id="editor" name="editor" rows="10" cols="80">
+                            Escriba su email aquí
+                        </textarea>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-12">
+                        Archivos Adjunto/s
+                        <input type="file" name="adjunto1" />
+                        <input type="file" name="adjunto2" />
+                        <input type="file" name="adjunto3" />
+                        <input type="file" name="adjunto4" />
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id="btnEnviar" class="btn btn-success" style="width:100%" title="Enviar Mails"
+                                @*onclick="document.getElementById('frmEnviarMails').submit();"*@>
+                            Enviar Mails
+                        </button>
+                    </div><!-- /.box-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script>
+        CKEDITOR.replace('editor');
+        //$(".textarea").wysihtml5();
+        $('#btnEnviar').click(function () {
+            var userSelect = "";
+            for (var i in SelectedRows.itemsValue) {
+                userSelect = userSelect + SelectedRows.itemsValue[i] + ";";
+            }
+
+            $('#destinatarios').val(userSelect);
+
+            var r = confirm("¿Esta seguro que desea enviar el Email a " + SelectedRows.itemsValue.length + " destinatarios?");
+            if (r == true) {
+                $('#frmEnviarMails').submit();
+            }
+            //window.Grid.GetSelectedFieldValues('Id;Nombre', OnGetValues);
+        });
+
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+            $('#IdTipoCurso').select2("val", "-1");
+            $('#IdSede').select2("val", "-1");
+            $('#IdCurso').select2("val", "-1");
+            $('#IdOferta').select2("val", "-1");
+            $('#IdPeriodo').select2("val", "-1");
+            $('#IdUsuario').select2("val", "");
+            refrescar();
+        }
+        // Refrescar Grilla
+        function refrescar() {
+            if (refresh === true) {
+                window.Grid.PerformCallback();
+            }
+        }
+        $(function () {
+            $('#IdTipoCurso').change(function () { refrescar(); });
+            $('#IdSede').change(function () { refrescar(); });
+            $('#IdCurso').change(function () {
+                refrescar();
+            });
+            
+            $('#IdOferta').change(function () { refrescar(); });
+            $('#IdPeriodo').change(function () {
+               
+                refrescar();
+            });
+            $('#IdUsuario').change(function () { refrescar(); });
+
+            $("#IdTipoCurso").select2({
+                allowClear: true
+            });
+            $("#IdSede").select2({
+                allowClear: true
+            });
+            $("#IdCurso").select2({
+                allowClear: true
+            });
+            $("#IdOferta").select2({
+                allowClear: true
+            });
+            $("#IdPeriodo").select2({
+                allowClear: true
+            });
+
+            $("#IdUsuario").select2({
+                placeholder: "Ingresa Nombre o documento...",
+                language: "es",
+                allowClear: true,
+                minimumInputLength: 4,
+                ajax: {
+                    cache: true,
+                    dataType: "json",
+                    type: "GET",
+                    quietMillis: 500,
+                    delay: 250,
+                    url: "@Url.Action("Buscar", "Usuarios")",
+                    data: function (searchTerm) {
+                        return { q: searchTerm };
+                    },
+                    processResults: function (data /*, page*/) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+        });
+
+
+        $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+
+        $('#plantilla').change(function () {
+            var val = $('#plantilla').val();
+            if (val != null && val != "" && val != "-1") {
+                //TODO: LLAMADA AJAX QUE CARGUE LAS PLANTILLAS DISPONIBLES
+                var URLactual = window.location.pathname;
+                if (URLactual.search('nuevositio') != -1) {
+                    $.ajax({
+                        type: "post",
+                        url: "/nuevositio/plantillaEMail/GetPlantilla",
+                        data: { IdPlantilla: $('#plantilla').val() },
+                        datatype: "json",
+                        traditional: true,
+                        success: function (data) {
+                            $("#editor").val(data.cuerpo);
+                            CKEDITOR.instances['editor'].setData(data.cuerpo); // where editor1 is id
+
+                            $("#asunto").val(data.asunto);
+                        }
+                    });
+                }
+                else
+                {
+                    $.ajax({
+                        type: "post",
+                        url: "/plantillaEMail/GetPlantilla",
+                        data: { IdPlantilla: $('#plantilla').val() },
+                        datatype: "json",
+                        traditional: true,
+                        success: function (data) {
+                            $("#editor").val(data.cuerpo);
+                            CKEDITOR.instances['editor'].setData(data.cuerpo); // where editor1 is id
+
+                            $("#asunto").val(data.asunto);
+                        }
+                    });
+                }
+            }
+        });
+
+        $("#plantilla").select2({
+            allowClear: true
+        });
+    </script>
+}

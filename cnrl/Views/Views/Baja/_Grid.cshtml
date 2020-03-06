@@ -1,0 +1,454 @@
+﻿@using DevExpress.Web.Mvc.UI
+@using System.Drawing
+@using System.Web.UI.WebControls
+
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "Grid";
+        settings.KeyFieldName = "Id";
+        settings.Caption = "Solicitudes de Baja Pendientes";
+        settings.CallbackRouteValues = new { Controller = "Baja", Action = "PartialGrid" };
+        // Settings
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.AlwaysShowPager = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.Styles.Header.BackColor = Color.LightGray;
+        settings.Styles.Cell.HorizontalAlign = HorizontalAlign.Center;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.NextColumn;
+
+        // Columnas
+
+
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Apellido"; col.Caption = "Apellido"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.Nombre"; col.Caption = "Nombre"; });
+        settings.Columns.Add(col => { col.FieldName = "AspNetUsers.NroDocumento"; col.Caption = "DNI"; });
+        settings.Columns.Add(col => { col.FieldName = "Teléfono"; col.UnboundType = DevExpress.Data.UnboundColumnType.String; col.UnboundExpression = "[AspNetUsers.Telefono]+' / '+[AspNetUsers.Telefono2]"; col.Caption = "Teléfono"; });
+
+        settings.Columns.Add(col => { col.FieldName = "DateModified"; col.Caption = "Fecha de Solicitud de Baja"; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "fechaAlta"; col.Caption = "Fecha de Alta en el Curso"; col.PropertiesEdit.DisplayFormatString = "d"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.sede1.nombre"; col.Caption = "Sede"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.curso1.descripcion"; col.Caption = "Curso"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.curso1.codCurso"; col.Caption = "Codigo"; });
+        settings.Columns.Add(col => { col.FieldName = "oferta1.horario"; col.Caption = "Días"; });
+        settings.Columns.Add(col => { col.FieldName = "descripcion"; col.Caption = "Aprobado"; });
+
+        settings.Columns.Add(col => { col.FieldName = "nroReclamo"; col.Caption = "Número de Reclamo"; });
+
+
+
+        // Botones
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(
+                    c => ViewContext.Writer.Write(
+            //"<a class='btn btn-flat btn-xs btn-info' href='{0}'><i class='icon-plus'></i>&nbsp;{1}</a>",
+            //@Url.Action("ConfirmarSolicitud", "Baja", new { codigo = DataBinder.Eval(c.DataItem, "codigo")})
+            //, "Dar de Baja"
+            //)
+            "<button type='button' class='btn btn-flat btn-xs btn-info habilitar' onclick=\"habilitarAjax({0});\" id='BotonHabilitar_{0}' name='BotonHabilitar' value='{0}' title='{1}'>{2}</button>&nbsp;",
+            DataBinder.Eval(c.DataItem, "codigo"),
+            "Dar de Baja la solicitud actual",
+            "Dar de Baja"
+            ));
+
+            column.SetHeaderTemplateContent(c => ViewContext.Writer.Write(
+            //"<a class='btn btn-flat btn-xs btn-info' href='{0}'><i class='icon-plus'></i>&nbsp;{1}</a>",
+            //string.Format("javascript:dlgModal.Ver(\"{0}\")", @Url.Action("ConfirmarTodas", "Baja")),
+            //"Aceptar Todas"
+            "<button type='button' class='btn btn-flat btn-xs btn-info habilitar' onclick=\"habilitarTodas();\" id='BotonHabilitar_{0}' name='BotonHabilitar' value='{0}' title='{0}'>{1}</button>&nbsp;",
+            //DataBinder.Eval(c.DataItem, "codigo"),
+            "Confirmar Todas las Solicitudes de Baja",
+            "Aceptar Todas"
+            ));
+
+            column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 100;
+        });
+        // Filtros
+        //settings.Settings.ShowHeaderFilterButton = false;
+        //settings.Settings.ShowFilterRow = false;
+        //settings.Settings.ShowFilterRowMenu = false;
+        //settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        //settings.Styles.FilterRow.BackColor = Color.LightGray;
+        //settings.Styles.GroupPanel.BackColor = Color.Lavender;
+        // Comportamiento
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowSort = true;
+        settings.SettingsBehavior.AllowGroup = false;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.Styles.RowHotTrack.BackColor = Color.LightCyan;
+        // Customization Window
+        // https://demos.devexpress.com/MVCxGridViewDemos/Columns/CustomizationWindow
+        settings.SettingsBehavior.EnableCustomizationWindow = false;
+        settings.SettingsText.CustomizationWindowCaption = Strings.MsgColumnas;
+        settings.SettingsLoadingPanel.Mode = DevExpress.Web.GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.SettingsText.EmptyDataRow = "No hay información para mostrar.";
+        settings.SettingsPager.AlwaysShowPager = false;
+        settings.SettingsPager.Summary.Text = " Página {0} de {1} ({2} elementos)";
+    }
+).Bind(Model).GetHtml()
+
+
+
+<script>
+
+    function habilitarAjax(codigo) {
+        LoadingIni();
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/Baja/VerMotivoBaja",
+                data: { codigo: codigo },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    LoadingFin();
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                        //MensajeExito('Operación finalizada con éxito');
+                        console.log(data.fechaBaja);
+                        bootbox.dialog({
+
+                            title: "Motivo de la Baja",
+                            message: data.motivo + "Resumen de Cuotas de la cursada: " + data.curso + "<br> Fecha de Baja: " + data.fechaBaja + "<br>" + data.cuotas +
+                            "<div class=form-group> <label for=mensaje>Mensaje:</label> <textarea class=form-control rows=1 id=mensaje></textarea></div>",
+
+                            buttons: [
+                                                            {
+                                                                label: 'Aceptar',
+                                                                className: 'btn-success btn-lg',
+                                                                callback: function () {
+                                                                    $('.modal').modal('hide');
+                                                                    //console.log('This was logged in the callback: ' + result);
+
+                                                                    LoadingIni();
+                                                                    $.ajax({
+                                                                        type: "post",
+                                                                        url: "/nuevositio/Baja/ConfirmarSolicitud",
+                                                                        data: { codigo: codigo },
+                                                                        datatype: "json",
+                                                                        traditional: true,
+                                                                        success: function (data) {
+                                                                            LoadingFin();
+                                                                            if (data.ok === true) {
+                                                                                window.Grid.PerformCallback();
+                                                                                MensajeExito('Operación finalizada con éxito');
+
+                                                                            } //if
+                                                                            else {
+                                                                                MensajeError('Operación finalizada con errores');
+                                                                            }
+                                                                        }
+                                                                    });
+
+                                                                }
+                                                            },
+                                 {
+                                     label: 'Rechazar',
+                                     className: 'btn-danger btn-lg',
+                                     callback: function () {
+                                         LoadingIni();
+                                         $.ajax({
+                                             type: "post",
+                                             url: "/nuevositio/Baja/RechazarSolicitud",
+                                             data: { codigo: codigo, mensaje: $('#mensaje').val() },
+                                             datatype: "json",
+                                             traditional: true,
+                                             success: function (data) {
+                                                 LoadingFin();
+                                                 if (data.ok === true) {
+                                                     window.Grid.PerformCallback();
+                                                     MensajeExito('Operación finalizada con éxito');
+
+                                                 } //if
+                                                 else {
+                                                     MensajeError('Operación finalizada con errores');
+                                                 }
+                                             }
+                                         });
+                                     }
+
+
+                                 }
+                                 ,
+                                 {
+                                     label: 'Salir',
+                                     className: 'btn btn-primary btn-lg',
+                                     callback: function () {
+
+                                     }
+
+
+                                 }
+                            ],
+                            /*callback: function (result) {
+                                $('.modal').modal('hide');
+                                //console.log('This was logged in the callback: ' + result);
+                                if (result === true) {
+                                    LoadingIni();
+                                    $.ajax({
+                                        type: "post",
+                                        url: "/Baja/ConfirmarSolicitud",
+                                        data: { codigo: codigo },
+                                        datatype: "json",
+                                        traditional: true,
+                                        success: function (data) {
+                                            LoadingFin();
+                                            if (data.ok === true) {
+                                                window.Grid.PerformCallback();
+                                                MensajeExito('Operación finalizada con éxito');
+    
+                                            } //if
+                                            else {
+                                                MensajeError('Operación finalizada con errores');
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    LoadingIni();
+                                    $.ajax({
+                                        type: "post",
+                                        url: "/Baja/RechazarSolicitud",
+                                        data: { codigo: codigo },
+                                        datatype: "json",
+                                        traditional: true,
+                                        success: function (data) {
+                                            LoadingFin();
+                                            if (data.ok === true) {
+                                                window.Grid.PerformCallback();
+                                                MensajeExito('Operación finalizada con éxito');
+    
+                                            } //if
+                                            else {
+                                                MensajeError('Operación finalizada con errores');
+                                            }
+                                        }
+                                    });
+                                }
+                            }//callback*/
+                        }); //bootbox
+
+                    } //if
+                    else {
+                        //MensajeError('Operación finalizada con errores');
+                        var permisos = data.search("Usted no posee permisos");
+                        if (permisos != -1) {
+                            //window.LoadingFin();
+                            //NProgress.done(true);
+                            MensajeError("Usted no posee permisos para acceder a la función solicitada");
+                        }
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/Baja/VerMotivoBaja",
+                data: { codigo: codigo },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    LoadingFin();
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                        //MensajeExito('Operación finalizada con éxito');
+                        console.log(data.fechaBaja);
+                        bootbox.dialog({
+
+                            title: "Motivo de la Baja",
+                            message: data.motivo + "Resumen de Cuotas de la cursada: " + data.curso + "<br> Fecha de Baja: " + data.fechaBaja + "<br>" + data.cuotas +
+                            "<div class=form-group> <label for=mensaje>Mensaje:</label> <textarea class=form-control rows=1 id=mensaje></textarea></div>",
+
+                            buttons: [
+                                                            {
+                                                                label: 'Aceptar',
+                                                                className: 'btn-success btn-lg',
+                                                                callback: function () {
+                                                                    $('.modal').modal('hide');
+                                                                    //console.log('This was logged in the callback: ' + result);
+
+                                                                    LoadingIni();
+                                                                    $.ajax({
+                                                                        type: "post",
+                                                                        url: "/Baja/ConfirmarSolicitud",
+                                                                        data: { codigo: codigo },
+                                                                        datatype: "json",
+                                                                        traditional: true,
+                                                                        success: function (data) {
+                                                                            LoadingFin();
+                                                                            if (data.ok === true) {
+                                                                                window.Grid.PerformCallback();
+                                                                                MensajeExito('Operación finalizada con éxito');
+
+                                                                            } //if
+                                                                            else {
+                                                                                MensajeError('Operación finalizada con errores');
+                                                                            }
+                                                                        }
+                                                                    });
+
+                                                                }
+                                                            },
+                                 {
+                                     label: 'Rechazar',
+                                     className: 'btn-danger btn-lg',
+                                     callback: function () {
+                                         LoadingIni();
+                                         $.ajax({
+                                             type: "post",
+                                             url: "/Baja/RechazarSolicitud",
+                                             data: { codigo: codigo, mensaje: $('#mensaje').val() },
+                                             datatype: "json",
+                                             traditional: true,
+                                             success: function (data) {
+                                                 LoadingFin();
+                                                 if (data.ok === true) {
+                                                     window.Grid.PerformCallback();
+                                                     MensajeExito('Operación finalizada con éxito');
+
+                                                 } //if
+                                                 else {
+                                                     MensajeError('Operación finalizada con errores');
+                                                 }
+                                             }
+                                         });
+                                     }
+
+
+                                 }
+                                 ,
+                                 {
+                                     label: 'Salir',
+                                     className: 'btn btn-primary btn-lg',
+                                     callback: function () {
+
+                                     }
+
+
+                                 }
+                            ],
+                            /*callback: function (result) {
+                                $('.modal').modal('hide');
+                                //console.log('This was logged in the callback: ' + result);
+                                if (result === true) {
+                                    LoadingIni();
+                                    $.ajax({
+                                        type: "post",
+                                        url: "/Baja/ConfirmarSolicitud",
+                                        data: { codigo: codigo },
+                                        datatype: "json",
+                                        traditional: true,
+                                        success: function (data) {
+                                            LoadingFin();
+                                            if (data.ok === true) {
+                                                window.Grid.PerformCallback();
+                                                MensajeExito('Operación finalizada con éxito');
+    
+                                            } //if
+                                            else {
+                                                MensajeError('Operación finalizada con errores');
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    LoadingIni();
+                                    $.ajax({
+                                        type: "post",
+                                        url: "/Baja/RechazarSolicitud",
+                                        data: { codigo: codigo },
+                                        datatype: "json",
+                                        traditional: true,
+                                        success: function (data) {
+                                            LoadingFin();
+                                            if (data.ok === true) {
+                                                window.Grid.PerformCallback();
+                                                MensajeExito('Operación finalizada con éxito');
+    
+                                            } //if
+                                            else {
+                                                MensajeError('Operación finalizada con errores');
+                                            }
+                                        }
+                                    });
+                                }
+                            }//callback*/
+                        }); //bootbox
+
+                    } //if
+                    else {
+                        //MensajeError('Operación finalizada con errores');
+                        var permisos = data.search("Usted no posee permisos");
+                        if (permisos != -1) {
+                            //window.LoadingFin();
+                            //NProgress.done(true);
+                            MensajeError("Usted no posee permisos para acceder a la función solicitada");
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function habilitarTodas() {
+        var URLactual = window.location.pathname;
+        if (URLactual.search('nuevositio') != -1) {
+            $.ajax({
+                type: "post",
+                url: "/nuevositio/Baja/ConfirmarTodas",
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                        MensajeExito('Operación finalizada con éxito');
+
+                    }
+                    else if (data.ok === "error1") {
+                        MensajeError('No existen solicitudes pendientes para confirmar');
+                    }
+                    else {
+                        MensajeError('Operación finalizada con errores');
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "post",
+                url: "/Baja/ConfirmarTodas",
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.ok === true) {
+                        window.Grid.PerformCallback();
+                        MensajeExito('Operación finalizada con éxito');
+
+                    }
+                    else if (data.ok === "error1") {
+                        MensajeError('No existen solicitudes pendientes para confirmar');
+                    }
+                    else {
+                        MensajeError('Operación finalizada con errores');
+                    }
+                }
+            });
+        }
+    }
+</script>

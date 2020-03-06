@@ -1,0 +1,97 @@
+﻿@using cnrl.Logica
+
+@model cnrl.ViewModels.ViewNivelar
+
+@{
+
+    ViewBag.Titulo = "Establecer Nivel";
+    string usuario = ViewBag.Usuario;
+}
+
+
+<div class="box box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title box-solid">Seleccionar Curso</h3>
+    </div><!-- /.box-header -->
+    <!--<div class="box-body">
+
+        <div class="row">
+            <div class="col-md-2">
+                <h3>Descripcion</h3>
+            </div>
+            <div class="col-md-2">
+                <h3>Horas Semanales</h3>
+            </div>
+            <div class="col-md-2">
+                <h3>Nivel</h3>
+            </div>
+            <div class="col-md-2">
+                <h3>Precio</h3>
+            </div>
+            <div class="col-md-2">
+                <h3>Tipo Curso</h3>
+            </div>
+        </div>-->
+    @*  @foreach (var cursada in Model.cursos)
+            {
+                using (Ajax.BeginForm("EstablecerCurso", "Cursa", FormMethod.Post,
+                            new AjaxOptions
+                            {
+                                OnSuccess = "GuardadoOk",
+                                HttpMethod = "POST"
+                            }))
+                //using (Html.BeginForm("FormaDePago", "Cursa", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    <input type="hidden" value="@cursada.codigo" name="codigo" />
+                    <input type="hidden" value="@usuario" name="alumno" />
+
+                    <div class="box box-success">
+
+                        <div class="box-body">
+                            @{
+
+                                string horario = "";
+                                string desc = "";
+                                string nivel = "";
+                                string precio = "";
+                                string tipoCurso = "";
+
+                                desc = cursada.descripcion.ToString();
+                                horario = cursada.horasSemanales.ToString();
+                                nivel = cursada.nivel.ToString();
+                                precio = cursada.precio.descripcion.ToString();
+                                tipoCurso = cursada.tipocurso1.descripcion.ToString();
+
+                            }
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <h4>@desc</h4>
+                                </div>
+                                <div class="col-md-2">
+                                    <h4>@horario</h4>
+                                </div>
+                                <div class="col-md-2">
+                                    <h4>@nivel</h4>
+                                </div>
+                                <div class="col-md-2">
+                                    <h4>@precio</h4>
+                                </div>
+                                <div class="col-md-1" style="text-align: center;">
+                                    <h4>@tipoCurso</h4>
+                                </div>
+                                <div class="col-md-1 col-md-offset-1">
+                                    <input type="submit" value="Confirmar Inscripción" class="btn btn-success btn-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div><!-- /.box-body -->
+
+                                    }
+                                }
+
+
+        </div><!-- /.box-body -->*@
+
+</div><!-- /.box -->
+@* @Html.Action("PartialGridCursos")*@

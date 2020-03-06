@@ -1,0 +1,979 @@
+﻿@using cnrl.Helpers
+@using cnrl.Logica
+@model cnrl.oferta
+
+@{
+    Layout = null;
+    string modo = ViewBag.modo;
+
+    var esAlta = modo == "Create";
+    var esVista = modo == "View";
+    var esEdit = modo == "Edit";
+    var esBaja = modo == "Delete";
+    var titulo = string.Format("{0} {1}", esAlta ? Strings.BtnNuevo : (esEdit ? Strings.BtnEditar : (esBaja ? Strings.BtnBorrar : Strings.BtnVer)), Strings.ColOferta);
+    ViewBag.Titulo = Strings.TituloOfertas;
+    ViewBag.Subtitulo = titulo;
+
+    var tiposCurso = (SelectList)ViewBag.tiposCurso;
+    var sedes = (SelectList)ViewBag.sedes;
+    var cursos = (SelectList)ViewBag.cursos;
+    var periodosLectivos = (SelectList)ViewBag.periodosLectivos;
+    var docentes = (SelectList)ViewBag.docentes;
+    var coordinadorDocentes = (SelectList)ViewBag.coordinadorDocentes;
+    var frecuencias = (SelectList)ViewBag.frecuenciasCuota;
+
+}
+
+@Html.Hidden("Titulo", Strings.ColOferta)
+@Html.Hidden("Subtitulo", titulo)
+@* Por si sale en una 2 Pantalla de Modal *@
+@Html.Hidden("Titulo2", Strings.ColOferta)
+@Html.Hidden("Subtitulo2", titulo)
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.EnableLocalizedClientValidation()
+
+        @using (Ajax.BeginForm(modo, "Oferta", FormMethod.Post,
+                                                                                                       new AjaxOptions
+                                                                                                       {
+                                                                                                           OnSuccess = ViewBag.Callback,
+                                                                                                           HttpMethod = "POST"
+                                                                                                       }
+                                                                                                       , new
+                                                                                                       {
+                                                                                                           @id = "frmID"
+                                                                                                       }
+                                                                            ))
+        {
+            <div class="box-body" id="controles">
+                @if (esBaja)
+                {
+                    <p class="rojo alerta">@Strings.MsgDeseaBorrar</p>
+                }
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <span>@Strings.ErrorMensajeGenerico</span>
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-error">@ViewBag.ErrorMessage</div>
+                }
+
+                @Html.HiddenFor(m => m.codigo)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="box box-solid box-success">
+                    <div class="box-header">
+                        <h6 class="box-title" style="font-size: 1.5em;">Información General</h6>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.curso, "curso", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("curso", cursos, htmlAttributes: new { @class = "form-control", id = "curso" })
+                                    @Html.ValidationMessageFor(model => model.curso, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.sede, "sede", htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.DropDownList("sede", sedes, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.sede, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.docente, "docente", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("docente", docentes, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.docente, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.coordinadorDocente, "coordinadorDocente", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("coordinadorDocente", coordinadorDocentes, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.coordinadorDocente, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.cupo, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.cupo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.cupo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.cupoMinimo, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.cupoMinimo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.cupoMinimo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.recaudacionMinima, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.recaudacionMinima, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.recaudacionMinima, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div>
+                                        @Html.CheckBoxFor(model => model.habilitada)
+                                        @Html.LabelForNormalizada(model => model.habilitada, htmlAttributes: new { @class = "control-label " })
+                                    </div>
+                                    <div>
+                                        @Html.CheckBoxFor(model => model.RequierePreInscripcion, htmlAttributes: new { id = "checkPreInscripcion" })
+                                        @Html.LabelForNormalizada(model => model.RequierePreInscripcion, htmlAttributes: new { @class = "control-label" })
+                                    </div>
+                                    <div>
+
+                                        @Html.CheckBoxFor(model => model.gratuito, htmlAttributes: new { id = "checkGratuito" })
+                                        @Html.LabelForNormalizada(model => model.gratuito, htmlAttributes: new { @class = "control-label" })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div id="ocultable">
+                                <div class="col-md-4">
+                                    <div class="bootstrap-timepicker">
+                                        <div class="form-group">
+                                            @Html.LabelForNormalizada(model => model.horaDocumentacion, htmlAttributes: new { @class = "control-label" })
+                                            <div class="input-group" id="ocultable">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </div>
+                                                @Html.EditorFor(model => model.horaDocumentacion, new { htmlAttributes = new { @class = "form-control timepicker", id = "horaDocumentacion" } })
+                                            </div>
+                                            @Html.ValidationMessageFor(model => model.horaDocumentacion, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelForNormalizada(model => model.fechaDocumentacion, htmlAttributes: new { @class = "control-label" })
+                                        <div class="input-group" id="ocultable">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            @Html.EditorFor(model => model.fechaDocumentacion, new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento", id = "fechaDocumentacion" } })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.fechaDocumentacion, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelForNormalizada(model => model.documentacion, htmlAttributes: new { @class = "control-label " })
+                                        <div>
+                                            @Html.EditorFor(model => model.documentacion, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.documentacion, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <!--<div class="form-group">
+                                        <label for="documentacion">Documentacion:</label>
+                                        <textarea class="form-control" rows="5" id="documentacion"></textarea>
+                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div>
+                <div class="box box-solid box-success">
+                    <div class="box-header">
+                        <h6 class="box-title" style="font-size: 1.5em;">Período Lectivo</h6>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="form-group">
+                            @Html.LabelForNormalizada(model => model.periodoLectivo, "periodoLectivo", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownList("periodoLectivo", periodosLectivos, htmlAttributes: new { @class = "form-control", id = "periodoLectivo" })
+                            @Html.ValidationMessageFor(model => model.periodoLectivo, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.fechaDesde, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.fechaDesde, new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento", @id = "fechaDesde" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.fechaDesde, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.fechaHasta, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.fechaHasta, new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento", @id = "fechaHasta" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.fechaHasta, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <div>
+                                        @Html.CheckBoxFor(model => model.lunes)
+                                        @Html.LabelForNormalizada(model => model.lunes, htmlAttributes: new { @class = "control-label " })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <div>
+                                        @Html.CheckBoxFor(model => model.martes)
+                                        @Html.LabelForNormalizada(model => model.martes, htmlAttributes: new { @class = "control-label " })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <div>
+                                        @Html.CheckBoxFor(model => model.miercoles)
+                                        @Html.LabelForNormalizada(model => model.miercoles, htmlAttributes: new { @class = "control-label " })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <div>
+                                        @Html.CheckBoxFor(model => model.jueves)
+                                        @Html.LabelForNormalizada(model => model.jueves, htmlAttributes: new { @class = "control-label " })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <div>
+                                        @Html.CheckBoxFor(model => model.viernes)
+                                        @Html.LabelForNormalizada(model => model.viernes, htmlAttributes: new { @class = "control-label " })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <div>
+                                        @Html.CheckBoxFor(model => model.sabado)
+                                        @Html.LabelForNormalizada(model => model.sabado, htmlAttributes: new { @class = "control-label " })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="bootstrap-timepicker">
+                                    <div class="form-group">
+                                        @Html.LabelForNormalizada(model => model.horaDesde, htmlAttributes: new { @class = "control-label" })
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </div>
+                                            @Html.EditorFor(model => model.horaDesde, new { htmlAttributes = new { @class = "form-control timepicker" } })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.horaDesde, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="bootstrap-timepicker">
+                                    <div class="form-group">
+                                        @Html.LabelForNormalizada(model => model.horaHasta, htmlAttributes: new { @class = "control-label" })
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </div>
+                                            @Html.EditorFor(model => model.horaHasta, new { htmlAttributes = new { @class = "form-control timepicker" } })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.horaHasta, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <div>
+                                        @Html.CheckBoxFor(model => model.esBandaNegativa)
+                                        @Html.LabelForNormalizada(model => model.esBandaNegativa, htmlAttributes: new { @class = "control-label " })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div>
+                <div class="box box-solid box-success">
+                    <div class="box-header">
+                        <h6 class="box-title" style="font-size: 1.5em;">Inscripción</h6>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.inscripcionDesde, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.inscripcionDesde, new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.inscripcionDesde, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.inscripcionHasta, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.inscripcionHasta, new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.inscripcionHasta, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="bootstrap-timepicker">
+                                    <div class="form-group">
+                                        @Html.LabelForNormalizada(model => model.horaInscripcionDesde, htmlAttributes: new { @class = "control-label" })
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </div>
+                                            @Html.EditorFor(model => model.horaInscripcionDesde, new { htmlAttributes = new { @class = "form-control timepicker" } })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.horaInscripcionDesde, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="bootstrap-timepicker">
+                                    <div class="form-group">
+                                        @Html.LabelForNormalizada(model => model.horaInscripcionHasta, htmlAttributes: new { @class = "control-label" })
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </div>
+                                            @Html.EditorFor(model => model.horaInscripcionHasta, new { htmlAttributes = new { @class = "form-control timepicker" } })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.horaInscripcionHasta, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.fechaPrimerCuota, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.fechaPrimerCuota, new { htmlAttributes = new { @class = "form-control pull-right FechaNacimiento" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.fechaPrimerCuota, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="box box-solid box-success" , id="cajaPrecio">
+                    <div class="box-header">
+                        <h6 class="box-title" style="font-size: 1.5em;">Precio</h6>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.precioAlumno, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-dollar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.precioAlumno, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.precioAlumno, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.precioNoAlumno, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-dollar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.precioNoAlumno, new { htmlAttributes = new { @class = "form-control v", @type = "number", @min = "0", @step = "0.01" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.precioNoAlumno, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.precioEmpleado, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-dollar"></i>
+                                        </div>
+                                        @*  <input type="number" name="precioEmpleado" value="@Model.precioEmpleado.ToString().Replace(',','.')" class="form-control" min="0", step="0.01"/>*@
+                                        @Html.EditorFor(model => model.precioEmpleado, new { htmlAttributes = new { @class = "form-control ", @type = "number", @min = "0", @step = "0.01", @lang = "us" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.precioEmpleado, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            @*Descuento banda negativa*@
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.descuentoBandaNegativa, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-dollar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.descuentoBandaNegativa, new { htmlAttributes = new { @class = "form-control ", @type = "number", @min = "0", @step = "0.01" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.descuentoBandaNegativa, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            @*Descuento banda negativa No Alumno*@
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.descuentoBandaNegativaNoAlumno, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-dollar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.descuentoBandaNegativaNoAlumno, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.descuentoBandaNegativaNoAlumno, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.precioMayorDe60, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-dollar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.precioMayorDe60, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.precioMayorDe60, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.precioGraduado, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-dollar"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.precioGraduado, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.precioGraduado, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.frecuenciaCuota, htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownListFor(model => model.frecuenciaCuota, frecuencias, htmlAttributes: new { @class = "form-control", @id = "frecuencia" })
+                                    @Html.ValidationMessageFor(model => model.frecuenciaCuota, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.cantidadCuotas, htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.cantidadCuotas, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.cantidadCuotas, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.descuentoUnaCuota, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-percent"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.descuentoUnaCuota, new
+                                   {
+                                       htmlAttributes = new
+                                       {
+                                           @class = "form-control"@*, @type = "number", @min = "0", @max = "100", @step = "0.01"*@ }
+                                   })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.descuentoUnaCuota, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.diasSegundoVencimiento, htmlAttributes: new { @class = "control-label" })
+
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar-plus-o"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.diasSegundoVencimiento, new { htmlAttributes = new { @class = "form-control", @min = 0, @max = 31 } })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.diasSegundoVencimiento, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    @Html.LabelForNormalizada(model => model.recargoSegundoVencimiento, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-percent"></i>
+                                        </div>
+                                        @Html.EditorFor(model => model.recargoSegundoVencimiento, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = 0, @max = 100, @step = "0.01" } })
+                                    </div>@Html.ValidationMessageFor(model => model.recargoSegundoVencimiento, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div>
+
+                <div class="box-footer">
+                    <div class="pull-left">
+                        <button type="button" data-dismiss="modal" class="btn btn-flat btn-default">Cerrar</button>
+                    </div>
+                    <div class="pull-right">
+                        <div>
+                            @if (!esBaja)
+                            {
+                                if (!esVista)
+                                {
+                                    <button type="submit" name="controlBandaNegativa" id="controlBandaNegativa" class="btn btn-flat btn-success">@Strings.BtnGuardar</button>
+                                }
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-flat btn-danger">@Strings.BtnBorrar</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+
+    var refresh = true;
+
+    function refrescar() {
+        if (refresh === true) {
+            window.Grid.PerformCallback();
+        }
+    }
+
+    $(function () {
+        $('#IdCurso').change(function () { refrescar(); });
+    });
+
+    $(document).ready(function () {
+        var modo = '@modo';
+        if (modo == "Delete" || modo == "View") {
+            $('#controles').find('input[type!="hidden"], textarea,  select').attr('disabled', 'disabled');
+
+        }
+
+        if (modo == "Edit" || modo == "View" || modo == "Delete" || modo == "Create") {
+            if (!$('#checkPreInscripcion').prop("checked")) {
+                $('#ocultable').hide();
+            }
+        }
+
+        if ($('#checkGratuito').prop("checked")) {
+            $('#cajaPrecio').hide();
+        }
+
+        $("#tipoCurso").select2({
+            allowClear: true
+        });
+
+        $("#sede").select2({
+            allowClear: true
+        });
+
+        $("#curso").select2({
+            allowClear: true
+        });
+
+        $("#periodoLectivo").select2({
+            allowClear: true
+        });
+
+        $("#docente").select2({
+            allowClear: true
+        })
+
+        $("#coordinadorDocente").select2({
+            allowClear: true
+        })
+
+        $("#frecuencia").select2({
+            allowClear: true
+        })
+
+        moment.locale('es');
+
+        $(".FechaNacimiento").inputmask("dd/mm/yyyy", { "placeholder": "dd/mm/yyyy" });
+
+        $(".FechaNacimiento").daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: "DD/MM/YYYY"
+        });
+
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+            increaseArea: '30%' // optional
+        });
+
+        $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+
+        $(".timepicker").timepicker({
+            showInputs: false,
+            showMeridian: false
+        });
+
+        $('#curso').change(function () {
+            var URLactual = window.location.pathname;
+           
+            var selectedItem = $(this).val();
+            var ddlStates = $("#periodoLectivo");
+            var statesProgress = $("#states-loading-progress");
+            statesProgress.show();
+
+             
+            if (URLactual.search('nuevositio') != -1) {
+                $.ajax({
+                    type: "post",
+                    url: "/nuevositio/periodolectivoes/GetPeriodosLectivos",
+                    data: { IdCurso: $('#curso').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        ddlStates.html('');
+                        $.each(data, function (id, option) {
+                            ddlStates.append($('<option></option>').val(option.Value).html(option.Text));
+                        });
+                        statesProgress.hide();
+                        $("#periodoLectivo").val("-1").change();
+                    }
+                });
+
+                $.ajax({
+                    type: "post",
+                    url: "/nuevositio/precio/GetPrecioCurso",
+                    data: { IdCurso: $('#curso').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        $("[name='precioAlumno']").val(data.alumno);
+                        $("[name='precioNoAlumno']").val(data.noAlumno);
+                        //Banda Negativa
+                        $("[name='descuentoBandaNegativa']").val(data.descuentoBandaNegativa);
+                        $("[name='descuentoBandaNegativaNoAlumno']").val(data.descuentoBandaNegativaNoAlumno);
+                        //
+                        $("[name='precioEmpleado']").val(data.precioEmpleado);
+                        $("[name='precioMayorDe60']").val(data.mayorDe60);
+                        $("[name='precioGraduado']").val(data.graduado);
+                        $("[name='diasSegundoVencimiento']").val(data.diasSegundoVencimiento);
+                        $("[name='descuentoUnaCuota']").val(data.descuentoUnaCuota);
+                        $("[name='recargoSegundoVencimiento']").val(data.recargoSegundoVencimiento);
+                        if (data.gratuito == "True")
+                            $("#checkGratuito").iCheck('check');
+                        else
+                            $("#checkGratuito").iCheck('uncheck');
+                    }
+                });
+
+                $.ajax({
+                    type: "post",
+                    url: "/nuevositio/cursos/GetDocumentacionCurso",
+                    data: { IdCurso: $('#curso').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+
+                        if (data.RequierePreInscripcion == "True") {
+
+                            $('#checkPreInscripcion').iCheck('check');
+                            $("[name='documentacion']").val(data.documentacion);
+                            $("[name='fechaDocumentacion']").val(data.fechaDocumentacion);
+                            $("[name='horaDocumentacion']").val(data.horaDocumentacion);
+                        }
+                        else {
+                            $('#checkPreInscripcion').iCheck('uncheck');
+                        }
+                    }
+                });
+
+            }
+            else
+            {
+                $.ajax({
+                    type: "post",
+                    url: "/periodolectivoes/GetPeriodosLectivos",
+                    data: { IdCurso: $('#curso').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        ddlStates.html('');
+                        $.each(data, function (id, option) {
+                            ddlStates.append($('<option></option>').val(option.Value).html(option.Text));
+                        });
+                        statesProgress.hide();
+                        $("#periodoLectivo").val("-1").change();
+                    }
+                });
+
+                $.ajax({
+                    type: "post",
+                    url: "/precio/GetPrecioCurso",
+                    data: { IdCurso: $('#curso').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        $("[name='precioAlumno']").val(data.alumno);
+                        $("[name='precioNoAlumno']").val(data.noAlumno);
+                        //Banda Negativa
+                        $("[name='descuentoBandaNegativa']").val(data.descuentoBandaNegativa);
+                        $("[name='descuentoBandaNegativaNoAlumno']").val(data.descuentoBandaNegativaNoAlumno);
+                        //
+                        $("[name='precioEmpleado']").val(data.precioEmpleado);
+                        $("[name='precioMayorDe60']").val(data.mayorDe60);
+                        $("[name='precioGraduado']").val(data.graduado);
+                        $("[name='diasSegundoVencimiento']").val(data.diasSegundoVencimiento);
+                        $("[name='descuentoUnaCuota']").val(data.descuentoUnaCuota);
+                        $("[name='recargoSegundoVencimiento']").val(data.recargoSegundoVencimiento);
+                        if (data.gratuito == "True")
+                            $("#checkGratuito").iCheck('check');
+                        else
+                            $("#checkGratuito").iCheck('uncheck');
+                    }
+                });
+
+                $.ajax({
+                    type: "post",
+                    url: "/cursos/GetDocumentacionCurso",
+                    data: { IdCurso: $('#curso').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+
+                        if (data.RequierePreInscripcion == "True") {
+
+                            $('#checkPreInscripcion').iCheck('check');
+                            $("[name='documentacion']").val(data.documentacion);
+                            $("[name='fechaDocumentacion']").val(data.fechaDocumentacion);
+                            $("[name='horaDocumentacion']").val(data.horaDocumentacion);
+                        }
+                        else {
+                            $('#checkPreInscripcion').iCheck('uncheck');
+                        }
+                    }
+                });
+
+            }
+        });
+
+        $('#periodoLectivo').change(function () {
+            var selectedItem = $(this).val();
+            var URLactual = window.location.pathname;
+            if (URLactual.search('nuevositio') != -1) {
+                $.ajax({
+                    type: "post",
+                    url: "/nuevositio/periodolectivoes/GetPeriodoLectivo",
+                    data: { IdPeriodo: $('#periodoLectivo').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        $("[name='fechaDesde']").val(data.fechaDesde);
+                        $("[name='fechaHasta']").val(data.fechaHasta);
+                        $("[name='inscripcionDesde']").val(data.inscripcionDesde);
+                        $("[name='inscripcionHasta']").val(data.inscripcionHasta);
+                        $("[name='fechaPrimerCuota']").val(data.fechaPrimerCuota);
+                        //Horarios del periodo lectivo e inscripcion
+                        $("[name='horaInscripcionDesde']").val(data.horaInscripcionDesde);
+                        $("[name='horaInscripcionHasta']").val(data.horaInscripcionHasta);
+                        $("[name='horaDesde']").val(data.horaDesde);
+                        $("[name='horaHasta']").val(data.horaHasta);
+                        //
+                    }
+                });
+            }
+            else
+            {
+                $.ajax({
+                    type: "post",
+                    url: "/periodolectivoes/GetPeriodoLectivo",
+                    data: { IdPeriodo: $('#periodoLectivo').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        $("[name='fechaDesde']").val(data.fechaDesde);
+                        $("[name='fechaHasta']").val(data.fechaHasta);
+                        $("[name='inscripcionDesde']").val(data.inscripcionDesde);
+                        $("[name='inscripcionHasta']").val(data.inscripcionHasta);
+                        $("[name='fechaPrimerCuota']").val(data.fechaPrimerCuota);
+                        //Horarios del periodo lectivo e inscripcion
+                        $("[name='horaInscripcionDesde']").val(data.horaInscripcionDesde);
+                        $("[name='horaInscripcionHasta']").val(data.horaInscripcionHasta);
+                        $("[name='horaDesde']").val(data.horaDesde);
+                        $("[name='horaHasta']").val(data.horaHasta);
+                        //
+                    }
+                });
+            }
+        });
+
+        // $('#checkPreInscripcion').change(function () {
+        $("[name='RequierePreInscripcion']").change(function () {
+            var $checkbox = $('#checkPreInscripcion');
+
+            if ($checkbox.prop('checked')) {
+                $("#ocultable").show();
+            } else {
+                $("#ocultable").hide();
+                $("#fechaDocumentacion").val('');
+                $("#horaDocumentacion").val('');
+                $("#documentacion").val('');
+            }
+        });
+
+        $("[name='gratuito']").change(function () {
+            var $checkbox = $('#checkGratuito');
+
+            if ($checkbox.prop('checked')) {
+                $("#cajaPrecio").hide();
+                //Banda Negativa
+                $("[name='descuentoBandaNegativa']").val(0);
+                $("[name='descuentoBandaNegativaNoAlumno']").val(0);
+                //
+                $("[name='cantidadCuotas']").val(0);
+                $("[name='descuentoUnaCuota']").val(0);
+                $("[name='diasSegundoVencimiento']").val(0);
+                $("[name='recargoSegundoVencimiento']").val(0);
+                $("[name='frecuenciaCuota']").val("1").change();
+            } else {
+                $("#cajaPrecio").show();
+                $("[name='frecuenciaCuota']").val("1").change();
+            }
+        });
+
+        $("#controlBandaNegativa").click(function () {
+            var $checkbox = $('#checkGratuito');
+            var $bandaNegativa = Number($('#descuentoBandaNegativa').val());
+            var $precioAlumno = Number($('#precioAlumno').val());
+            var $precioEmpleado = Number($('#precioEmpleado').val());
+            var $precioMayorDe60 = Number($('#precioMayorDe60').val());
+            var $precioGraduado = Number($('#precioGraduado').val());
+            var $precioNoAlumno = Number($('#precioNoAlumno').val());
+            var $descuentoBandaNegativaNoAlumno = Number($('#descuentoBandaNegativaNoAlumno').val());
+
+            if ($checkbox.prop('checked') === false) {
+
+                if ($bandaNegativa > $precioAlumno) {
+                    alert("El descuento de banda negativa debe ser menor al precio alumno.");
+
+                    return false;
+                }
+
+                if ($bandaNegativa > $precioEmpleado) {
+                    alert("El descuento de banda negativa debe ser menor al precio empleado.");
+                    return false;
+                }
+
+                if ($bandaNegativa > $precioMayorDe60) {
+                    alert("El descuento de banda negativa debe ser menor al precio mayor de 60.");
+                    return false;
+                }
+
+                if ($bandaNegativa > $precioGraduado) {
+                    alert("El descuento de banda negativa debe ser menor al precio graduado.");
+                    return false;
+                }
+
+                if ($descuentoBandaNegativaNoAlumno > $precioNoAlumno) {
+                    alert("El descuento de banda negativa debe ser menor al precio no alumno.");
+                    return false;
+                }
+                //if ($("[name='descuentoBandaNegativa']").val() > $("[name='precioAlumno']").val()) {
+                //    alert("El descuento de banda negativa debe ser menor al precio alumno.");
+                //    return false;
+                //}
+
+                //if ($("[name='descuentoBandaNegativa']").val() > $("[name='precioEmpleado']").val()) {
+                //    alert("El descuento de banda negativa debe ser menor al precio empleado.");
+                //    return false;
+                //}
+
+                //if ($("[name='descuentoBandaNegativa']").val() > $("[name='precioMayorDe60']").val()) {
+                //    alert("El descuento de banda negativa debe ser menor al precio mayor de 60.");
+                //    return false;
+                //}
+
+                //if ($("[name='descuentoBandaNegativa']").val() > $("[name='precioGraduado']").val()) {
+                //    alert("El descuento de banda negativa debe ser menor al precio graduado.");
+                //    return false;
+                //}
+
+                //if ($("[name='descuentoBandaNegativaNoAlumno']").val() > $("[name='precioNoAlumno']").val()) {
+                //    alert("El descuento de banda negativa no alumno debe ser menor al precio no alumno.");
+                //    return false;
+                //}
+            }
+
+            document.getElementById(modo);
+            return true;
+        });
+
+
+        //$('#curso').change(function () {
+        //    var codigoCurso = $(this).val();
+        //    //console.log(selectedItem);
+        //    $.ajax({
+        //        type: "post",
+        //        url: "/cursos/ControlGratuito",
+        //        data: { codigoCurso: $('#curso').val() },
+        //        datatype: "json",
+        //        traditional: true,
+        //        success: function (data) {
+        //            if (data.Gratuito === true) {
+        //                $('#cajaPrecio').hide();
+        //                $("[name='descuentoBandaNegativa']").val(0);
+        //                $("[name='cantidadCuotas']").val(0);
+        //                $("[name='descuentoUnaCuota']").val(0);
+        //                $("[name='diasSegundoVencimiento']").val(0);
+        //                $("[name='recargoSegundoVencimiento']").val(0);
+        //                $("[name='frecuenciaCuota']").val("4").change();
+        //            }
+        //        }
+        //    });
+        //});
+
+    });
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

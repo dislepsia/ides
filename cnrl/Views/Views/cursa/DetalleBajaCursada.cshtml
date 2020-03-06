@@ -1,0 +1,186 @@
+﻿@model cnrl.cursa
+@using cnrl.Helpers
+
+@{
+    Layout = null;
+    ViewBag.Titulo = "DetalleBajaCursada";
+
+    var motivosBajas = (SelectList)ViewBag.motivosBaja;
+}
+
+@Html.Hidden("Titulo", "Cursadas")
+@Html.Hidden("Subtitulo", "Solicitar Baja")
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 style="color:red">¿Desea solicitar la baja de este curso?</h2>
+        @using (Ajax.BeginForm("DetalleBajaCursada", "Cursa", FormMethod.Post,
+                                                                                                new AjaxOptions
+                                                                                                {
+                                                                                                    OnSuccess = "GuardadoOk",
+                                                                                                    HttpMethod = "POST"
+                                                                                                }, new { id = "frmEnviarMails" }))
+        {
+            <div class="box-body" id="controles">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <span>Debe seleccionar el motivo de la Baja.</span>
+                        <span>Debe describir el motivo de la Baja.</span>
+                    </div>
+                }
+
+                @Html.HiddenFor(m => m.codigo)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    <label class="control-label">Código Curso</label>
+                    <div>
+                        @Html.EditorFor(model => model.oferta1.curso1.codCurso, new { htmlAttributes = new { @class = "form-control", @style = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.oferta1.curso1.codCurso, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Curso</label>
+                    <div>
+                        @Html.EditorFor(model => model.oferta1.curso1.descripcion, new { htmlAttributes = new { @class = "form-control", @style = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.oferta1.curso1.descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Estado</label>
+                    <div>
+                        @Html.EditorFor(model => model.EstadoCursa.descripcion, new { htmlAttributes = new { @class = "form-control", @style = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.EstadoCursa.descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Motivo de la Baja</label>
+                    <div>
+                        @Html.DropDownList("baja", motivosBajas, htmlAttributes: new { @class = "form-control IdTipoBaja" })
+                        @Html.ValidationMessageFor(model => model.motivoBaja.descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Descripción para otorgar la baja:</label>
+                    <div>
+
+
+                        @Html.TextAreaFor(model => model.DescripcionBaja, 5, 50, new { onkeydown = "valida_longitud(this)" })
+                        @Html.ValidationMessageFor(model => model.DescripcionBaja, "", new { @class = "text-danger" })
+
+                        <div>
+                            <label>Caracteres Restantes:</label>
+                            <label id="caracteres" name="caracteres"></label>
+                            @*<label name=caracteres> Caracteres restantes: 0/250<span></span></label>*@
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        }
+        <div class="box-footer">
+            <div class="pull-left">
+                <button id="btnCerrar" type="button" data-dismiss="modal" class="btn btn-flat btn-default">Cerrar</button>
+            </div>
+            <div class="pull-right">
+                <div>
+
+
+                    <button id="btnEnviar" type="submit" class="btn btn-flat btn-success">@Strings.BtnGuardar</button>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    var texto = "";
+    var num_caracteres_permitidos = 249;
+
+    function valida_longitud(val) {
+        var len = val.value.length;
+
+
+        if (len > num_caracteres_permitidos) {
+            val.value = texto;
+
+        }
+        else {
+            texto = val.value;
+        }
+
+
+        cuenta(val);
+    }
+    function cuenta(val) {
+        $('#caracteres').text(num_caracteres_permitidos - val.value.length);
+        $('#caracteres').css({ color: "red" });
+    }
+
+    $(document).ready(function () {
+        $('#controles').find('input[type!="hidden"]').attr('disabled', 'disabled');
+
+        /* $('.IdTipoBaja').select2("val", "-1");
+
+         $(".IdTipoBaja").select2({
+             allowClear: true
+         });*/
+    });
+
+    $('#btnEnviar').click(function () {
+
+
+        LoadingIni();
+        $('#btnEnviar').hide();
+        $('#btnCerrar').hide();
+        $('#frmEnviarMails').submit();
+
+    });
+
+    function GuardadoOk(data) {
+        LoadingFin();
+        if (data.ok === true) {
+            MensajeExito('Se realizo la Solicitud de Baja correctamente');
+
+            //$('#DlgGenericoBody').modal('hide');
+
+
+            //$('#panelNroReclamo').css('visibility', 'visible');
+            bootbox.alert({
+                message: "Número de Reclamo: " + data.codigo,
+                callback: function () {
+                    $('.modal').modal('hide');
+                }
+            })
+
+
+
+        } else {
+            //Recarga el formulario con los errores recibidos
+            MensajeError('Ocurrió un error intentando guardar la Solicitud de Baja');
+            console.log($('.IdTipoBaja').val());
+            if ($('.IdTipoBaja').val() == -1) {
+                MensajeError('Debe seleccionar el motivo de la baja');
+            }
+            else {
+                MensajeError('Debe completar la descripción del motivo de la baja');
+            }
+            $('#btnEnviar').show();
+            $('#btnCerrar').show();
+        }
+    }
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

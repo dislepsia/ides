@@ -1,0 +1,80 @@
+﻿@using cnrl
+
+@model HandleErrorInfo
+
+@{
+    Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+    var titulo = "Ups!";
+    var ruta = Request.QueryString["aspxerrorpath"];
+    var cuerpo = string.Format("<p>{0}</p>.", @"Lo sentimos, ha ocurrido un error. Por favor, intenta nuevamente.");
+    if (Model != null)
+    {
+        cuerpo = string.Format("<dl class='dl-horizontal'><dt>{0}</dt><dd>{1}</dd><dt>{2}</dt><dd>{3}</dd><dt>{4}</dt><dd>{5}</dd></dl>",
+            @"Módulo",
+            @Model.ControllerName,
+            @"Método",
+            @Model.ActionName,
+            @"Error",
+            @Model.Exception.Message.Replace(": error ", "<br/><br/>Error ")
+        );
+    }
+    else if (!string.IsNullOrEmpty(ViewBag.titulo) && !string.IsNullOrEmpty(ViewBag.msg))
+    {
+        titulo = ViewBag.titulo;
+        cuerpo = string.Format("<p>{0}</p>", ViewBag.msg);
+    }
+    else if (!string.IsNullOrEmpty(ruta))
+    {
+        titulo = @"Ruta no encontrada!";
+        cuerpo = string.Format("<dl class='dl-horizontal'><dt>{0}</dt><dd>{1}</dd></dl>",
+            @"Ruta",
+            ruta
+        );
+    }
+}
+
+<style>
+    /*.page-header {
+        margin-top: -10px;
+    }
+    #error-icono {
+        color: slategrey;
+        font-size: 10em;
+    }
+    #error-texto {
+        text-align: justify;
+    }
+    #dialogo {
+        margin-top: 15px;
+        width: 100%;
+    }
+    #btnContinuar {
+        margin-top: 15px;
+    }*/
+</style>
+
+<div class="col-sm-8 col-sm-offset-2">
+    @*<div id="dialogo" class="red box smallchart">*@
+        <div class="content" style="color: slategrey; padding: 0 0 0 0">
+            <div class="row">
+                <div class="col-sm-3">
+                    <img src="@Url.Content("~/Content/images/Icon-warning.png")" width="100%" alt="">
+
+                </div>
+                <div class="col-sm-9">
+                    <div id="error-texto">
+                        @*<div class="page-header">
+                            <h1><small>@titulo</small></h1>
+                        </div>*@
+                        <h2>@Html.Raw(cuerpo)</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-right">
+                <a id="btnContinuar" class="btn btn-success" href="@Url.Action("Index", "Admin")">Continuar&nbsp;<i class="icon-arrow-right"></i></a>
+            </div>
+        </div>
+
+    @*</div>*@
+    
+</div>

@@ -1,0 +1,140 @@
+﻿@model IEnumerable<cnrl.AspNetUsers>
+@using cnrl.Logica
+@using cnrl.Models
+
+@{
+    ViewBag.Titulo = "Docentes";
+    ViewBag.Subtitulo = "Administración de Cursos";
+    Layout = "~/Views/Shared/_LayoutUnlam.cshtml";
+    var docentes = (SelectList)ViewBag.Docentes;
+    var periodos = (SelectList)ViewBag.periodosLectivos;
+}
+<script>
+    function OnBeginCallback(s, e) {
+        e.customArgs["IdDocente"] = $('#IdDocente').val();
+        e.customArgs["idPeriodoLectivo"] = $('#idPeriodoLectivo').val();
+
+    }
+
+</script>
+@if (User.IsInRole("AdministradorEmpresas") || User.IsInRole("AdministradorGraduado") || User.IsInRole("Administrador") || User.IsInRole("SuperAdministrador") || User.IsInRole("CoordinadorDocente"))
+{
+
+
+    <form action="@Url.Action("Exportar")" method="POST" name="frmExportar" id="frmExportar">
+        <div class="box box-default filtros">
+            <div class="box-body filtros">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="IdDocente">@Strings.ColDocente</label>
+                        @Html.DropDownList("IdDocente", docentes, new { @class = "form-control" })
+
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="idPeriodoLectivo">@Strings.ColPeriodo</label>
+                        @Html.DropDownList("idPeriodoLectivo", periodos, new { @class = "form-control" })
+
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="pull-right">
+                        <button type="button" class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </form>
+}
+else
+{
+    if (User.IsInRole("Docente"))
+    {
+        <form action="@Url.Action("Exportar")" method="POST" name="frmExportar" id="frmExportar">
+            <div class="box box-default filtros">
+                <div class="box-body filtros">
+
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="idPeriodoLectivo">@Strings.ColPeriodo</label>
+                            @Html.DropDownList("idPeriodoLectivo", periodos, new { @class = "form-control" })
+
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="pull-right">
+                            <button type="button" class="btn" onclick="javascript:resetFiltros();"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    }
+}
+@Html.Action("PartialGrid")
+
+@section styles
+{
+    <style>
+        .btn-toolbar {
+            margin-bottom: 15px;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script>
+        var refresh = true;
+        function resetFiltros() {
+            refresh = false;
+
+            $('#IdDocente').select2("val", "-1");
+            $('#idPeriodoLectivo').select2("val", "-1");
+
+            refresh = true;
+            refrescar();
+        }
+
+        // Refrescar Grilla
+        function refrescar() {
+            if (refresh === true) {
+                window.Grid.PerformCallback();
+            }
+        }
+        $(function () {
+
+            $('#IdDocente').change(function () { refrescar(); refrescar(); });
+            $('#idPeriodoLectivo').change(function () { refrescar(); });
+
+            $("#IdDocente").select2({
+                allowClear: true
+            });
+
+            $("#idPeriodoLectivo").select2({
+                allowClear: true
+            });
+
+        });
+
+
+        $(document).ready(function () {
+            $("#frmExportar").keypress(function (e) {//Para deshabilitar el uso de la tecla "Enter"
+                if (e.which == 13) {
+                    return false;
+                }
+            });
+
+            $('#IdDocente').change(function () {
+
+                console.log($(this).val());
+            });
+
+        });
+    </script>
+}

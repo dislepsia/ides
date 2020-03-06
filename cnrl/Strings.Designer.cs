@@ -61,7 +61,7 @@ namespace cnrl {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Cursos de Extensión Universitaria.
+        ///   Busca una cadena traducida similar a Sistema de Inscripción de Cursos IDES.
         /// </summary>
         public static string AppTitulo {
             get {
